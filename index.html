@@ -80,6 +80,7 @@
         .map-container svg:active { cursor: grabbing; }
         .map-container.mode-add svg { cursor: crosshair; }
         .map-container.mode-add svg:active { cursor: crosshair; }
+        .map-container svg g[id^="floor-"] { transition: filter 0.3s ease, opacity 0.3s ease; }
         
         /* Map Points */
         .map-point { cursor: pointer; transition: filter 0.2s, opacity 0.2s; }
@@ -137,6 +138,7 @@
         <h1>Select Map</h1>
         <div class="map-grid">
             <div class="map-card" onclick="initMap('customs')">Customs</div>
+            <div class="map-card" onclick="initMap('factory')">Factory</div>
         </div>
     </div>
 
@@ -226,7 +228,9 @@
         let pointsData = [];
         let availableIcons = [];
         let activeFilters = new Set();
-        
+
+
+
         let pendingPointCoords = null; 
         let draggedPoint = null;       
         let currentViewedPointId = null; 
@@ -234,6 +238,9 @@
         // Base Sizes
         const POINT_RADIUS = 1.5; 
         const ICON_SIZE = 9.6;    
+        // Map Scaling
+        let minScale = 0.5;
+        let maxScale = 5.0;
 
         // DOM Elements
         const appContainer = document.getElementById('app-container');
@@ -304,6 +311,8 @@
                     } else {
                         availableIcons = parsedData.icons || [];
                         availableFloors = parsedData.floors || [];
+                        maxScale = parsedData.mapScale[0] || 1.0;
+                        minScale = parsedData.mapScale[1] || 5.0;
                     }
                 }
             } catch(e) { }
@@ -424,11 +433,8 @@
                     const floorGroup = svg.querySelector(`[id="${floorId}"]`);
                     
                     if (floorGroup) {
-                        if (floorId === 'floor-0') {
-                            floorGroup.style.display = ''; // Ground is always visible
-                        } else {
+                        if (floorId !== 'floor-0') {
                             buttonsToCreate.push({ id: floorId, label: `FLOOR ${floorVal}` });
-                            floorGroup.style.display = 'none'; // Hidden by default
                         }
                     }
                 });
@@ -436,11 +442,8 @@
                 const allFloors = Array.from(svg.querySelectorAll(`g[id^="floor-"]`));
                 allFloors.forEach((floor) => {
                     const floorId = floor.id;
-                    if (floorId === 'floor-0') {
-                        floor.style.display = ''; 
-                    } else {
+                    if (floorId !== 'floor-0') {
                         buttonsToCreate.push({ id: floorId, label: floorId.replace('-', ' ').toUpperCase() });
-                        floor.style.display = 'none';
                     }
                 });
             }
@@ -469,17 +472,38 @@
             document.querySelectorAll('.floor-btn').forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.target === targetId);
             });
-            
-            allFloorIds.forEach(id => {
-                const floor = document.querySelector(`.map-container svg [id="${id}"]`);
-                if (floor) {
-                    floor.style.display = (id === targetId) ? '' : 'none';
-                }
-            });
-            
-            // Safety measure: ensure floor-0 never gets accidentally hidden
-            const floor0 = document.querySelector(`.map-container svg [id="floor-0"]`);
-            if (floor0) floor0.style.display = '';
+
+            const activeNum = parseInt(targetId.replace('floor-', ''));
+            const svg = document.querySelector('.map-container svg');
+
+            if (svg) {
+                const allFloorGroups = Array.from(svg.querySelectorAll('g[id^="floor-"]'));
+                allFloorGroups.forEach(floorGroup => {
+                    const floorId = floorGroup.id;
+                    const floorNum = parseInt(floorId.replace('floor-', ''));
+
+                    if (!isNaN(floorNum)) {
+                        if (floorNum === activeNum) {
+                            // Active floor: fully visible, normal brightness
+                            floorGroup.style.display = '';
+                            floorGroup.style.filter = 'none';
+                        } else if (floorNum < activeNum) {
+                            // Lower floor: visible but darkened except 0
+                            if(floorNum === 0 && activeNum === 1) {
+                                floorGroup.style.display = '';
+                                floorGroup.style.filter = 'none';
+                            } else {
+                            floorGroup.style.display = '';
+                            floorGroup.style.filter = 'brightness(0.35)';
+                            }
+                        } else {
+                            // Higher floor: hidden
+                            floorGroup.style.display = 'none';
+                            floorGroup.style.filter = 'none';
+                        }
+                    }
+                });
+            }
 
             closeViewer();
             updatePointsVisibility();
@@ -502,7 +526,7 @@
                     g.style.display = ''; 
                 }
 
-                // 2. FLOOR CHECK (Floor 0 is never technically active in the menu anymore)
+                // 2. FLOOR CHECK
                 const ptNum = parseInt(pt.floor.replace('floor-', ''));
                 const oldArrow = g.querySelector('.floor-arrow');
                 if (oldArrow) oldArrow.remove();
@@ -537,7 +561,8 @@
             if (!initialViewBoxWidth) return;
             
             const zoomRatio = viewBox.w / initialViewBoxWidth;
-            const scale = Math.max(0.5, Math.min(5.0, zoomRatio * 7.0));
+            const scale = Math.max(maxScale, Math.min(5.0, zoomRatio * minScale));
+            console.log(minScale);
             
             document.querySelectorAll('.map-point').forEach(g => {
                 const img = g.querySelector('image');
@@ -756,7 +781,6 @@
             viewer.style.top = (screenY - 20) + 'px';
             viewerHeader.textContent = pointData.iconType || "document Details";
 
-            // Handle optional details text
             if (pointData.details) {
                 viewerDescription.textContent = pointData.details;
                 viewerDescription.style.display = 'block';
@@ -764,7 +788,6 @@
                 viewerDescription.style.display = 'none';
             }
 
-            // Handle optional image
             if (pointData.image) {
                 viewerContent.innerHTML = `<img src="${pointData.image}" onclick="openLightbox('${pointData.image}')" alt="Reference">`;
             } else {
