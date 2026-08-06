@@ -819,10 +819,39 @@
         }
 
         // 9. Data Handlers
-        function convertToBase64(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = () => resolve(reader.result);
+        function convertToBase64(file, maxWidth = 1200) {
+        return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        
+        reader.onload = (event) => {
+            const img = new Image();
+            img.src = event.target.result;
+            
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                let width = img.width;
+                let height = img.height;
+
+                // Scale down if the image is wider than maxWidth
+                if (width > maxWidth) {
+                    height = Math.round((height * maxWidth) / width);
+                    width = maxWidth;
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+                
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+
+                // Re-encode as JPEG with 85% quality
+                const compressedBase64 = canvas.toDataURL('image/jpeg', 0.85);
+                resolve(compressedBase64);
+            };
+            
+            img.onerror = error => reject(error);
+                };
+                
                 reader.onerror = error => reject(error);
                 reader.readAsDataURL(file);
             });
