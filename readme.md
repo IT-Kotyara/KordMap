@@ -32,6 +32,10 @@ You can get clean map SVG's from https://github.com/the-hideout/tarkov-dev-svg-m
   "floors": [
     "0",
     "1"
+  ],
+  "mapScale": [
+	"1.0", //how small and
+	"7.0"  //how big icons can get
   ]
 }
 
