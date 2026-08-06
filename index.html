@@ -137,8 +137,9 @@
     <div id="map-selector">
         <h1>Select Map</h1>
         <div class="map-grid">
-            <div class="map-card" onclick="initMap('customs')">Таможно</div>
+            <div class="map-card" onclick="initMap('customs')">Таможня</div>
             <div class="map-card" onclick="initMap('factory')">Завод</div>
+            <div class="map-card" onclick="initMap('interchech')">Развязка</div>
         </div>
     </div>
 
@@ -845,7 +846,7 @@
                 ctx.drawImage(img, 0, 0, width, height);
 
                 // Re-encode as JPEG with 85% quality
-                const compressedBase64 = canvas.toDataURL('image/jpeg', 0.2);
+                const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
                 resolve(compressedBase64);
             };
             
