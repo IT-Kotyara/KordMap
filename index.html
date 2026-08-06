@@ -92,6 +92,8 @@
         .modal-content { background: var(--bg-panel); padding: 25px; border-radius: 4px; border: 1px solid var(--border); min-width: 320px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
         .modal-content h3 { margin-top: 0; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; font-size: 1.1rem; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
         .modal-content input[type="file"] { margin: 15px 0; display: block; color: var(--text-muted); font-size: 0.85rem; }
+        .modal-content textarea { width: 100%; box-sizing: border-box; background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border); border-radius: 2px; padding: 10px; margin-bottom: 15px; resize: vertical; min-height: 80px; font-family: inherit; font-size: 0.85rem; }
+        .modal-content textarea:focus { outline: none; border-color: var(--accent); }
         
         /* Custom Icon Select Dropdown */
         .custom-select { position: relative; background: var(--bg-card); border-radius: 2px; border: 1px solid var(--border); margin-bottom: 15px; user-select: none; }
@@ -114,6 +116,7 @@
         #point-viewer.active { display: block; pointer-events: auto; }
         #point-viewer img { width: 100%; cursor: zoom-in; border-radius: 2px; object-fit: cover; border: 1px solid var(--border); }
         .viewer-header { font-size: 0.8rem; color: var(--accent); margin-bottom: 10px; font-weight: bold; border-bottom: 1px solid var(--border); padding-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+        .viewer-description { font-size: 0.85rem; color: var(--text-main); margin-bottom: 12px; line-height: 1.4; white-space: pre-wrap; word-wrap: break-word; display: none; }
         .no-image-box { border: 1px dashed var(--border); background: var(--bg-base); padding: 20px; text-align: center; color: var(--text-muted); font-size: 0.8rem; border-radius: 2px; text-transform: uppercase; }
         .close-viewer { position: absolute; top: -10px; right: -10px; background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border); border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; }
         .close-viewer:hover { background: var(--bg-hover); color: var(--accent); }
@@ -159,12 +162,10 @@
 
             <div class="menu-items" id="floor-menu"></div>
             
-            HTML
-
-			<div class="sidebar-footer">
-				Map SVGs by <a href="https://github.com/the-hideout/tarkov-dev-svg-maps/" target="_blank" rel="noopener noreferrer">Shebuka</a><br>
-				Licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0</a><br>
-			</div>
+            <div class="sidebar-footer">
+                Map SVGs by <a href="https://github.com/the-hideout/tarkov-dev-svg-maps/" target="_blank" rel="noopener noreferrer">Shebuka</a><br>
+                Licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0</a><br>
+            </div>
         </nav>
 
         <main class="map-container" id="map-wrapper"></main>
@@ -172,6 +173,7 @@
         <div id="point-viewer">
             <button class="close-viewer" onclick="closeViewer()">×</button>
             <div id="viewer-header" class="viewer-header">Point Details</div>
+            <div id="viewer-description" class="viewer-description"></div>
             <div id="viewer-content"></div>
             <div class="viewer-actions">
                 <button class="btn-delete" onclick="deleteActivePoint()">Delete Point</button>
@@ -190,6 +192,9 @@
                 <div class="select-items" id="select-items"></div>
             </div>
             <input type="hidden" id="selected-icon-value">
+            
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px;">Details (Optional):</p>
+            <textarea id="point-details-input" placeholder="Enter intel details..."></textarea>
 
             <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px;">Attach Image Reference:</p>
             <input type="file" id="point-image-input" accept="image/*">
@@ -235,6 +240,7 @@
         
         const viewer = document.getElementById('point-viewer');
         const viewerHeader = document.getElementById('viewer-header');
+        const viewerDescription = document.getElementById('viewer-description');
         const viewerContent = document.getElementById('viewer-content');
         const lightbox = document.getElementById('lightbox');
         const lightboxImg = document.getElementById('lightbox-img');
@@ -647,6 +653,7 @@
 
                 pendingPointCoords = { floor: activeFloorId, x: svgP.x, y: svgP.y };
                 document.getElementById('point-image-input').value = ""; 
+                document.getElementById('point-details-input').value = ""; 
                 createModal.classList.add('active');
             });
         }
@@ -659,6 +666,7 @@
 
         async function saveNewPoint() {
             const fileInput = document.getElementById('point-image-input');
+            const detailsInput = document.getElementById('point-details-input');
             let base64Image = null;
 
             if (fileInput.files.length > 0) {
@@ -678,6 +686,7 @@
                 x: pendingPointCoords.x,
                 y: pendingPointCoords.y,
                 iconType: hiddenIconValue.value,
+                details: detailsInput.value.trim(),
                 image: base64Image
             };
 
@@ -743,6 +752,15 @@
             viewer.style.top = (screenY - 20) + 'px';
             viewerHeader.textContent = pointData.iconType || "document Details";
 
+            // Handle optional details text
+            if (pointData.details) {
+                viewerDescription.textContent = pointData.details;
+                viewerDescription.style.display = 'block';
+            } else {
+                viewerDescription.style.display = 'none';
+            }
+
+            // Handle optional image
             if (pointData.image) {
                 viewerContent.innerHTML = `<img src="${pointData.image}" onclick="openLightbox('${pointData.image}')" alt="Reference">`;
             } else {
