@@ -105,7 +105,7 @@
     <path id="cinema-3" d="M499.199 681.373h3.097v1.793h-3.097Z"/>
     <path id="cinema-4" d="M499.199 716.747v-.978h3.097v1.956h-3.097Z"/>
   </defs>
-  <g id="Ground_Level">
+  <g id="floor-0">
     <g id="cement" class="cement">
       <use xlink:href="#border_path" x="0" y="0"/>
     </g>
@@ -641,7 +641,7 @@
       <path d="M530.981 750.357v-20.091h28.149v20.091Z"/>
     </g>
   </g>
-  <g id="Underground_Level" class="shadow">
+  <g id="floor--1" class="shadow">
     <g id="Stairs-U" class="stairs">
       <use xlink:href="#stairs-80" x="0" y="0"/>
       <use xlink:href="#stairs-81" x="0" y="0"/>
@@ -659,7 +659,7 @@
       <path d="M110.58 709.101v-3.748h1.304v-.327h-1.304v-6.031h-.326v9.944h-7.173v-9.944h-.326v6.358H63.1428v-3.098h7.9877v-9.128h-7.4987v.325h3.2604v4.076h-5.8686v-4.076h.9781v-.325H48.4715v-22.985h5.2165v6.846h9.2918v-7.01h-.3261v4.076h-3.9123v-6.032h4.2384v-8.639h4.8905v-1.305h.978v-.326h-1.3041v1.304h-4.5644v-6.684h7.9877v5.38h-.9781v.326h1.3042v-5.706h38.7974v-5.704h5.542v-5.38h-.325v3.749h-3.587v-5.869h3.587v.978h.325v-.978h5.706v13.204h44.014v5.544h4.239v-.327h-3.912v-5.217h5.868v5.217h-.815v.327h.815v6.846h.325v1.467h-.325v21.192h-45.156v5.379h-.814v.327h.814v3.748h-1.956v-2.934h-3.097v1.631h1.467v1.303h-2.282v-3.748h3.587v-.327h-5.869v9.944h3.423v2.282h-8.151v.327h8.151v7.498H110.58Zm-46.133-12.796v-.733h1.4671v-1.631h-3.0974v3.098h1.6303Zm63.087-26.49v-5.868H115.96v11.737h11.574Zm37.982-.082v-5.46h-5.705v10.922h5.705Zm-103.0252.816V669h-3.0974v1.631h1.4671v1.467h1.6303Zm51.1862-27.713v-.734h1.467v-1.629h-3.097v3.096h1.63Z"/>
     </g>
   </g>
-  <g id="First_Floor" class="shadow" data-keep-with-group="Ground_Level">
+  <g id="floor-1" class="shadow" data-keep-with-group="Ground_Level">
     <g id="Stairs-1" class="stairs">
       <use xlink:href="#stairs-16" x="0" y="0"/>
       <use xlink:href="#stairs-17" x="0" y="0"/>
@@ -964,7 +964,7 @@
       <path d="m271.81386 567.52784 6.34793 3.66498-2.21996 3.84509-6.34794-3.66498Z"/>
     </g>
   </g>
-  <g id="Second_Floor" class="shadow">
+  <g id="floor-2" class="shadow">
     <g id="Stairs-2" class="stairs">
       <use xlink:href="#stairs-16" x="0" y="0"/>
       <use xlink:href="#stairs-17" x="0" y="0"/>
@@ -1137,7 +1137,7 @@
       <path d="M379.671 751.05v5.044h.361v.567h-.309v2.882h-8.802v.412h-.515v-8.905h-5.044v10.706h5.044v-.72h.515v.72h10.758v-5.095h-.36v-.567h3.242v-5.044Z"/>
     </g>
   </g>
-  <g id="Third_Floor" class="shadow">
+  <g id="floor-3" class="shadow">
     <g id="Stairs-3" class="stairs">
       <use xlink:href="#stairs-16" x="0" y="0"/>
       <use xlink:href="#stairs-17" x="0" y="0"/>
@@ -1229,7 +1229,7 @@
       <path d="M495.087 678.865v4.076h.816v.325h-5.133V699h-.38v-7.823h-2.412v2.117h-2.618v12.553h2.618v2.117h2.412v-7.823h.38v15.315h5.133v.326h-.816v4.238h4.566v-1.793h-.772v-2.445h-1.022v-.326h2.772v-4.646l-.978-4.005v-14.77l.978-4.002v-4.767h-2.772v-.325h1.022v-2.283h.772v-1.793Zm-8.802 14.918h.978v2.608h-.978Zm0 3.913h.978v2.607h-.978Zm0 5.216h.978v2.608h-.978Z"/>
     </g>
   </g>
-  <g id="Fourth_Floor" class="shadow">
+  <g id="floor-4" class="shadow">
     <g id="Stairs-4" class="stairs">
       <use xlink:href="#stairs-30" x="0" y="0"/>
       <use xlink:href="#stairs-32" x="0" y="0"/>
@@ -1261,7 +1261,7 @@
       <path d="M279.583 503.219v12.879h-6.522v1.303h.978v.326h-1.467v3.922h.204v.335l-.204.01v1.276h-.325v-5.542h-2.934v7.009h2.934v-.163l.001-.162h.325v.651h-3.26v.278h-.265v-7.613h-4.564v8.965h2.71v.327h-5.217v.489h-.326v-.489h-2.608v-.327h.814v-2.445h-3.585v-1.467h-1.468v3.912h.816v.327h-7.173v1.793h13.204v-.489h.326v.489h3.424v.325h-3.261v7.011h4.564v-7.011h-.329l.004-.162v-.163h.978v.163l.001.162h-.327v7.011h3.75v-5.869h-2.12l-.019-.611.011-1.412h.257v1.712h1.886v-2.943h-1.886v.415h-.233l.014-.421h-.518v-.326l.162-.001h.713v-.309h.266v.309h3.423v.326h-1.631v9.129h5.217v-9.129h-2.608l-.004-.321.329-.011.002-.41.33-.003.022.419h1.929v-1.467h-1.956v.164l.001.162h-.328v-2.119h.327v1.467h1.956v-2.934h-1.956v.652h-.327v-.652h-.324l-.001-.164v-.162h2.608v-3.913h-1.305v-.326h2.446v.326h-.815v3.424h5.053v-3.424h-.815v-.326h.815v-14.182Z"/>
     </g>
   </g>
-  <g id="Fifth_Floor" class="shadow">
+  <g id="floor-5" class="shadow">
     <g id="Stairs-5" class="stairs">
       <use xlink:href="#stairs-46" x="0" y="0"/>
       <use xlink:href="#stairs-34" x="0" y="0"/>

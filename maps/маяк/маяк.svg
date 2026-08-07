@@ -25,7 +25,7 @@
     .stairs { fill:#FFD700 }
     .shadow { filter:drop-shadow(0 0 2px #000) }
   </style>
-  <g id="Ground_Level">
+  <g id="floor-0">
     <g id="water" class="water">
       <path d="M329.968 77.0327.003198 165.449.001066 1722.95H990.697v-347.37H529.282V77.0327Z"/>
     </g>
