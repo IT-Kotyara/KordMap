@@ -47,7 +47,26 @@
         .mode-btn { width: 100%; padding: 10px; background: var(--bg-card); color: var(--text-muted); border: 1px solid var(--border); border-radius: 2px; cursor: pointer; font-weight: bold; transition: 0.2s; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; }
         .mode-btn:hover { background: var(--bg-hover); color: var(--text-main); }
         .mode-btn.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
-        
+        .change-map-btn {
+            width: calc(100% - 30px);
+            margin: 0 15px 12px;
+            padding: 8px 12px;
+            background: var(--bg-card);
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.2s;
+        }
+        .change-map-btn:hover {
+            background: var(--bg-hover);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
         .action-group { display: flex; gap: 10px; margin-top: 10px; }
         .action-btn { flex: 1; padding: 10px; border: 1px solid var(--border); border-radius: 2px; cursor: pointer; font-weight: bold; font-size: 0.8rem; text-transform: uppercase; transition: 0.2s; }
         .action-btn { background: var(--bg-card); color: var(--text-main); }
@@ -155,6 +174,7 @@
     <div class="container" id="app-container">
         <nav class="sidebar">
             <div class="sidebar-header" id="current-map-title">Карта</div>
+            <button class="change-map-btn" onclick="changeMap()">Выбрать другую карту</button>
             <div class="controls">
                 <button id="mode-view" class="mode-btn active" onclick="setMode('VIEW')">View Points</button>
                 <button id="mode-add" class="mode-btn" onclick="setMode('ADD')">Mark Points</button>
@@ -345,6 +365,27 @@
                     }
                 }
             } catch(e) { } 
+        }
+
+        function changeMap() {
+            closeViewer();
+            lightbox.classList.remove('active');
+            if (createModal.classList.contains('active')) cancelCreate();
+
+            mapWrapper.innerHTML = '';
+            pointsData = [];
+            availableIcons = [];
+            activeFilters.clear();
+            activeFloorId = null;
+            currentMap = '';
+            floorMenu.innerHTML = '';
+            legendMenu.innerHTML = '';
+            legendContainer.style.display = 'none';
+
+            setMode('VIEW');
+
+            appContainer.style.display = 'none';
+            mapSelector.style.display = 'flex';
         }
 
         function buildIconDropdown() {
