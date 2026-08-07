@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tarkov Map Interactive</title>
+    <title>Карта документов Kord Breach</title>
     <style>
         /* Tactical Color Palette */
         :root {
@@ -240,8 +240,8 @@
         const POINT_RADIUS = 1.5; 
         const ICON_SIZE = 9.6;    
         // Map Scaling
-        let minScale = 0.5;
-        let maxScale = 5.0;
+        let minScale = 0.2;
+        let maxScale = 3.0;
 
         // DOM Elements
         const appContainer = document.getElementById('app-container');
@@ -280,7 +280,7 @@
         async function initMap(mapName) {
             currentMap = mapName;
             pointsData = []; 
-            mapTitle.textContent = mapName.charAt(0).toUpperCase() + mapName.slice(1) + " map";
+            mapTitle.textContent = "Карта" + mapName.charAt(0).toUpperCase() + mapName.slice(1);
             mapSelector.style.display = 'none';
             appContainer.style.display = 'flex';
 
