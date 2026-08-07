@@ -32,10 +32,49 @@
         .container { display: none; height: 100%; }
         
         /* Map Selector Screen */
-        #map-selector { position: fixed; inset: 0; background: var(--bg-panel); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 200; }
-        #map-selector h1 { color: var(--accent); font-weight: normal; letter-spacing: 2px; text-transform: uppercase; }
-        .map-grid { display: flex; gap: 20px; margin-top: 20px; flex-direction: column ;}
-        .map-card { background: var(--bg-card); padding: 30px 50px; border-radius: 4px; font-size: 1.25rem; font-weight: bold; cursor: pointer; transition: 0.2s; border: 1px solid var(--border); text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); }
+        #map-selector {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-panel);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            z-index: 200;
+            overflow-y: auto;
+            padding: 40px 20px;
+        }
+        #map-selector h1 {
+            color: var(--accent);
+            font-weight: normal;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            flex-shrink: 0;
+        }
+        .map-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+            max-width: 900px;
+            width: 100%;
+            padding-bottom: 40px;
+        }
+        .map-card {
+            background: var(--bg-card);
+            padding: 30px 20px;
+            border-radius: 4px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 1px solid var(--border);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            text-align: center;
+        }
         .map-card:hover { background: var(--bg-hover); border-color: var(--accent); color: var(--accent); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
         
         /* Sidebar */
