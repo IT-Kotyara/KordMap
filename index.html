@@ -189,6 +189,12 @@
         #lightbox.active { display: flex; cursor: zoom-out; }
         #lightbox img { max-width: 90%; max-height: 90%; border-radius: 4px; box-shadow: 0 0 30px rgba(0,0,0,0.8); border: 1px solid var(--border); }
     </style>
+    
+    <!-- Vercel Web Analytics -->
+    <script>
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
 
@@ -996,12 +1002,6 @@
                 if (createModal.classList.contains('active')) cancelCreate();
             }
         });
-    </script>
-
-    <!-- Vercel Web Analytics -->
-    <script type="module">
-        import { inject } from 'https://cdn.jsdelivr.net/npm/@vercel/analytics@2.0.1/+esm';
-        inject();
     </script>
 </body>
 </html>
