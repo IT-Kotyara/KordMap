@@ -1,0 +1,23 @@
+{
+  "name": "primary",
+  "version": "1.0.0",
+  "description": "This is very crude, made only for the interim period before the main sites update",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IT-Kotyara/KordMap.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/IT-Kotyara/KordMap/issues"
+  },
+  "homepage": "https://github.com/IT-Kotyara/KordMap#readme",
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
+  }
+}
