@@ -139,7 +139,7 @@
         <div class="map-grid">
             <div class="map-card" onclick="initMap('customs')">Таможня</div>
             <div class="map-card" onclick="initMap('factory')">Завод</div>
-            <div class="map-card" onclick="initMap('interchech')">Развязка</div>
+            <div class="map-card" onclick="initMap('interchange')">Развязка</div>
         </div>
     </div>
 
@@ -166,12 +166,12 @@
             <div class="menu-items" id="floor-menu"></div>
             
             <div class="sidebar-footer">
-                You can contribute to this project on <a href="https://github.com/KalleLeskinen/KordMap" target="_blank" rel="noopener noreferrer">Github</a><br>
+                Original project by <a href="https://github.com/KalleLeskinen/KordMap" target="_blank" rel="noopener noreferrer">Kalle Leskinen on Github</a><br>
                 <br>
-                Document locations by users on <a href="https://discord.com/invite/AmuWBRMnVQ" target="_blank" rel="noopener noreferrer">VeryBadSCAV</a>'s Discord server<br>
+                Document locations by <a href="https://t.me/metadvij" target="_blank" rel="noopener noreferrer">Metadvij community</a><br>
                 <br>
                 Map SVGs by <a href="https://github.com/the-hideout/tarkov-dev-svg-maps/" target="_blank" rel="noopener noreferrer">Shebuka</a><br>
-                Licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0</a><br>
+                Shared and modified under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0</a><br>
             </div>
         </nav>
 
@@ -195,7 +195,7 @@
             
             <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px;">document Type:</p>
             <div class="custom-select" id="icon-select">
-                <div class="select-selected" id="select-selected">Loading Icons...</div>
+                <div class="select-selected" id="select-selected">Загружаем иконки...</div>
                 <div class="select-items" id="select-items"></div>
             </div>
             <input type="hidden" id="selected-icon-value">
@@ -435,7 +435,7 @@
                     
                     if (floorGroup) {
                         if (floorId !== 'floor-0') {
-                            buttonsToCreate.push({ id: floorId, label: `FLOOR ${floorVal}` });
+                            buttonsToCreate.push({ id: floorId, label: `Этаж ${floorVal}` });
                         }
                     }
                 });
