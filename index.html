@@ -274,9 +274,30 @@
         .map-container.mode-add svg:active { cursor: crosshair; }
         .map-container svg g[id^="floor-"] { transition: filter 0.3s ease, opacity 0.3s ease; }
         
+        /* Display Options */
+        .options-container { border-bottom: 1px solid var(--border); display: flex; flex-direction: column; }
+        .options-menu { padding: 10px 15px; display: flex; flex-direction: column; gap: 8px; }
+        .option-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-main);
+            font-size: 0.85rem;
+            cursor: pointer;
+            user-select: none;
+        }
+        .option-item input { accent-color: var(--accent); cursor: pointer; margin: 0; width: 14px; height: 14px; }
+
         /* Map Points */
         .map-point { cursor: pointer; transition: filter 0.2s, opacity 0.2s; }
         .map-point:hover { filter: drop-shadow(0px 0px 5px var(--accent)); }
+
+        /* Dark glow behind icons, for readability on light map areas.
+           A gradient-filled circle rather than a drop-shadow filter: filters are
+           re-rasterized per icon on every pan/zoom frame, which crawls on busy maps. */
+        .point-glow { display: none; pointer-events: none; }
+        .map-container.dark-glow .point-glow { display: block; }
+
         .map-container.mode-move .map-point { cursor: move; }
 
         /* Modals & Overlays */
@@ -361,8 +382,23 @@
                 <div class="legend-header">Фильтр документов</div>
                 <div id="legend-menu" class="legend-menu"></div>
             </div>
+            <div id="options-container" class="options-container">
+                <div class="legend-header">Отображение</div>
+                <div class="options-menu">
+                    <label class="option-item">
+                        <input type="checkbox" id="opt-floor-arrows" checked> Стрелки этажей
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" id="opt-ignore-floors"> Игнорировать этажи
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" id="opt-dark-glow"> Контраст иконок
+                    </label>
+                </div>
+            </div>
+
             <div class="menu-items" id="floor-menu"></div>
-            
+
             <div class="sidebar-footer">
                 Original project by <a href="https://github.com/KalleLeskinen/KordMap" target="_blank" rel="noopener noreferrer">Kalle Leskinen on Github</a><br>
                 <br>
@@ -425,9 +461,12 @@
         let availableIcons = [];
         let activeFilters = new Set();
 
+        // Display Options
+        let ignoreFloors = false;
+        let showFloorArrows = true;
+        let darkGlow = false;
 
-
-        let pendingPointCoords = null; 
+        let pendingPointCoords = null;
         let draggedPoint = null;       
         let currentViewedPointId = null; 
 
@@ -652,6 +691,27 @@
             closeViewer();
         }
 
+        // The gradient lives in the map SVG, which is replaced whenever a map loads
+        function ensurePointGlowGradient(svg) {
+            if (svg.querySelector('#point-glow-gradient')) return;
+
+            const NS = 'http://www.w3.org/2000/svg';
+            const defs = document.createElementNS(NS, 'defs');
+            const gradient = document.createElementNS(NS, 'radialGradient');
+            gradient.id = 'point-glow-gradient';
+
+            [['0%', '0.8'], ['50%', '0.6'], ['100%', '0']].forEach(([offset, opacity]) => {
+                const stop = document.createElementNS(NS, 'stop');
+                stop.setAttribute('offset', offset);
+                stop.setAttribute('stop-color', '#000');
+                stop.setAttribute('stop-opacity', opacity);
+                gradient.appendChild(stop);
+            });
+
+            defs.appendChild(gradient);
+            svg.insertBefore(defs, svg.firstChild);
+        }
+
         // 3. Base Map Setup (Floor 0 Hidden, Floor 1 Default)
         function setupMapInteractions(svg, floorsConfig) {
             floorMenu.innerHTML = ''; 
@@ -662,6 +722,8 @@
                 pointsLayer.id = 'points-layer';
                 svg.appendChild(pointsLayer);
             }
+
+            ensurePointGlowGradient(svg);
 
             const buttonsToCreate = [];
             
@@ -769,13 +831,16 @@
                 const oldArrow = g.querySelector('.floor-arrow');
                 if (oldArrow) oldArrow.remove();
 
-                if (ptNum === activeNum) {
+                if (ptNum === activeNum || ignoreFloors) {
                     g.style.opacity = '1';
-                    g.style.pointerEvents = 'all'; 
+                    g.style.pointerEvents = 'all';
                 } else {
                     g.style.opacity = '0.35';
-                    g.style.pointerEvents = 'none'; 
-                    
+                    g.style.pointerEvents = 'none';
+                }
+
+                // Floor arrow: an off-floor marker still shows which way it sits
+                if (ptNum !== activeNum && showFloorArrows) {
                     const arrow = document.createElementNS('http://www.w3.org/2000/svg', 'text');
                     arrow.setAttribute('class', 'floor-arrow');
                     arrow.setAttribute('font-weight', 'bold');
@@ -804,12 +869,17 @@
             
             document.querySelectorAll('.map-point').forEach(g => {
                 const img = g.querySelector('image');
-                const circle = g.querySelector('circle');
+                const circle = g.querySelector('circle:not(.point-glow)');
+                const glow = g.querySelector('.point-glow');
                 const arrow = g.querySelector('.floor-arrow');
-                
+
                 const currentIconSize = ICON_SIZE * scale;
                 const currentRadius = POINT_RADIUS * scale;
-                
+
+                if (glow) {
+                    glow.setAttribute('r', img ? currentIconSize * 0.7 : currentRadius * 3);
+                }
+
                 if (img) {
                     img.setAttribute('width', currentIconSize);
                     img.setAttribute('height', currentIconSize);
@@ -978,6 +1048,12 @@
             title.textContent = pointData.iconType || "Point";
             g.appendChild(title);
 
+            const glow = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            glow.setAttribute('class', 'point-glow');
+            glow.setAttribute('r', ICON_SIZE * 0.7);
+            glow.setAttribute('fill', 'url(#point-glow-gradient)');
+            g.appendChild(glow);
+
             if (pointData.iconType) {
                 const img = document.createElementNS('http://www.w3.org/2000/svg', 'image');
                 img.setAttribute('href', `icons/${pointData.iconType}.png`);
@@ -1125,6 +1201,40 @@
             };
             reader.readAsText(file);
         }
+
+        // 10. Display Options
+        function applyDarkGlow() {
+            mapWrapper.classList.toggle('dark-glow', darkGlow);
+        }
+
+        function initDisplayOptions() {
+            const ignoreFloorsInput = document.getElementById('opt-ignore-floors');
+            const floorArrowsInput = document.getElementById('opt-floor-arrows');
+            const darkGlowInput = document.getElementById('opt-dark-glow');
+
+            ignoreFloorsInput.addEventListener('change', (e) => {
+                ignoreFloors = e.target.checked;
+                updatePointsVisibility();
+            });
+
+            floorArrowsInput.addEventListener('change', (e) => {
+                showFloorArrows = e.target.checked;
+                updatePointsVisibility();
+            });
+
+            darkGlowInput.addEventListener('change', (e) => {
+                darkGlow = e.target.checked;
+                applyDarkGlow();
+            });
+
+            // Reflect the markup's initial state
+            ignoreFloors = ignoreFloorsInput.checked;
+            showFloorArrows = floorArrowsInput.checked;
+            darkGlow = darkGlowInput.checked;
+            applyDarkGlow();
+        }
+
+        initDisplayOptions();
 
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {

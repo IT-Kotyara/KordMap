@@ -4,6 +4,7 @@
   "description": "This is very crude, made only for the interim period before the main sites update",
   "main": "index.js",
   "scripts": {
+    "start": "serve -l 8080 .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -19,5 +20,8 @@
   "homepage": "https://github.com/IT-Kotyara/KordMap#readme",
   "dependencies": {
     "@vercel/analytics": "^2.0.1"
+  },
+  "devDependencies": {
+    "serve": "^14.2.6"
   }
 }
