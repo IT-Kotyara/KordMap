@@ -101,11 +101,15 @@
             margin-bottom: 10px;
             flex-shrink: 0;
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
         }
 
         #map-selector h2 img {
-            width: 42px;
-            height: 42px;
+            width: 64px;
+            height: 64px;
         }
 
         .map-grid {
@@ -154,6 +158,19 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.5);
             transition: 0.5s;
             background-size: 110%;
+        }
+
+        #socials {
+            position: relative;
+            top: ;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            z-index: 200;
+            overflow-y: auto;
+            padding: 40px 20px;
         }
 
         /* Sidebar */
@@ -303,7 +320,7 @@
             <div class="map-card" style="background-image: url('mapBG/лабиринт.jpg');" onclick="initMap('лабиринт')">Лабиринт</div>
             <div class="map-card" style="background-image: url('mapBG/ледокол.jpg');" onclick="initMap('ледокол')">Ледокол</div>
         </div>
-        <h2>Тарковское Метадвижение<img src="favicon.ico"></h2>
+        <h2>Тарковское Метадвижение <img src="favicon.ico"></h2>
     </div>
 
     <div class="container" id="app-container">
