@@ -201,7 +201,6 @@
             <div class="map-card" onclick="initMap('берег')">Берег</div>
             <div class="map-card" onclick="initMap('лес')">Лес</div>
             <div class="map-card" onclick="initMap('маяк')">Маяк</div>
-            <div class="map-card" onclick="initMap('развязка')">Развязка</div>
             <div class="map-card" onclick="initMap('резерв')">Резерв</div>
             <div class="map-card" onclick="initMap('улицы')">Улицы Таркова</div>
             <div class="map-card" onclick="initMap('эпицентр')">Эпицентр</div>
@@ -911,38 +910,38 @@
 
         // 9. Data Handlers
         function convertToBase64(file, maxWidth = 1920) {
-        return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        
-        reader.onload = (event) => {
-            const img = new Image();
-            img.src = event.target.result;
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
             
-            img.onload = () => {
-                const canvas = document.createElement('canvas');
-                let width = img.width;
-                let height = img.height;
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.src = event.target.result;
+                    
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        let width = img.width;
+                        let height = img.height;
 
-                // Scale down if the image is wider than maxWidth
-                if (width > maxWidth) {
-                    height = Math.round((height * maxWidth) / width);
-                    width = maxWidth;
-                }
+                        // Scale down if the image is wider than maxWidth
+                        if (width > maxWidth) {
+                            height = Math.round((height * maxWidth) / width);
+                            width = maxWidth;
+                        }
 
-                canvas.width = width;
-                canvas.height = height;
-                
-                const ctx = canvas.getContext('2d');
-                ctx.drawImage(img, 0, 0, width, height);
+                        canvas.width = width;
+                        canvas.height = height;
+                        
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
 
-                // Re-encode as JPEG with 85% quality
-                const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
-                resolve(compressedBase64);
-            };
-            
-            img.onerror = error => reject(error);
+                        // Re-encode as JPEG with 70% quality
+                        const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
+                        resolve(compressedBase64);
+                    };
+                    
+                    img.onerror = error => reject(error);
                 };
-                
+                        
                 reader.onerror = error => reject(error);
                 reader.readAsDataURL(file);
             });
