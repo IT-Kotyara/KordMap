@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Карта документов Kord Breach</title>
     <style>
@@ -63,6 +64,9 @@
         }
         .map-card {
             background: var(--bg-card);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             padding: 30px 20px;
             border-radius: 4px;
             font-size: 1.1rem;
@@ -72,11 +76,37 @@
             border: 1px solid var(--border);
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: var(--text-muted);
+            color: #fff;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.9);
         }
-        .map-card:hover { background: var(--bg-hover); border-color: var(--accent); color: var(--accent); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
-        
+        .map-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            transition: background 0.2s;
+            z-index: 0;
+        }
+
+        .map-card:hover {
+            background-color: var(--bg-hover);
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            background-size: 110%;
+        }
+
+        .map-card:hover::before {
+            background: rgba(0, 0, 0, 0.25);
+        }
         /* Sidebar */
         .sidebar { width: 280px; background: var(--bg-panel); display: flex; flex-direction: column; z-index: 10; border-right: 1px solid var(--border); }
         .sidebar-header { padding: 20px; font-size: 1.1rem; font-weight: bold; text-align: center; color: var(--accent); text-transform: uppercase; letter-spacing: 2px; }
@@ -195,18 +225,18 @@
     <div id="map-selector">
         <h1>Выберите карту</h1>
         <div class="map-grid">
-            <div class="map-card" onclick="initMap('таможня')">Таможня</div>
-            <div class="map-card" onclick="initMap('завод')">Завод</div>
-            <div class="map-card" onclick="initMap('развязка')">Развязка</div>
-            <div class="map-card" onclick="initMap('берег')">Берег</div>
-            <div class="map-card" onclick="initMap('лес')">Лес</div>
-            <div class="map-card" onclick="initMap('маяк')">Маяк</div>
-            <div class="map-card" onclick="initMap('резерв')">Резерв</div>
-            <div class="map-card" onclick="initMap('улицы')">Улицы Таркова</div>
-            <div class="map-card" onclick="initMap('эпицентр')">Эпицентр</div>
-            <div class="map-card" onclick="initMap('лаборатория')">Лаборатория</div>
-            <div class="map-card" onclick="initMap('лабиринт')">Лабиринт</div>
-            <div class="map-card" onclick="initMap('ледокол')">Ледокол</div>
+            <div class="map-card" style="background-image: url('mapBG/таможня.jpg');" onclick="initMap('таможня')">Таможня</div>
+            <div class="map-card" style="background-image: url('mapBG/завод.jpg');" onclick="initMap('завод')">Завод</div>
+            <div class="map-card" style="background-image: url('mapBG/развязка.jpg');" onclick="initMap('развязка')">Развязка</div>
+            <div class="map-card" style="background-image: url('mapBG/берег.jpg');" onclick="initMap('берег')">Берег</div>
+            <div class="map-card" style="background-image: url('mapBG/лес.jpg');" onclick="initMap('лес')">Лес</div>
+            <div class="map-card" style="background-image: url('mapBG/маяк.jpg');" onclick="initMap('маяк')">Маяк</div>
+            <div class="map-card" style="background-image: url('mapBG/резерв.jpg');" onclick="initMap('резерв')">Резерв</div>
+            <div class="map-card" style="background-image: url('mapBG/улицы.jpg');" onclick="initMap('улицы')">Улицы Таркова</div>
+            <div class="map-card" style="background-image: url('mapBG/эпицентр.jpg');" onclick="initMap('эпицентр')">Эпицентр</div>
+            <div class="map-card" style="background-image: url('mapBG/лаборатория.jpg');" onclick="initMap('лаборатория')">Лаборатория</div>
+            <div class="map-card" style="background-image: url('mapBG/лабиринт.jpg');" onclick="initMap('лабиринт')">Лабиринт</div>
+            <div class="map-card" style="background-image: url('mapBG/ледокол.jpg');" onclick="initMap('ледокол')">Ледокол</div>
         </div>
     </div>
 
