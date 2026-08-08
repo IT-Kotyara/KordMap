@@ -365,15 +365,6 @@
                 <div class="legend-header">Фильтр документов</div>
                 <div id="legend-menu" class="legend-menu"></div>
             </div>
-            <div class="controls">
-                <button id="mode-view" class="mode-btn active" onclick="setMode('VIEW')">View Points</button>
-                
-                <div class="action-group">
-                    <button class="action-btn load" onclick="document.getElementById('import-json').click()">Load</button>
-                    <button class="action-btn export" onclick="exportData()">Export</button>
-                    <input type="file" id="import-json" accept=".json" style="display:none" onchange="loadData(event)">
-                </div>
-            </div>
             <div class="menu-items" id="floor-menu"></div>
             
             <div class="sidebar-footer">
@@ -547,6 +538,7 @@
                     }
                 }
             } catch(e) { }
+            setMode('VIEW');
             updateLegendCounts();
         }
 
