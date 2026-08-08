@@ -296,12 +296,6 @@
     <g id="Border" class="map_border">
       <use xlink:href="#the_ground" x="0" y="0" />
     </g>
-    <g id="Sniper" class="danger">
-      <path d="M45.4522 253.7359H19.329087V276.03H45.4522Z" />
-      <path d="m45.242918 148.82-25.746896-.202V46.295403l25.746896.201997Z" />
-      <path d="M272.904 253.03741v-32.23779h39.662v32.23779z" />
-      <path d="M254.483 398.077v34.417h52.376v-34.417z" />
-    </g>
   </g>
   <g id="floor-1" class="shadow" data-keep-with-group="floor-0">
     <g id="Floor-1" class="floor">
