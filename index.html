@@ -9,7 +9,14 @@
 
         @font-face {
             font-family: Bender;
-            src: url(Bender.woff)
+            src: url(Bender.woff);
+            font-weight: normal;
+        }
+
+        @font-face {
+            font-family: Bender;
+            src: url(Bender-Bold.woff);
+            font-weight: bold;
         }
 
         * {
@@ -85,6 +92,22 @@
             flex-shrink: 0;
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 1);
         }
+
+        #map-selector h2 {
+            color: white;
+            font-weight: bold;
+            font-size: 3rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            flex-shrink: 0;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 1);
+        }
+
+        #map-selector h2 img {
+            width: 512px; height: 512px; object-fit: contain;
+        }
+
         .map-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -280,6 +303,7 @@
             <div class="map-card" style="background-image: url('mapBG/лабиринт.jpg');" onclick="initMap('лабиринт')">Лабиринт</div>
             <div class="map-card" style="background-image: url('mapBG/ледокол.jpg');" onclick="initMap('ледокол')">Ледокол</div>
         </div>
+        <h2>Тарковское Метадвижение><img src="kord_mtdv.png"></h2>
     </div>
 
     <div class="container" id="app-container">
