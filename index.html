@@ -313,10 +313,6 @@
         .no-image-box { border: 1px dashed var(--border); background: var(--bg-base); padding: 20px; text-align: center; color: var(--text-muted); font-size: 0.8rem; border-radius: 2px; text-transform: uppercase; }
         .close-viewer { position: absolute; top: -10px; right: -10px; background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border); border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; }
         .close-viewer:hover { background: var(--bg-hover); color: var(--accent); }
-        
-        .viewer-actions { display: flex; justify-content: flex-end; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
-        .btn-delete { background: var(--btn-danger); color: white; border: 1px solid #000; padding: 6px 12px; border-radius: 2px; cursor: pointer; font-size: 0.75rem; font-weight: bold; width: 100%; text-transform: uppercase; letter-spacing: 1px; }
-        .btn-delete:hover { background: var(--btn-danger-hover); }
 
         /* Fullscreen Lightbox */
         #lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 150; justify-content: center; align-items: center; }
@@ -384,9 +380,6 @@
             <div id="viewer-header" class="viewer-header">Point Details</div>
             <div id="viewer-description" class="viewer-description"></div>
             <div id="viewer-content"></div>
-            <div class="viewer-actions">
-                <button class="btn-delete" onclick="deleteActivePoint()">Delete Point</button>
-            </div>
         </div>
     </div>
 
@@ -1041,17 +1034,6 @@
             }
             
             viewer.classList.add('active');
-        }
-        
-        function deleteActivePoint() {
-            if (!currentViewedPointId) return;
-            if (!confirm("Confirm deletion of document marker?")) return;
-            
-            pointsData = pointsData.filter(p => p.id !== currentViewedPointId);
-            const element = document.querySelector(`g.map-point[data-id="${currentViewedPointId}"]`);
-            if (element) element.remove();
-            updateLegendCounts();
-            closeViewer();
         }
 
         function closeViewer() {
