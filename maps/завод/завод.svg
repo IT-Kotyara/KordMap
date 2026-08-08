@@ -14,7 +14,7 @@
       }
 
       .st2 {
-        fill: gold;
+        fill: gray(16);
       }
 
       .st3 {
