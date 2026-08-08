@@ -55,6 +55,8 @@
         .map-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
+            justify-content: center;
+            align-content: space-around;
             gap: 20px;
             margin-top: 20px;
             max-width: 900px;
@@ -214,7 +216,7 @@
     <div class="container" id="app-container">
         <nav class="sidebar">
             <div class="sidebar-header" id="current-map-title">Карта</div>
-            <button class="change-map-btn" onclick="changeMap()">Выбрать другую карту</button>
+            <button class="change-map-btn" onclick="changeMap()">Выбрать карту</button>
             <div class="controls">
                 <button id="mode-view" class="mode-btn active" onclick="setMode('VIEW')">View Points</button>
                 <button id="mode-add" class="mode-btn" onclick="setMode('ADD')">Mark Points</button>
