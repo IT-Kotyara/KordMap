@@ -543,7 +543,6 @@
         }
 
         function changeMap() {
-            closeViewer();
             lightbox.classList.remove('active');
             if (createModal.classList.contains('active')) cancelCreate();
 
@@ -561,6 +560,7 @@
 
             appContainer.style.display = 'none';
             mapSelector.style.display = 'flex';
+            closeViewer();
         }
 
         function buildIconDropdown() {
@@ -659,7 +659,6 @@
             mapWrapper.className = `map-container mode-${newMode.toLowerCase()}`;
             closeViewer();
         }
-
         // 3. Base Map Setup (Floor 0 Hidden, Floor 1 Default)
         function setupMapInteractions(svg, floorsConfig) {
             floorMenu.innerHTML = ''; 
