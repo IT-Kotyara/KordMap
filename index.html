@@ -655,7 +655,6 @@
         function setMode(newMode) {
             mode = newMode;
             document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById(`mode-${newMode.toLowerCase()}`).classList.add('active');
             mapWrapper.className = `map-container mode-${newMode.toLowerCase()}`;
             closeViewer();
         }
