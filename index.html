@@ -203,9 +203,6 @@
         }
 
         .map-card {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
             background: var(--bg-card);
             background-size: cover;
             background-position: center;
@@ -223,6 +220,7 @@
             text-align: center;
             position: relative;
             overflow: hidden;
+            display: flex;
             align-items: center;
             justify-content: center;
             text-shadow: 1.5px 1.5px 1px #000;
@@ -236,27 +234,6 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.5);
             transition: 0.5s;
             background-size: 110%;
-        }
-
-        .map-card-name {
-            display: block;
-            line-height: 1.2;
-        }
-
-        .map-card-icons {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .map-card-icons img {
-            width: 28px;
-            height: 28px;
-            scale: 2;
-            object-fit: contain;
-            filter: drop-shadow(0 1px 2px #000);
         }
 
         /* Mobile adjustments for selector only */
@@ -1148,6 +1125,7 @@
         <button type="button" id="lightbox-edit">Редактировать</button>
     </div>
     <script>
+        const EDITOR_PASSWORD = 'metodvigenye';
         let isEditor = false;
         
         // Global Map State
@@ -2013,7 +1991,7 @@
             };
             reader.readAsText(file);
         }
-        const EDITOR_PASSWORD='metodvigenye';
+
         // 10. Display Options
         function applyDarkGlow() {
             mapWrapper.classList.toggle('dark-glow', darkGlow);
@@ -2235,79 +2213,7 @@
             };
             img.src = url;
         });
-        
-        async function loadMapMarkerCounts() {
-            const cards = document.querySelectorAll('.map-card');
-            await Promise.all(Array.from(cards).map(async (card) => {
-                const onclickAttr = card.getAttribute('onclick') || '';
-                const match = onclickAttr.match(/initMap\(\s*['"]([^'"]+)['"]\s*\)/);
-                if (!match) return;
 
-                const name = match[1];
-                const baseLabel = card.textContent.trim().replace(/\s*\(\d+\)\s*$/, '');
-
-                try {
-                    const res = await fetch(`/data/${name}-points.json`);
-                    if (!res.ok) throw new Error('not found');
-                    const data = await res.json();
-                    const count = Array.isArray(data.points) ? data.points.length : 0;
-                    card.textContent = `${baseLabel} (${count})`;
-                } catch {
-                    card.textContent = `${baseLabel} (0)`;
-                }
-            }));
-        }
-
-        loadMapMarkerCounts();
-
-        async function loadMapCardMeta() {
-            const cards = document.querySelectorAll('.map-card');
-
-            await Promise.all(Array.from(cards).map(async (card) => {
-                const onclickAttr = card.getAttribute('onclick') || '';
-                const match = onclickAttr.match(/initMap\(\s*['"]([^'"]+)['"]\s*\)/);
-                if (!match) return;
-
-                const mapName = match[1];
-                const baseLabel = card.textContent.trim().replace(/\s*\(\d+\)\s*$/, '');
-
-                let count = 0;
-                const icons = new Set();
-
-                try {
-                    const res = await fetch(`data/${mapName}-points.json`);
-                    if (res.ok) {
-                        const data = await res.json();
-                        const points = Array.isArray(data.points) ? data.points : [];
-                        count = points.length;
-                        points.forEach(p => {
-                            if (p.iconType) icons.add(p.iconType);
-                        });
-                    }
-                } catch {}
-
-                card.innerHTML = '';
-
-                const nameEl = document.createElement('div');
-                nameEl.className = 'map-card-name';
-                nameEl.textContent = `${baseLabel} (${count})`;
-                card.appendChild(nameEl);
-
-                const iconsEl = document.createElement('div');
-                iconsEl.className = 'map-card-icons';
-                Array.from(icons).sort().forEach(type => {
-                    const img = document.createElement('img');
-                    img.src = `icons/${type}.png`;
-                    img.alt = type;
-                    img.title = type;
-                    img.onerror = () => img.remove();
-                    iconsEl.appendChild(img);
-                });
-                card.appendChild(iconsEl);
-            }));
-        }
-
-        loadMapCardMeta();
     </script>
 
     <script type="module">
