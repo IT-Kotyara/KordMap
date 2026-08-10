@@ -825,7 +825,23 @@
             width: 220px;
             pointer-events: none;
         }
-        #point-viewer.active { display: block; pointer-events: auto; }
+        #point-viewer.active {
+            display: block;
+            pointer-events: auto;
+        }
+
+        @media (max-width: 767px) {
+            #point-viewer {
+                position: fixed;
+                left: 12px;
+                right: 12px;
+                width: auto;
+                max-width: none;
+                bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+                top: auto;
+                z-index: 60;
+            }
+        }
         #point-viewer img {
             width: 100%;
             cursor: zoom-in;
@@ -1827,11 +1843,6 @@
         function showViewer(pointData, screenX, screenY) {
             currentViewedPointId = pointData.id;
 
-            if (window.innerWidth >= 768) {
-                viewer.style.left = (screenX + 15) + 'px';
-                viewer.style.top = (screenY - 20) + 'px';
-            }
-
             viewerHeader.textContent = pointData.iconType || 'document Details';
 
             if (pointData.details) {
@@ -1848,6 +1859,18 @@
             }
 
             viewer.classList.add('active');
+
+            if (window.innerWidth >= 768) {
+                viewer.style.left = (screenX + 15) + 'px';
+                viewer.style.top = (screenY - 20) + 'px';
+                viewer.style.right = '';
+                viewer.style.bottom = '';
+            } else {
+                viewer.style.left = '';
+                viewer.style.right = '';
+                viewer.style.top = '';
+                viewer.style.bottom = '';
+            }
         }
 
         function closeViewer() {
