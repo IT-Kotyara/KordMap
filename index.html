@@ -454,17 +454,27 @@
         }
 
         .controls {
-            padding: 15px;
+            padding: 12px 15px;
             border-bottom: 1px solid var(--border);
             display: flex;
             flex-direction: column;
             gap: 10px;
             flex-shrink: 0;
+            min-width: 0;
+            width: 100%;
+            box-sizing: border-box;
         }
-        .mode-row { display: flex; gap: 8px; }
+        .mode-row {
+            display: flex;
+            gap: 6px;
+            width: 100%;
+            min-width: 0;
+        }
         .mode-btn {
-            flex: 1;
-            padding: 10px;
+            flex: 1 1 0;
+            min-width: 0;
+            max-width: 100%;
+            padding: 10px 6px;
             background: var(--bg-card);
             color: var(--text-muted);
             border: 1px solid var(--border);
@@ -473,9 +483,12 @@
             font-weight: bold;
             transition: 0.2s;
             text-transform: uppercase;
-            font-size: 0.85rem;
-            letter-spacing: 1px;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
             min-height: 44px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
         .mode-btn:hover { background: var(--bg-hover); color: var(--text-main); }
         .mode-btn.active {
@@ -1634,8 +1647,7 @@
 
             function onPointerDown(e) {
                 if (e.pointerType === 'mouse' && e.button !== 0) return;
-                if (mode === 'MOVE' && e.target.closest('.map-point')) return;
-                if (mode === 'VIEW' && e.target.closest('.map-point')) return;
+                if (e.target.closest('.map-point')) return;
 
                 activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
                 svg.setPointerCapture?.(e.pointerId);
@@ -1657,16 +1669,17 @@
             }
 
             function onPointerMove(e) {
-                if (!activePointers.has(e.pointerId)) return;
-                activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
-
-                if (draggedPoint && mode === 'MOVE') {
+                if (draggedPoint && mode === 'MOVE' && isEditor) {
+                    e.preventDefault();
                     const svgP = getSVGPoint(e.clientX, e.clientY);
                     draggedPoint.group.setAttribute('transform', `translate(${svgP.x}, ${svgP.y})`);
                     draggedPoint.data.x = svgP.x;
                     draggedPoint.data.y = svgP.y;
                     return;
                 }
+
+                if (!activePointers.has(e.pointerId)) return;
+                activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
 
                 if (activePointers.size === 2) {
                     e.preventDefault();
@@ -1700,11 +1713,13 @@
             }
 
             function onPointerUp(e) {
+                if (draggedPoint) {
+                    draggedPoint = null;
+                }
                 activePointers.delete(e.pointerId);
                 if (activePointers.size < 2) lastTouchDist = 0;
                 if (activePointers.size === 0) {
                     isPanning = false;
-                    draggedPoint = null;
                     mapWrapper.classList.remove('is-panning');
                 } else if (activePointers.size === 1) {
                     const remaining = activePointers.values().next().value;
@@ -1714,7 +1729,13 @@
                 }
             }
 
-            svg.addEventListener('pointerdown', onPointerDown);
+            svg.addEventListener('pointerdown', (e) => {
+                if (mode !== 'MOVE' || !isEditor) return;
+                e.stopPropagation();
+                e.preventDefault();
+                draggedPoint = { group: g, data: pointData };
+                g.setPointerCapture?.(e.pointerId);
+            });
             svg.addEventListener('pointermove', onPointerMove, { passive: false });
             svg.addEventListener('pointerup', onPointerUp);
             svg.addEventListener('pointercancel', onPointerUp);
@@ -1727,6 +1748,10 @@
                 document.getElementById('point-image-input').value = '';
                 document.getElementById('point-details-input').value = '';
                 createModal.classList.add('active');
+                if (mode === 'VIEW') {
+                    e.stopPropagation();
+                    showViewer(pointData, e.clientX, e.clientY);
+                }
             });
         }
         // 7. Point Creation & Rendering
@@ -1886,6 +1911,10 @@
                 if (createModal.classList.contains('active')) cancelCreate();
                 closeSheet();
             }
+        });
+
+        document.addEventListener('pointerup', () => {
+            if (draggedPoint) draggedPoint = null;
         });
 
         // 9. Data Handlers
