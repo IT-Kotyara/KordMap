@@ -21,24 +21,6 @@
             font-family: Bender, system-ui, sans-serif;
             box-sizing: border-box;
         }
-<<<<<<< Updated upstream
-
-        /* Tactical Color Palette */
-        :root {
-            --bg-base: #09090a;      /* Deepest background */
-            --bg-panel: #121315;     /* Sidebar and modal background */
-            --bg-card: #191b1d;      /* UI elements / Cards */
-            --bg-hover: #232528;     /* Hover state for items */
-            --border: #282a2e;       /* Borders and dividers */
-            --text-main: #c4c5c7;    /* Primary text (off-white/gray) */
-            --text-muted: #72757a;   /* Secondary text */
-            
-            /* Accents */
-            --accent: #d18d32;       /* Tactical orange/gold */
-            --accent-hover: #e59f3d; 
-            --accent-dim: rgba(209, 141, 50, 0.15);
-=======
->>>>>>> Stashed changes
 
         :root {
             --bg-base: #09090a;
@@ -69,12 +51,8 @@
             overflow: hidden;
             -webkit-tap-highlight-color: transparent;
         }
-<<<<<<< Updated upstream
-        /* Map Selector Screen */
-=======
 
         /* ========== MAP SELECTOR ========== */
->>>>>>> Stashed changes
         #map-selector {
             position: fixed;
             inset: 0;
@@ -100,15 +78,7 @@
             z-index: 0;
             pointer-events: none;
         }
-<<<<<<< Updated upstream
-
-        #map-selector > * {
-            position: relative;
-            z-index: 1;
-        }
-=======
         #map-selector > * { position: relative; z-index: 1; }
->>>>>>> Stashed changes
 
         #map-selector h1 {
             color: var(--accent);
@@ -157,35 +127,13 @@
             justify-content: center;
             text-shadow: 1.5px 1.5px 2px #000;
         }
-<<<<<<< Updated upstream
-
-        .map-card > * {
-            position: relative;
-            z-index: 1;
-        }
-
-        .map-card:hover {
-            background-color: var(--bg-hover);
-=======
         .map-card:hover, .map-card:active {
->>>>>>> Stashed changes
             border-color: var(--accent);
             color: var(--accent);
             transform: translateY(-2px);
             background-size: 108%;
         }
 
-<<<<<<< Updated upstream
-        /* Sidebar */
-        .sidebar { width: 280px; background: var(--bg-panel); display: flex; flex-direction: column; z-index: 10; border-right: 1px solid var(--border); }
-        .sidebar-header { padding: 20px; font-size: 1.1rem; font-weight: bold; text-align: center; color: var(--accent); text-transform: uppercase; letter-spacing: 2px; }
-        
-        /* Controls & Modes */
-        .controls { padding: 15px; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: 10px; }
-        .mode-btn { width: 100%; padding: 10px; background: var(--bg-card); color: var(--text-muted); border: 1px solid var(--border); border-radius: 2px; cursor: pointer; font-weight: bold; transition: 0.2s; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; }
-        .mode-btn:hover { background: var(--bg-hover); color: var(--text-main); }
-        .mode-btn.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
-=======
         .brand-block {
             display: flex;
             flex-direction: column;
@@ -343,7 +291,6 @@
             flex-shrink: 0;
         }
 
->>>>>>> Stashed changes
         .change-map-btn {
             display: none; /* hidden on mobile – use top bar instead */
         }
@@ -418,33 +365,6 @@
             letter-spacing: 1px;
             background: #000;
         }
-<<<<<<< Updated upstream
-        .legend-item img { width: 32px; height: 32px; object-fit: contain; }
-        .legend-item input[type="checkbox"] { accent-color: var(--accent); cursor: pointer; margin: 0; width: 14px; height: 14px; background: var(--bg-card); border: 1px solid var(--border); }
-
-        /* Menu Items */
-        .menu-items { display: flex; flex-direction: column; overflow-y: auto; flex: 1; padding: 10px 0; }
-        .floor-btn { background: none; border: none; color: var(--text-muted); padding: 12px 20px; text-align: left; font-size: 0.9rem; cursor: pointer; border-left: 3px solid transparent; font-weight: bold; transition: 0.2s; letter-spacing: 1px; }
-        .floor-btn:hover { background: var(--bg-hover); color: var(--text-main); }
-        .floor-btn.active { background: #000; color: var(--accent); border-left-color: var(--accent); }
-
-        /* Sidebar Footer */
-        .sidebar-footer { padding: 15px; font-size: 0.75rem; color: var(--text-muted); text-align: center; border-top: 1px solid var(--border); background: var(--bg-base); }
-        .sidebar-footer a { color: var(--accent); text-decoration: none; font-weight: bold; transition: color 0.2s; }
-        .sidebar-footer a:hover { color: var(--accent-hover); text-decoration: underline; }
-
-        /* Map Area */
-        .map-container { flex: 1; display: flex; justify-content: center; align-items: center; position: relative; overflow: hidden; }
-        .map-container svg { width: 100%; height: 100%; background: transparent; cursor: grab; user-select: none; pointer-events: all; }
-        .map-container svg:active { cursor: grabbing; }
-        .map-container.mode-add svg { cursor: crosshair; }
-        .map-container.mode-add svg:active { cursor: crosshair; }
-        .map-container svg g[id^="floor-"] { transition: filter 0.3s ease, opacity 0.3s ease; }
-        
-        /* Map Points */
-        .map-point { cursor: pointer; transition: filter 0.2s, opacity 0.2s; }
-        .map-point:hover { filter: drop-shadow(0px 0px 5px var(--accent)); }
-=======
         .legend-menu, .options-menu {
             padding: 10px 14px;
             display: flex;
@@ -576,7 +496,6 @@
         .map-point:hover { filter: drop-shadow(0px 0px 5px var(--accent)); }
         .point-glow { display: none; pointer-events: none; }
         .map-container.dark-glow .point-glow { display: block; }
->>>>>>> Stashed changes
         .map-container.mode-move .map-point { cursor: move; }
 
         /* ========== MODALS & VIEWER ========== */
@@ -703,26 +622,6 @@
         }
         .btn-cancel { background: var(--bg-card); color: var(--text-main); }
         .btn-save { background: var(--accent); color: #000; border-color: var(--accent); }
-<<<<<<< Updated upstream
-        .btn-save:hover { background: var(--accent-hover); }
-        
-        /* Floating Point Viewer */
-        #point-viewer { display: none; position: absolute; background: var(--bg-panel); border: 1px solid var(--border); padding: 12px; border-radius: 4px; box-shadow: 0 4px 20px rgba(0,0,0,0.8); z-index: 50; width: 220px; pointer-events: none; }
-        #point-viewer.active { display: block; pointer-events: auto; }
-        #point-viewer img { width: 100%; cursor: zoom-in; border-radius: 2px; object-fit: cover; border: 1px solid var(--border); }
-        .viewer-header { font-size: 0.8rem; color: var(--accent); margin-bottom: 10px; font-weight: bold; border-bottom: 1px solid var(--border); padding-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
-        .viewer-description { font-size: 0.85rem; color: var(--text-main); margin-bottom: 12px; line-height: 1.4; white-space: pre-wrap; word-wrap: break-word; display: none; }
-        .no-image-box { border: 1px dashed var(--border); background: var(--bg-base); padding: 20px; text-align: center; color: var(--text-muted); font-size: 0.8rem; border-radius: 2px; text-transform: uppercase; }
-        .close-viewer { position: absolute; top: -10px; right: -10px; background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border); border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; }
-        .close-viewer:hover { background: var(--bg-hover); color: var(--accent); }
-        
-        .viewer-actions { display: flex; justify-content: flex-end; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
-        .btn-delete { background: var(--btn-danger); color: white; border: 1px solid #000; padding: 6px 12px; border-radius: 2px; cursor: pointer; font-size: 0.75rem; font-weight: bold; width: 100%; text-transform: uppercase; letter-spacing: 1px; }
-        .btn-delete:hover { background: var(--btn-danger-hover); }
-
-        /* Fullscreen Lightbox */
-        #lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 150; justify-content: center; align-items: center; }
-=======
 
         /* Point viewer */
         #point-viewer {
@@ -802,7 +701,6 @@
             align-items: center;
             padding: 16px;
         }
->>>>>>> Stashed changes
         #lightbox.active { display: flex; cursor: zoom-out; }
         #lightbox img {
             max-width: 100%;
@@ -856,13 +754,9 @@
             </div>
         </div>
     </div>
-<<<<<<< Updated upstream
-
-=======
     <a class="donate-button" href="https://www.donationalerts.com/r/v1shnevskyy" target="_blank" rel="noopener noreferrer">Поддержать нас 💸</a>
 
     <!-- MAIN APP -->
->>>>>>> Stashed changes
     <div class="container" id="app-container">
         <!-- Mobile top bar -->
         <header class="mobile-header">
@@ -877,24 +771,6 @@
             <div class="sheet-handle"></div>
             <div class="sidebar-header" id="current-map-title">Карта</div>
             <button class="change-map-btn" onclick="changeMap()">Выбрать карту</button>
-<<<<<<< Updated upstream
-            <div class="controls">
-                <button id="mode-view" class="mode-btn active" onclick="setMode('VIEW')">View Points</button>
-                <button id="mode-add" class="mode-btn" onclick="setMode('ADD')">Mark Points</button>
-                <button id="mode-move" class="mode-btn" onclick="setMode('MOVE')">Move Points</button>
-                
-                <div class="action-group">
-                    <button class="action-btn load" onclick="document.getElementById('import-json').click()">Load</button>
-                    <button class="action-btn export" onclick="exportData()">Export</button>
-                    <input type="file" id="import-json" accept=".json" style="display:none" onchange="loadData(event)">
-                </div>
-            </div>
-            
-            <div id="legend-container" class="legend-container" style="display: none;">
-                <div class="legend-header">Фильтр документов</div>
-                <div id="legend-menu" class="legend-menu"></div>
-            </div>
-=======
 
             <div class="controls">
                 <div class="mode-row">
@@ -930,7 +806,6 @@
                     </label>
                 </div>
             </div>
->>>>>>> Stashed changes
 
             <div class="menu-items" id="floor-menu"></div>
             
@@ -993,21 +868,12 @@
         let pointsData = [];
         let availableIcons = [];
         let activeFilters = new Set();
-<<<<<<< Updated upstream
-
-
-
-        let pendingPointCoords = null; 
-        let draggedPoint = null;       
-        let currentViewedPointId = null; 
-=======
         let ignoreFloors = false;
         let showFloorArrows = true;
         let darkGlow = false;
         let pendingPointCoords = null;
         let draggedPoint = null;
         let currentViewedPointId = null;
->>>>>>> Stashed changes
 
         const POINT_RADIUS = 1.5;
         const ICON_SIZE = 9.6;
@@ -1120,13 +986,9 @@
                         updatePointsVisibility();
                     }
                 }
-<<<<<<< Updated upstream
-            } catch(e) { }
-=======
             } catch (e) {}
 
             setMode('VIEW');
->>>>>>> Stashed changes
             updateLegendCounts();
         }
 
@@ -1231,22 +1093,14 @@
         // ========== MODES ==========
         function setMode(newMode) {
             mode = newMode;
-<<<<<<< Updated upstream
-            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById(`mode-${newMode.toLowerCase()}`).classList.add('active');
-=======
             document.querySelectorAll('.mode-btn').forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.mode === newMode);
             });
->>>>>>> Stashed changes
             mapWrapper.className = `map-container mode-${newMode.toLowerCase()}`;
             if (darkGlow) mapWrapper.classList.add('dark-glow');
             closeViewer();
         }
 
-<<<<<<< Updated upstream
-        // 3. Base Map Setup (Floor 0 Hidden, Floor 1 Default)
-=======
         function ensurePointGlowGradient(svg) {
             if (svg.querySelector('#point-glow-gradient')) return;
             const NS = 'http://www.w3.org/2000/svg';
@@ -1265,7 +1119,6 @@
         }
 
         // ========== FLOORS ==========
->>>>>>> Stashed changes
         function setupMapInteractions(svg, floorsConfig) {
             floorMenu.innerHTML = '';
             let pointsLayer = svg.querySelector('#points-layer');
@@ -1274,10 +1127,7 @@
                 pointsLayer.id = 'points-layer';
                 svg.appendChild(pointsLayer);
             }
-<<<<<<< Updated upstream
-=======
             ensurePointGlowGradient(svg);
->>>>>>> Stashed changes
 
             const buttonsToCreate = [];
             if (floorsConfig && floorsConfig.length > 0) {
@@ -1366,15 +1216,10 @@
                     g.style.pointerEvents = 'all'; 
                 } else {
                     g.style.opacity = '0.35';
-<<<<<<< Updated upstream
-                    g.style.pointerEvents = 'none'; 
-                    
-=======
                     g.style.pointerEvents = 'none';
                 }
 
                 if (ptNum !== activeNum && showFloorArrows) {
->>>>>>> Stashed changes
                     const arrow = document.createElementNS('http://www.w3.org/2000/svg', 'text');
                     arrow.setAttribute('class', 'floor-arrow');
                     arrow.setAttribute('font-weight', 'bold');
@@ -1400,17 +1245,10 @@
                 const img = g.querySelector('image');
                 const circle = g.querySelector('circle');
                 const arrow = g.querySelector('.floor-arrow');
-<<<<<<< Updated upstream
-                
-                const currentIconSize = ICON_SIZE * scale;
-                const currentRadius = POINT_RADIUS * scale;
-                
-=======
                 const currentIconSize = ICON_SIZE * scale;
                 const currentRadius = POINT_RADIUS * scale;
 
                 if (glow) glow.setAttribute('r', img ? currentIconSize * 0.7 : currentRadius * 3);
->>>>>>> Stashed changes
                 if (img) {
                     img.setAttribute('width', currentIconSize);
                     img.setAttribute('height', currentIconSize);
@@ -1748,8 +1586,6 @@
             reader.readAsText(file);
         }
 
-<<<<<<< Updated upstream
-=======
         // ========== DISPLAY OPTIONS ==========
         function applyDarkGlow() {
             mapWrapper.classList.toggle('dark-glow', darkGlow);
@@ -1780,7 +1616,6 @@
         }
         initDisplayOptions();
 
->>>>>>> Stashed changes
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 closeViewer();
