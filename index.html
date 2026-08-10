@@ -1386,17 +1386,6 @@
             });
         }
 
-        // 2. Mode Switching
-        function setMode(newMode) {
-            mode = newMode;
-            document.querySelectorAll('.mode-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.mode === newMode);
-            });
-            mapWrapper.className = `map-container mode-${newMode.toLowerCase()}`;
-            if (darkGlow) mapWrapper.classList.add('dark-glow');
-            closeViewer();
-        }
-
         function ensurePointGlowGradient(svg) {
             if (svg.querySelector('#point-glow-gradient')) return;
 
@@ -1642,12 +1631,24 @@
             let hasMoved = false;
             let startPan = { x: 0, y: 0 };
             let lastTouchDist = 0;
-            let pinchCenter = { x: 0, y: 0 };
             let activePointers = new Map();
 
             function onPointerDown(e) {
                 if (e.pointerType === 'mouse' && e.button !== 0) return;
-                if (e.target.closest('.map-point')) return;
+
+                const pointEl = e.target.closest?.('.map-point');
+
+                if (pointEl && mode === 'MOVE' && isEditor) {
+                    const id = pointEl.getAttribute('data-id');
+                    const data = pointsData.find(p => p.id === id);
+                    if (!data) return;
+                    e.stopPropagation();
+                    draggedPoint = { group: pointEl, data };
+                    pointEl.setPointerCapture?.(e.pointerId);
+                    return;
+                }
+
+                if (pointEl && mode === 'VIEW') return;
 
                 activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
                 svg.setPointerCapture?.(e.pointerId);
@@ -1661,16 +1662,11 @@
                     isPanning = false;
                     const pts = Array.from(activePointers.values());
                     lastTouchDist = Math.hypot(pts[1].x - pts[0].x, pts[1].y - pts[0].y);
-                    pinchCenter = {
-                        x: (pts[0].x + pts[1].x) / 2,
-                        y: (pts[0].y + pts[1].y) / 2
-                    };
                 }
             }
 
             function onPointerMove(e) {
                 if (draggedPoint && mode === 'MOVE' && isEditor) {
-                    e.preventDefault();
                     const svgP = getSVGPoint(e.clientX, e.clientY);
                     draggedPoint.group.setAttribute('transform', `translate(${svgP.x}, ${svgP.y})`);
                     draggedPoint.data.x = svgP.x;
@@ -1686,10 +1682,11 @@
                     const pts = Array.from(activePointers.values());
                     const dist = Math.hypot(pts[1].x - pts[0].x, pts[1].y - pts[0].y);
                     if (lastTouchDist > 0) {
-                        const scaleFactor = lastTouchDist / dist;
-                        const cx = (pts[0].x + pts[1].x) / 2;
-                        const cy = (pts[0].y + pts[1].y) / 2;
-                        applyZoom(cx, cy, scaleFactor);
+                        applyZoom(
+                            (pts[0].x + pts[1].x) / 2,
+                            (pts[0].y + pts[1].y) / 2,
+                            lastTouchDist / dist
+                        );
                     }
                     lastTouchDist = dist;
                     return;
@@ -1713,9 +1710,7 @@
             }
 
             function onPointerUp(e) {
-                if (draggedPoint) {
-                    draggedPoint = null;
-                }
+                if (draggedPoint) draggedPoint = null;
                 activePointers.delete(e.pointerId);
                 if (activePointers.size < 2) lastTouchDist = 0;
                 if (activePointers.size === 0) {
@@ -1729,17 +1724,10 @@
                 }
             }
 
-            svg.addEventListener('pointerdown', (e) => {
-                if (mode !== 'MOVE' || !isEditor) return;
-                e.stopPropagation();
-                e.preventDefault();
-                draggedPoint = { group: g, data: pointData };
-                g.setPointerCapture?.(e.pointerId);
-            });
+            svg.addEventListener('pointerdown', onPointerDown);
             svg.addEventListener('pointermove', onPointerMove, { passive: false });
             svg.addEventListener('pointerup', onPointerUp);
             svg.addEventListener('pointercancel', onPointerUp);
-            svg.addEventListener('pointerleave', onPointerUp);
 
             svg.addEventListener('click', (e) => {
                 if (hasMoved || mode !== 'ADD' || !isEditor || !activeFloorId || e.target.closest('.map-point')) return;
@@ -1748,10 +1736,6 @@
                 document.getElementById('point-image-input').value = '';
                 document.getElementById('point-details-input').value = '';
                 createModal.classList.add('active');
-                if (mode === 'VIEW') {
-                    e.stopPropagation();
-                    showViewer(pointData, e.clientX, e.clientY);
-                }
             });
         }
         // 7. Point Creation & Rendering
@@ -1829,13 +1813,6 @@
                 g.appendChild(circle);
             }
 
-            g.addEventListener('mousedown', (e) => {
-                if (mode === 'MOVE') {
-                    e.stopPropagation();
-                    draggedPoint = { group: g, data: pointData };
-                }
-            });
-
             g.addEventListener('click', (e) => {
                 if (mode === 'VIEW') {
                     e.stopPropagation();
@@ -1911,10 +1888,6 @@
                 if (createModal.classList.contains('active')) cancelCreate();
                 closeSheet();
             }
-        });
-
-        document.addEventListener('pointerup', () => {
-            if (draggedPoint) draggedPoint = null;
         });
 
         // 9. Data Handlers
