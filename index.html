@@ -1,18 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Карта документов Kord Breach</title>
     <style>
-
         @font-face {
             font-family: Bender;
             src: url(Bender.woff);
             font-weight: normal;
         }
-
         @font-face {
             font-family: Bender;
             src: url(Bender-Bold.woff);
@@ -20,43 +18,131 @@
         }
 
         * {
-            font-family: Bender;
+            font-family: Bender, system-ui, sans-serif;
+            box-sizing: border-box;
         }
-        
-        /* Tactical Color Palette */
-        :root {
-            --bg-base: #09090a;      /* Deepest background */
-            --bg-panel: #121315;     /* Sidebar and modal background */
-            --bg-card: #191b1d;      /* UI elements / Cards */
-            --bg-hover: #232528;     /* Hover state for items */
-            --border: #282a2e;       /* Borders and dividers */
-            --text-main: #c4c5c7;    /* Primary text (off-white/gray) */
-            --text-muted: #72757a;   /* Secondary text */
-            
-            /* Accents */
-            --accent: #d18d32;       /* Tactical orange/gold */
-            --accent-hover: #e59f3d; 
-            --accent-dim: rgba(209, 141, 50, 0.15);
 
-            /* Action Buttons */
-            --btn-success: #3c5438;  
+        :root {
+            --bg-base: #09090a;
+            --bg-panel: #121315;
+            --bg-card: #191b1d;
+            --bg-hover: #232528;
+            --border: #282a2e;
+            --text-main: #c4c5c7;
+            --text-muted: #72757a;
+            --accent: #d18d32;
+            --accent-hover: #e59f3d;
+            --accent-dim: rgba(209, 141, 50, 0.15);
+            --btn-success: #3c5438;
             --btn-success-hover: #4a6645;
             --btn-danger: #6b2b2b;
             --btn-danger-hover: #823535;
+            --header-height: 56px;
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
+            --safe-top: env(safe-area-inset-top, 0px);
         }
 
-        /* Base Styles */
-        body, html { margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; height: 100vh; background: var(--bg-base); color: var(--text-main); overflow: hidden; }
-        .container { display: none; height: 100%; }
-        .brand-block {
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background: var(--bg-base);
+            color: var(--text-main);
+            overflow: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .editor-login {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--border);
             display: flex;
             flex-direction: column;
-            align-items: center;
-            gap: 12px;
-            margin-top: 15px;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        .editor-login input {
+            width: 100%;
+            padding: 10px 12px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            color: var(--text-main);
+            font-size: 0.9rem;
+        }
+        .editor-login input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        .editor-login-actions {
+            display: flex;
+            gap: 8px;
+        }
+        .editor-login-actions button {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            font-weight: bold;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            min-height: 40px;
+            background: var(--bg-card);
+            color: var(--text-main);
+        }
+        .editor-login-actions button.primary {
+            background: var(--accent);
+            color: #000;
+            border-color: var(--accent);
+        }
+        .editor-login-actions button:hover {
+            background: var(--bg-hover);
+        }
+        .editor-login-actions button.primary:hover {
+            background: var(--accent-hover);
+        }
+        .editor-status {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-align: center;
+        }
+        .editor-status.on {
+            color: var(--accent);
+        }
+        .mode-btn:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+        #lightbox-edit {
+            position: absolute;
+            bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 20px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-main);
+            font-weight: bold;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            z-index: 203;
+            display: none;
+            min-height: 44px;
+        }
+        #lightbox-edit.visible {
+            display: block;
+        }
+        #lightbox-edit:hover,
+        #lightbox-edit:active {
+            background: var(--accent);
+            color: #000;
+            border-color: var(--accent);
         }
 
-        /* Map Selector Screen */
+        /* ========== MAP SELECTOR ========== */
         #map-selector {
             position: fixed;
             inset: 0;
@@ -73,8 +159,8 @@
             z-index: 200;
             overflow-y: auto;
             padding: 40px 20px;
+            -webkit-overflow-scrolling: touch;
         }
-
         #map-selector::before {
             content: '';
             position: absolute;
@@ -83,10 +169,7 @@
             z-index: 0;
             pointer-events: none;
         }
-
-        #map-selector > * {
-            position: relative;
-        }
+        #map-selector > * { position: relative; z-index: 1; }
 
         #map-selector h1 {
             color: var(--accent);
@@ -97,65 +180,28 @@
             margin-bottom: 10px;
             flex-shrink: 0;
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 1);
-        }
-
-        #map-selector h2 {
-            color: white;
-            font-weight: bold;
-            font-size: 4rem;
-            letter-spacing: 2px;
-            margin: 0;
-            margin-top: -40px;
-            flex-shrink: 0;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-        }
-
-        #map-selector h2 img {
-            width: 64px;
-            height: 64px;
-        }
-
-        .social-links {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 22px;
-        }
-
-        .social-links a {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            transition: 0.25s;
-            text-decoration: none;
-        }
-
-        .social-links a:hover {
-            transform: translateY(-2px);
-        }
-
-        .social-links img {
-            width: 50px;
-            height: 50px;
-            object-fit: contain;
+            text-align: center;
         }
 
         .map-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
+            grid-template-columns: 1fr;
+            gap: 12px;
             margin-top: 20px;
             max-width: 1400px;
             width: 100%;
             padding-bottom: 40px;
         }
+        @media (min-width: 480px) {
+            .map-grid { grid-template-columns: 1fr 1fr; gap: 16px; }
+        }
+        @media (min-width: 900px) {
+            .map-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 20px;
+            }
+        }
+
         .map-card {
             background: var(--bg-card);
             background-size: cover;
@@ -178,8 +224,8 @@
             align-items: center;
             justify-content: center;
             text-shadow: 1.5px 1.5px 1px #000;
+            min-height: 90px;
         }
-
         .map-card:hover {
             background-color: var(--bg-hover);
             border-color: var(--accent);
@@ -190,6 +236,77 @@
             background-size: 110%;
         }
 
+        /* Mobile adjustments for selector only */
+        @media (max-width: 767px) {
+            #map-selector {
+                padding: 24px 16px calc(80px + var(--safe-bottom));
+                background-attachment: scroll;
+            }
+            #map-selector h1 {
+                font-size: clamp(1.6rem, 6vw, 2.4rem);
+            }
+            .map-card {
+                padding: 28px 16px;
+                font-size: clamp(1.1rem, 4vw, 1.35rem);
+                border-width: 3px;
+                border-radius: 6px;
+            }
+        }
+
+        .brand-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            margin-top: 15px;
+        }
+        .brand-block h2 {
+            color: white;
+            font-weight: bold;
+            font-size: 4rem;
+            letter-spacing: 2px;
+            margin: 0;
+            margin-top: -40px;
+            flex-shrink: 0;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        .brand-block h2 img { width: 64px; height: 64px; }
+
+        @media (max-width: 767px) {
+            .brand-block h2 {
+                font-size: clamp(1.4rem, 5vw, 2.2rem);
+                margin-top: 0;
+            }
+            .brand-block h2 img { width: 40px; height: 40px; }
+        }
+
+        .social-links {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 22px;
+        }
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            transition: 0.25s;
+            text-decoration: none;
+        }
+        .social-links a:hover { transform: translateY(-2px); }
+        .social-links img {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+        }
+
         .donate-button {
             display: flex;
             position: fixed;
@@ -197,55 +314,237 @@
             bottom: 35px;
             right: 55px;
             border-radius: 5px;
-            background: rgba(0, 0, 0, 0.2);
+            background: rgb(0, 0, 0);
             color: #fff;
             text-shadow: 0 2px 15px #000;
             font-weight: bold;
             text-decoration: none;
-            z-index: 201;
+            z-index: 199;
+        }
+        @media (max-width: 767px) {
+            .donate-button {
+                scale: 1;
+                bottom: calc(20px + var(--safe-bottom));
+                right: 16px;
+                padding: 10px 16px;
+                background: rgb(0, 0, 0);
+                border-radius: 8px;
+                font-size: 0.95rem;
+            }
         }
 
-        /* Sidebar */
-        .sidebar { width: 280px; background: var(--bg-panel); display: flex; flex-direction: column; z-index: 10; border-right: 1px solid var(--border); }
-        .sidebar-header { padding: 20px; font-size: 1.1rem; font-weight: bold; text-align: center; color: var(--accent); text-transform: uppercase; letter-spacing: 2px; }
-        
-        /* Controls & Modes */
-        .controls { padding: 15px; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: 10px; }
-        .mode-btn { width: 100%; padding: 10px; background: var(--bg-card); color: var(--text-muted); border: 1px solid var(--border); border-radius: 2px; cursor: pointer; font-weight: bold; transition: 0.2s; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; }
-        .mode-btn:hover { background: var(--bg-hover); color: var(--text-main); }
-        .mode-btn.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+        /* ========== APP LAYOUT ========== */
+        .container {
+            display: none;
+            height: 100%;
+            width: 100%;
+        }
+        .container.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Mobile top bar */
+        .mobile-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: calc(var(--header-height) + var(--safe-top));
+            padding: var(--safe-top) 12px 0;
+            background: var(--bg-panel);
+            border-bottom: 1px solid var(--border);
+            z-index: 40;
+            flex-shrink: 0;
+        }
+        .mobile-header button {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            min-height: 44px;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+        .mobile-header button:active { background: var(--bg-hover); }
+        .mobile-header .map-title {
+            font-weight: bold;
+            color: var(--accent);
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            max-width: 40vw;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Map area */
+        .map-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            background: var(--bg-base);
+            touch-action: none;
+            user-select: none;
+        }
+        .map-container svg {
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            cursor: grab;
+            user-select: none;
+            pointer-events: all;
+        }
+        .map-container svg:active { cursor: grabbing; }
+        .map-container.mode-add svg { cursor: crosshair; }
+        .map-container.mode-add svg:active { cursor: crosshair; }
+        .map-container svg g[id^="floor-"] {
+            transition: filter 0.3s ease, opacity 0.3s ease;
+        }
+
+        /* Sidebar – mobile = bottom sheet, desktop = original */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: min(65vh, 520px);
+            max-height: calc(100% - var(--header-height) - 20px);
+            background: var(--bg-panel);
+            border-radius: 18px 18px 0 0;
+            border-top: 1px solid var(--border);
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            transform: translateY(110%);
+            transition: transform 0.32s cubic-bezier(0.32, 0.72, 0, 1);
+            padding-bottom: var(--safe-bottom);
+            box-shadow: 0 -8px 30px rgba(0,0,0,0.5);
+        }
+        .sidebar.open { transform: translateY(0); }
+
+        .sheet-handle {
+            width: 40px;
+            height: 5px;
+            background: var(--border);
+            border-radius: 3px;
+            margin: 10px auto 6px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-align: center;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            flex-shrink: 0;
+        }
+
         .change-map-btn {
-            width: calc(100% - 30px);
-            margin: 0 15px 12px;
-            padding: 8px 12px;
+            display: none;
+        }
+
+        .controls {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex-shrink: 0;
+            min-width: 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .mode-row {
+            display: flex;
+            gap: 6px;
+            width: 100%;
+            min-width: 0;
+        }
+        .mode-btn {
+            flex: 1 1 0;
+            min-width: 0;
+            max-width: 100%;
+            padding: 10px 6px;
             background: var(--bg-card);
             color: var(--text-muted);
             border: 1px solid var(--border);
             border-radius: 2px;
             cursor: pointer;
             font-weight: bold;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
             transition: 0.2s;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+            min-height: 44px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
-        .change-map-btn:hover {
-            background: var(--bg-hover);
+        .mode-btn:hover { background: var(--bg-hover); color: var(--text-main); }
+        .mode-btn.active {
+            background: var(--accent-dim);
             border-color: var(--accent);
             color: var(--accent);
         }
+
         .action-group { display: flex; gap: 10px; margin-top: 10px; }
-        .action-btn { flex: 1; padding: 10px; border: 1px solid var(--border); border-radius: 2px; cursor: pointer; font-weight: bold; font-size: 0.8rem; text-transform: uppercase; transition: 0.2s; }
-        .action-btn { background: var(--bg-card); color: var(--text-main); }
+        .action-btn {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            transition: 0.2s;
+            background: var(--bg-card);
+            color: var(--text-main);
+            min-height: 44px;
+        }
         .action-btn:hover { background: var(--bg-hover); }
-        .action-btn.export { background: var(--btn-success); color: #fff; border-color: var(--btn-success); }
+        .action-btn.export {
+            background: var(--btn-success);
+            color: #fff;
+            border-color: var(--btn-success);
+        }
         .action-btn.export:hover { background: var(--btn-success-hover); }
-        
-        /* Legend / Filters */
-        .legend-container { border-bottom: 1px solid var(--border); display: flex; flex-direction: column; max-height: 35vh; }
-        .legend-header { padding: 8px 15px; font-size: 0.75rem; font-weight: bold; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; background: #000; border-bottom: 1px solid var(--border); }
-        .legend-menu { padding: 10px 15px; display: flex; flex-direction: column; gap: 10px; overflow-y: auto; }
-        .legend-item {
+
+        .legend-container, .options-container {
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+        .legend-header {
+            padding: 8px 15px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: #000;
+            border-bottom: 1px solid var(--border);
+        }
+        .legend-menu, .options-menu {
+            padding: 10px 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            overflow-y: auto;
+            max-height: 28vh;
+        }
+        .legend-item, .option-item {
             display: flex;
             align-items: center;
             gap: 8px;
@@ -253,102 +552,418 @@
             font-size: 0.85rem;
             cursor: pointer;
             user-select: none;
-        }
-        .legend-count {
-            margin-left: auto;
-            color: var(--text-muted);
-            font-size: 0.8rem;
-            font-weight: normal;
-            min-width: 20px;
-            text-align: right;
+            min-height: 40px;
         }
         .legend-item img { width: 32px; height: 32px; object-fit: contain; }
-        .legend-item input[type="checkbox"] { accent-color: var(--accent); cursor: pointer; margin: 0; width: 14px; height: 14px; background: var(--bg-card); border: 1px solid var(--border); }
+        .legend-item input, .option-item input {
+            accent-color: var(--accent);
+            cursor: pointer;
+            margin: 0;
+            width: 14px;
+            height: 14px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+        }
+        .legend-name { flex: 1; }
 
-        /* Menu Items */
-        .menu-items { display: flex; flex-direction: column; overflow-y: auto; flex: 1; padding: 10px 0; }
-        .floor-btn { background: none; border: none; color: var(--text-muted); padding: 12px 20px; text-align: left; font-size: 0.9rem; cursor: pointer; border-left: 3px solid transparent; font-weight: bold; transition: 0.2s; letter-spacing: 1px; }
+        .menu-items {
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            flex: 1;
+            padding: 10px 0;
+            -webkit-overflow-scrolling: touch;
+        }
+        .floor-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            padding: 12px 20px;
+            text-align: left;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border-left: 3px solid transparent;
+            font-weight: bold;
+            transition: 0.2s;
+            letter-spacing: 1px;
+            min-height: 44px;
+        }
         .floor-btn:hover { background: var(--bg-hover); color: var(--text-main); }
-        .floor-btn.active { background: #000; color: var(--accent); border-left-color: var(--accent); }
+        .floor-btn.active {
+            background: #000;
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
 
-        /* Sidebar Footer */
-        .sidebar-footer { padding: 15px; font-size: 0.75rem; color: var(--text-muted); text-align: center; border-top: 1px solid var(--border); background: var(--bg-base); }
-        .sidebar-footer a { color: var(--accent); text-decoration: none; font-weight: bold; transition: color 0.2s; }
+        .sidebar-footer {
+            padding: 15px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-align: center;
+            border-top: 1px solid var(--border);
+            background: var(--bg-base);
+            flex-shrink: 0;
+            line-height: 1.45;
+        }
+        .sidebar-footer a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.2s;
+        }
         .sidebar-footer a:hover { color: var(--accent-hover); text-decoration: underline; }
 
-        /* Map Area */
-        .map-container { flex: 1; display: flex; justify-content: center; align-items: center; position: relative; overflow: hidden; }
-        .map-container svg { width: 100%; height: 100%; background: transparent; cursor: grab; user-select: none; pointer-events: all; }
-        .map-container svg:active { cursor: grabbing; }
-        .map-container.mode-add svg { cursor: crosshair; }
-        .map-container.mode-add svg:active { cursor: crosshair; }
-        .map-container svg g[id^="floor-"] { transition: filter 0.3s ease, opacity 0.3s ease; }
-        
-        /* Display Options */
-        .options-container { border-bottom: 1px solid var(--border); display: flex; flex-direction: column; }
-        .options-menu { padding: 10px 15px; display: flex; flex-direction: column; gap: 8px; }
-        .option-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--text-main);
-            font-size: 0.85rem;
-            cursor: pointer;
-            user-select: none;
+        .sheet-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.45);
+            z-index: 45;
         }
-        .option-item input { accent-color: var(--accent); cursor: pointer; margin: 0; width: 14px; height: 14px; }
+        .sheet-backdrop.visible { display: block; }
 
-        /* Map Points */
+        /* ========== DESKTOP (≥768px) – original sidebar + selector styles ========== */
+        @media (min-width: 768px) {
+            .mobile-header { display: none; }
+
+            .container.active {
+                flex-direction: row;
+            }
+
+            .sidebar {
+                position: relative;
+                width: 280px;
+                height: 100%;
+                max-height: none;
+                transform: none !important;
+                border-radius: 0;
+                border-top: none;
+                border-right: 1px solid var(--border);
+                box-shadow: none;
+                padding-bottom: 0;
+                z-index: 10;
+            }
+            .sheet-handle { display: none; }
+            .sheet-backdrop { display: none !important; }
+
+            .change-map-btn {
+                display: block;
+                width: calc(100% - 30px);
+                margin: 0 15px 12px;
+                padding: 8px 12px;
+                background: var(--bg-card);
+                color: var(--text-muted);
+                border: 1px solid var(--border);
+                border-radius: 2px;
+                cursor: pointer;
+                font-weight: bold;
+                font-size: 0.75rem;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                transition: 0.2s;
+            }
+            .change-map-btn:hover {
+                background: var(--bg-hover);
+                border-color: var(--accent);
+                color: var(--accent);
+            }
+
+            .legend-menu, .options-menu { max-height: 35vh; }
+
+            .sidebar-header { padding: 20px; }
+        }
+
+        /* ========== MAP POINTS ========== */
         .map-point { cursor: pointer; transition: filter 0.2s, opacity 0.2s; }
         .map-point:hover { filter: drop-shadow(0px 0px 5px var(--accent)); }
-
-        /* Dark glow behind icons, for readability on light map areas.
-        A gradient-filled circle rather than a drop-shadow filter: filters are
-        re-rasterized per icon on every pan/zoom frame, which crawls on busy maps. */
         .point-glow { display: none; pointer-events: none; }
         .map-container.dark-glow .point-glow { display: block; }
-
         .map-container.mode-move .map-point { cursor: move; }
 
-        /* Modals & Overlays */
-        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 100; justify-content: center; align-items: center; backdrop-filter: blur(2px); }
+        /* ========== MODALS & VIEWER ========== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(2px);
+            padding: 16px;
+        }
         .modal-overlay.active { display: flex; }
-        .modal-content { background: var(--bg-panel); padding: 25px; border-radius: 4px; border: 1px solid var(--border); min-width: 320px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
-        .modal-content h3 { margin-top: 0; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; font-size: 1.1rem; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
-        .modal-content input[type="file"] { margin: 15px 0; display: block; color: var(--text-muted); font-size: 0.85rem; }
-        .modal-content textarea { width: 100%; box-sizing: border-box; background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border); border-radius: 2px; padding: 10px; margin-bottom: 15px; resize: vertical; min-height: 80px; font-family: inherit; font-size: 0.85rem; }
+
+        .modal-content {
+            background: var(--bg-panel);
+            padding: 25px;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            min-width: 320px;
+            max-width: 380px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+        .modal-content h3 {
+            margin-top: 0;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 1.1rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+        }
+        .modal-content label,
+        .modal-content p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .modal-content textarea {
+            width: 100%;
+            box-sizing: border-box;
+            background: var(--bg-card);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            padding: 10px;
+            margin-bottom: 15px;
+            resize: vertical;
+            min-height: 80px;
+            font-family: inherit;
+            font-size: 0.85rem;
+        }
         .modal-content textarea:focus { outline: none; border-color: var(--accent); }
-        
-        /* Custom Icon Select Dropdown */
-        .custom-select { position: relative; background: var(--bg-card); border-radius: 2px; border: 1px solid var(--border); margin-bottom: 15px; user-select: none; }
-        .select-selected { display: flex; align-items: center; gap: 10px; padding: 10px; cursor: pointer; font-size: 0.9rem; }
-        .select-selected img, .select-item img { width: 24px; height: 24px; object-fit: contain; }
-        .select-items { position: absolute; background: var(--bg-panel); top: 100%; left: -1px; right: -1px; z-index: 99; border: 1px solid var(--border); border-top: none; max-height: 200px; overflow-y: auto; display: none; }
+        .modal-content input[type="file"] {
+            margin: 15px 0;
+            display: block;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            width: 100%;
+        }
+
+        .custom-select {
+            position: relative;
+            background: var(--bg-card);
+            border-radius: 2px;
+            border: 1px solid var(--border);
+            margin-bottom: 15px;
+            user-select: none;
+        }
+        .select-selected {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .select-selected img, .select-item img {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+        }
+        .select-items {
+            position: absolute;
+            background: var(--bg-panel);
+            top: 100%;
+            left: -1px;
+            right: -1px;
+            z-index: 99;
+            border: 1px solid var(--border);
+            border-top: none;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+        }
         .select-items.active { display: block; }
-        .select-item { display: flex; align-items: center; gap: 10px; padding: 10px; cursor: pointer; transition: background 0.2s; font-size: 0.9rem; }
+        .select-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-size: 0.9rem;
+        }
         .select-item:hover { background: var(--bg-hover); color: var(--accent); }
 
-        .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
-        .modal-actions button { padding: 8px 16px; cursor: pointer; border-radius: 2px; border: 1px solid var(--border); font-weight: bold; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; }
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .modal-actions button {
+            padding: 8px 16px;
+            cursor: pointer;
+            border-radius: 2px;
+            border: 1px solid var(--border);
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
         .btn-cancel { background: var(--bg-card); color: var(--text-main); }
         .btn-cancel:hover { background: var(--bg-hover); }
         .btn-save { background: var(--accent); color: #000; border-color: var(--accent); }
         .btn-save:hover { background: var(--accent-hover); }
-        
-        /* Floating Point Viewer */
-        #point-viewer { display: none; position: absolute; background: var(--bg-panel); border: 1px solid var(--border); padding: 12px; border-radius: 4px; box-shadow: 0 4px 20px rgba(0,0,0,0.8); z-index: 50; width: 220px; pointer-events: none; }
-        #point-viewer.active { display: block; pointer-events: auto; }
-        #point-viewer img { width: 100%; cursor: zoom-in; border-radius: 2px; object-fit: cover; border: 1px solid var(--border); }
-        .viewer-header { font-size: 0.8rem; color: var(--accent); margin-bottom: 10px; font-weight: bold; border-bottom: 1px solid var(--border); padding-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
-        .viewer-description { font-size: 0.85rem; color: var(--text-main); margin-bottom: 12px; line-height: 1.4; white-space: pre-wrap; word-wrap: break-word; display: none; }
-        .no-image-box { border: 1px dashed var(--border); background: var(--bg-base); padding: 20px; text-align: center; color: var(--text-muted); font-size: 0.8rem; border-radius: 2px; text-transform: uppercase; }
-        .close-viewer { position: absolute; top: -10px; right: -10px; background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border); border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; }
+
+        #point-viewer {
+            display: none;
+            position: absolute;
+            background: var(--bg-panel);
+            border: 1px solid var(--border);
+            padding: 12px;
+            border-radius: 4px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.8);
+            z-index: 50;
+            width: 220px;
+            pointer-events: none;
+        }
+        #point-viewer.active {
+            display: block;
+            pointer-events: auto;
+        }
+
+        @media (max-width: 767px) {
+            #point-viewer {
+                position: fixed;
+                left: 12px;
+                right: 12px;
+                width: auto;
+                max-width: none;
+                bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+                top: auto;
+                z-index: 60;
+            }
+        }
+        #point-viewer img {
+            width: 100%;
+            cursor: zoom-in;
+            border-radius: 2px;
+            object-fit: cover;
+            border: 1px solid var(--border);
+        }
+        .viewer-header {
+            font-size: 0.8rem;
+            color: var(--accent);
+            margin-bottom: 10px;
+            font-weight: bold;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .viewer-description {
+            font-size: 0.85rem;
+            color: var(--text-main);
+            margin-bottom: 12px;
+            line-height: 1.4;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            display: none;
+        }
+        .no-image-box {
+            border: 1px dashed var(--border);
+            background: var(--bg-base);
+            padding: 20px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            border-radius: 2px;
+            text-transform: uppercase;
+        }
+        .close-viewer {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: var(--bg-card);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
         .close-viewer:hover { background: var(--bg-hover); color: var(--accent); }
 
-        /* Fullscreen Lightbox */
-        #lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 202; justify-content: center; align-items: center; }
-        #lightbox.active { display: flex; cursor: zoom-out; }
-        #lightbox img { max-width: 90%; max-height: 90%; border-radius: 4px; box-shadow: 0 0 30px rgba(0,0,0,0.8); border: 1px solid var(--border); }
+        #lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.96);
+            z-index: 202;
+            justify-content: center;
+            align-items: center;
+            padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
+            overscroll-behavior: none;
+        }
+        #lightbox.active {
+            display: flex;
+            cursor: zoom-out;
+        }
+        #lightbox img {
+            max-width: 92%;
+            max-height: 88%;
+            object-fit: contain;
+            border-radius: 4px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+            border: 1px solid var(--border);
+            user-select: none;
+            -webkit-user-drag: none;
+            cursor: zoom-out;
+        }
+        #lightbox-close {
+            position: absolute;
+            top: calc(12px + env(safe-area-inset-top, 0px));
+            right: calc(12px + env(safe-area-inset-right, 0px));
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-main);
+            font-size: 1.4rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 203;
+            line-height: 1;
+        }
+        #lightbox-close:hover,
+        #lightbox-close:active {
+            background: var(--bg-hover);
+            color: var(--accent);
+        }
+
+        @media (max-width: 767px) {
+            #lightbox {
+                padding: 0;
+                background: #000;
+                touch-action: none;
+            }
+            #lightbox img {
+                max-width: 100%;
+                max-height: 100%;
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+                border: none;
+                border-radius: 0;
+                box-shadow: none;
+            }
+        }
     </style>
 </head>
 <body>
@@ -371,7 +986,6 @@
         </div>
         <div class="brand-block">
             <h2>Тарковское Метадвижение <img src="favicon.ico" alt=""></h2>
-            
             <div class="social-links">
                 <a href="https://vk.ru/metadvij" target="_blank" rel="noopener noreferrer" title="ВКонтакте">
                     <img src="vk.ico" alt="VK">
@@ -383,15 +997,52 @@
         </div>
     </div>
     <a class="donate-button" href="https://www.donationalerts.com/r/v1shnevskyy" target="_blank" rel="noopener noreferrer" title="Поддержать нас">Поддержать нас 💸</a>
+
     <div class="container" id="app-container">
-        <nav class="sidebar">
+        <header class="mobile-header">
+            <button type="button" id="toggle-sheet-btn">☰ Меню</button>
+            <span class="map-title" id="mobile-map-title">Карта</span>
+            <button type="button" onclick="changeMap()">Карты</button>
+        </header>
+
+        <div class="sheet-backdrop" id="sheet-backdrop"></div>
+
+        <nav class="sidebar" id="sidebar">
+            <div class="sheet-handle"></div>
             <div class="sidebar-header" id="current-map-title">Карта</div>
             <button class="change-map-btn" onclick="changeMap()">Выбрать карту</button>
-            
-            <div id="legend-container" class="legend-container" style="display: none;">
+            <div class="editor-login" id="editor-login">
+            <div class="editor-status" id="editor-status">Редактор: выключен</div>
+            <div id="editor-login-form">
+                <input type="password" id="editor-password" placeholder="Пароль редактора" autocomplete="current-password">
+                <div class="editor-login-actions">
+                    <button type="button" class="primary" onclick="editorLogin()">Войти</button>
+                </div>
+            </div>
+            <div class="editor-login-actions" id="editor-logout-row" style="display:none;">
+                <button type="button" onclick="editorLogout()">Выйти</button>
+            </div>
+        </div>
+            <div class="controls">
+                <div class="mode-row">
+                    <button class="mode-btn active" data-mode="VIEW" id="mode-view" onclick="setMode('VIEW')">Просмотр</button>
+                    <button class="mode-btn" data-mode="ADD" id="mode-add" onclick="setMode('ADD')" disabled>Добавить</button>
+                    <button class="mode-btn" data-mode="MOVE" id="mode-move" onclick="setMode('MOVE')" disabled>Двигать</button>
+                </div>
+                <div class="action-group">
+                    <button class="action-btn export" onclick="exportData()">Экспорт</button>
+                    <label class="action-btn" style="text-align:center;display:flex;align-items:center;justify-content:center;cursor:pointer;">
+                        Импорт
+                        <input type="file" accept=".json,application/json" style="display:none" onchange="loadData(event)">
+                    </label>
+                </div>
+            </div>
+
+            <div id="legend-container" class="legend-container" style="display:none;">
                 <div class="legend-header">Фильтр документов</div>
                 <div id="legend-menu" class="legend-menu"></div>
             </div>
+
             <div id="options-container" class="options-container">
                 <div class="legend-header">Отображение</div>
                 <div class="options-menu">
@@ -410,12 +1061,10 @@
             <div class="menu-items" id="floor-menu"></div>
 
             <div class="sidebar-footer">
-                Original project by <a href="https://github.com/KalleLeskinen/KordMap" target="_blank" rel="noopener noreferrer">Kalle Leskinen on Github</a><br>
-                <br>
-                Document locations by <a href="https://t.me/metadvij" target="_blank" rel="noopener noreferrer">Metadvij community</a><br>
-                <br>
+                Original project by <a href="https://github.com/KalleLeskinen/KordMap" target="_blank" rel="noopener noreferrer">Kalle Leskinen on Github</a><br><br>
+                Document locations by <a href="https://t.me/metadvij" target="_blank" rel="noopener noreferrer">Metadvij community</a><br><br>
                 Map SVGs by <a href="https://github.com/the-hideout/tarkov-dev-svg-maps/" target="_blank" rel="noopener noreferrer">Shebuka</a> and <a href="https://reemr.se/" target="_blank" rel="noopener noreferrer">RE3MR</a><br>
-                Shared and modified under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0</a><br>
+                Shared and modified under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0</a>
             </div>
         </nav>
 
@@ -429,44 +1078,69 @@
         </div>
     </div>
 
-    <!-- Create Point Modal -->
     <div id="create-modal" class="modal-overlay">
         <div class="modal-content">
             <h3>Mark New document</h3>
-            
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px;">document Type:</p>
+            <p>document Type:</p>
             <div class="custom-select" id="icon-select">
                 <div class="select-selected" id="select-selected">Загружаем иконки...</div>
                 <div class="select-items" id="select-items"></div>
             </div>
             <input type="hidden" id="selected-icon-value">
-            
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px;">Details (Optional):</p>
+
+            <p>Details (Optional):</p>
             <textarea id="point-details-input" placeholder="Enter intel details..."></textarea>
 
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px;">Attach Image Reference:</p>
+            <p>Attach Image Reference:</p>
             <input type="file" id="point-image-input" accept="image/*">
-            
+
             <div class="modal-actions">
                 <button class="btn-cancel" onclick="cancelCreate()">Cancel</button>
                 <button class="btn-save" onclick="saveNewPoint()">Save Marker</button>
             </div>
         </div>
     </div>
-
-    <div id="lightbox" onclick="this.classList.remove('active')">
-        <img id="lightbox-img" src="" alt="Expanded View">
+    <div id="edit-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h3>Редактировать документ</h3>
+            <p>Тип документа:</p>
+            <div class="custom-select" id="edit-icon-select">
+                <div class="select-selected" id="edit-select-selected">…</div>
+                <div class="select-items" id="edit-select-items"></div>
+            </div>
+            <input type="hidden" id="edit-selected-icon-value">
+            <p>Описание:</p>
+            <textarea id="edit-point-details-input" placeholder="Детали..."></textarea>
+            <p>Новое изображение (необязательно):</p>
+            <input type="file" id="edit-point-image-input" accept="image/*">
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="cancelEdit()">Отмена</button>
+                <button class="btn-save" onclick="saveEditedPoint()">Сохранить</button>
+            </div>
+        </div>
     </div>
-
+    <div id="lightbox">
+        <button type="button" id="lightbox-close" aria-label="Close">×</button>
+        <img id="lightbox-img" src="" alt="Expanded View">
+        <button type="button" id="lightbox-edit">Редактировать</button>
+    </div>
     <script>
+        const EDITOR_PASSWORD = 'mentodigenye';
+        let isEditor = false;
+        
         // Global Map State
         let viewBox = { x: 0, y: 0, w: 1000, h: 1000 };
         let initialViewBoxWidth = 1000;
 
+        let _rafId = null;
+        let _needsScaleUpdate = false;
+        let _cachedWidth = 0;
+        let _cachedHeight = 0;
+
         // App State
         let currentMap = '';
         let activeFloorId = null;
-        let mode = 'VIEW'; 
+        let mode = 'VIEW';
         let pointsData = [];
         let availableIcons = [];
         let activeFilters = new Set();
@@ -477,12 +1151,12 @@
         let darkGlow = false;
 
         let pendingPointCoords = null;
-        let draggedPoint = null;       
-        let currentViewedPointId = null; 
+        let draggedPoint = null;
+        let currentViewedPointId = null;
 
         // Base Sizes
-        const POINT_RADIUS = 1.5; 
-        const ICON_SIZE = 9.6;    
+        const POINT_RADIUS = 1.5;
+        const ICON_SIZE = 9.6;
         // Map Scaling
         let minScale = 0.2;
         let maxScale = 10.0;
@@ -493,29 +1167,47 @@
         const mapWrapper = document.getElementById('map-wrapper');
         const floorMenu = document.getElementById('floor-menu');
         const mapTitle = document.getElementById('current-map-title');
-        
+        const mobileMapTitle = document.getElementById('mobile-map-title');
+        const sidebar = document.getElementById('sidebar');
+        const sheetBackdrop = document.getElementById('sheet-backdrop');
+        const toggleSheetBtn = document.getElementById('toggle-sheet-btn');
+
         const viewer = document.getElementById('point-viewer');
         const viewerHeader = document.getElementById('viewer-header');
         const viewerDescription = document.getElementById('viewer-description');
         const viewerContent = document.getElementById('viewer-content');
         const lightbox = document.getElementById('lightbox');
         const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxClose = document.getElementById('lightbox-close');
         const createModal = document.getElementById('create-modal');
-        
+
         const iconSelect = document.getElementById('icon-select');
         const selectItems = document.getElementById('select-items');
         const selectSelected = document.getElementById('select-selected');
         const hiddenIconValue = document.getElementById('selected-icon-value');
-        
+
         const legendContainer = document.getElementById('legend-container');
         const legendMenu = document.getElementById('legend-menu');
+
+        // Sheet (mobile)
+        function openSheet() {
+            sidebar.classList.add('open');
+            sheetBackdrop.classList.add('visible');
+        }
+        function closeSheet() {
+            sidebar.classList.remove('open');
+            sheetBackdrop.classList.remove('visible');
+        }
+        toggleSheetBtn.addEventListener('click', () => {
+            sidebar.classList.contains('open') ? closeSheet() : openSheet();
+        });
+        sheetBackdrop.addEventListener('click', closeSheet);
 
         // Custom Dropdown Logic
         iconSelect.addEventListener('click', (e) => {
             selectItems.classList.toggle('active');
             e.stopPropagation();
         });
-        
         document.addEventListener('click', (e) => {
             if (!e.target.closest('.custom-select')) selectItems.classList.remove('active');
         });
@@ -523,10 +1215,13 @@
         // 1. Initialization
         async function initMap(mapName) {
             currentMap = mapName;
-            pointsData = []; 
-            mapTitle.textContent = mapName.charAt(0).toUpperCase() + mapName.slice(1);
+            pointsData = [];
+            const title = mapName.charAt(0).toUpperCase() + mapName.slice(1);
+            mapTitle.textContent = title;
+            mobileMapTitle.textContent = title;
             mapSelector.style.display = 'none';
-            appContainer.style.display = 'flex';
+            appContainer.classList.add('active');
+            closeSheet();
 
             const svgPath = `maps/${mapName}/${mapName}.svg`;
             const jsonPath = `maps/${mapName}/mapdata.json`;
@@ -534,7 +1229,6 @@
 
             let availableFloors = [];
 
-            // Load Map SVG
             try {
                 const response = await fetch(svgPath);
                 if (!response.ok) throw new Error('SVG file not found');
@@ -543,10 +1237,9 @@
                 mapWrapper.innerHTML = `<div style="padding:20px; text-align:center;"><h2 style="color:var(--btn-danger);">Signal Lost</h2><p>${error.message}</p></div>`;
                 return;
             }
-            
+
             const svgElement = mapWrapper.querySelector('svg');
 
-            // Load Map Configuration
             try {
                 const dataResponse = await fetch(jsonPath);
                 if (dataResponse.ok) {
@@ -556,19 +1249,17 @@
                     } else {
                         availableIcons = parsedData.icons || [];
                         availableFloors = parsedData.floors || [];
-                        maxScale = parsedData.mapScale[0] || 0.2;
-                        minScale = parsedData.mapScale[1] || 10.0;
+                        maxScale = parsedData.mapScale?.[0] || 0.2;
+                        minScale = parsedData.mapScale?.[1] || 10.0;
                     }
                 }
-            } catch(e) { }
+            } catch (e) {}
 
             buildIconDropdown();
             buildLegend();
-            
             setupMapInteractions(svgElement, availableFloors);
             setupPanAndZoom(svgElement);
 
-            // Load Points
             try {
                 const pointsResponse = await fetch(pointsPath);
                 if (pointsResponse.ok) {
@@ -579,15 +1270,35 @@
                         updatePointsVisibility();
                     }
                 }
-            } catch(e) { }
+            } catch (e) {}
+
             setMode('VIEW');
             updateLegendCounts();
+        }
+
+        function cacheMapSize(svg) {
+            _cachedWidth = svg.clientWidth || 1;
+            _cachedHeight = svg.clientHeight || 1;
+        }
+
+        function scheduleViewBoxUpdate(svg, updateScale) {
+            if (updateScale) _needsScaleUpdate = true;
+            if (_rafId !== null) return;
+            _rafId = requestAnimationFrame(() => {
+                _rafId = null;
+                svg.setAttribute('viewBox', `${viewBox.x} ${viewBox.y} ${viewBox.w} ${viewBox.h}`);
+                if (_needsScaleUpdate) {
+                    _needsScaleUpdate = false;
+                    updatePointsScale();
+                }
+            });
         }
 
         function changeMap() {
             closeViewer();
             lightbox.classList.remove('active');
             if (createModal.classList.contains('active')) cancelCreate();
+            closeSheet();
 
             mapWrapper.innerHTML = '';
             pointsData = [];
@@ -600,8 +1311,7 @@
             legendContainer.style.display = 'none';
 
             setMode('VIEW');
-
-            appContainer.style.display = 'none';
+            appContainer.classList.remove('active');
             mapSelector.style.display = 'flex';
         }
 
@@ -617,7 +1327,6 @@
                 const div = document.createElement('div');
                 div.className = 'select-item';
                 div.innerHTML = `<img src="icons/${iconName}.png" alt="${iconName}" onerror="this.style.display='none'"> <span>${iconName}</span>`;
-                
                 div.onclick = (e) => {
                     e.stopPropagation();
                     setDropdownSelection(iconName);
@@ -665,7 +1374,7 @@
 
                 const span = document.createElement('span');
                 span.className = 'legend-name';
-                span.textContent = `${iconName} (0)`;   // сразу с нулём
+                span.textContent = `${iconName} (0)`;
 
                 label.appendChild(checkbox);
                 label.appendChild(img);
@@ -693,15 +1402,6 @@
             });
         }
 
-        // 2. Mode Switching
-        function setMode(newMode) {
-            mode = newMode;
-            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
-            mapWrapper.className = `map-container mode-${newMode.toLowerCase()}`;
-            closeViewer();
-        }
-
-        // The gradient lives in the map SVG, which is replaced whenever a map loads
         function ensurePointGlowGradient(svg) {
             if (svg.querySelector('#point-glow-gradient')) return;
 
@@ -722,10 +1422,10 @@
             svg.insertBefore(defs, svg.firstChild);
         }
 
-        // 3. Base Map Setup (Floor 0 Hidden, Floor 1 Default)
+        // 3. Base Map Setup
         function setupMapInteractions(svg, floorsConfig) {
-            floorMenu.innerHTML = ''; 
-            
+            floorMenu.innerHTML = '';
+
             let pointsLayer = svg.querySelector('#points-layer');
             if (!pointsLayer) {
                 pointsLayer = document.createElementNS('http://www.w3.org/2000/svg', 'g');
@@ -736,20 +1436,17 @@
             ensurePointGlowGradient(svg);
 
             const buttonsToCreate = [];
-            
+
             if (floorsConfig && floorsConfig.length > 0) {
                 floorsConfig.forEach((floorVal) => {
                     const floorId = `floor-${floorVal}`;
                     const floorGroup = svg.querySelector(`[id="${floorId}"]`);
-                    
-                    if (floorGroup) {
-                        if (floorId !== 'floor-0') {
-                            buttonsToCreate.push({ id: floorId, label: `Этаж ${floorVal}` });
-                        }
+                    if (floorGroup && floorId !== 'floor-0') {
+                        buttonsToCreate.push({ id: floorId, label: `Этаж ${floorVal}` });
                     }
                 });
             } else {
-                const allFloors = Array.from(svg.querySelectorAll(`g[id^="floor-"]`));
+                const allFloors = Array.from(svg.querySelectorAll('g[id^="floor-"]'));
                 allFloors.forEach((floor) => {
                     const floorId = floor.id;
                     if (floorId !== 'floor-0') {
@@ -758,17 +1455,18 @@
                 });
             }
 
-            // Determine default floor (Prefer Floor-1, else first available)
             const hasFloor1 = buttonsToCreate.some(f => f.id === 'floor-1');
             const defaultFloorId = hasFloor1 ? 'floor-1' : (buttonsToCreate.length > 0 ? buttonsToCreate[0].id : null);
 
-            // Generate buttons
             buttonsToCreate.forEach(btnConfig => {
                 const btn = document.createElement('button');
                 btn.className = `floor-btn ${btnConfig.id === defaultFloorId ? 'active' : ''}`;
                 btn.textContent = btnConfig.label;
                 btn.dataset.target = btnConfig.id;
-                btn.onclick = () => switchFloor(btnConfig.id, buttonsToCreate.map(b => b.id));
+                btn.onclick = () => {
+                    switchFloor(btnConfig.id, buttonsToCreate.map(b => b.id));
+                    if (window.innerWidth < 768) closeSheet();
+                };
                 floorMenu.appendChild(btn);
             });
 
@@ -794,20 +1492,17 @@
 
                     if (!isNaN(floorNum)) {
                         if (floorNum === activeNum) {
-                            // Active floor: fully visible, normal brightness
                             floorGroup.style.display = '';
                             floorGroup.style.filter = 'none';
                         } else if (floorNum < activeNum) {
-                            // Lower floor: visible but darkened except 0
-                            if(floorNum === 0 && activeNum === 1) {
+                            if (floorNum === 0 && activeNum === 1) {
                                 floorGroup.style.display = '';
                                 floorGroup.style.filter = 'none';
                             } else {
-                            floorGroup.style.display = '';
-                            floorGroup.style.filter = 'brightness(0.35)';
+                                floorGroup.style.display = '';
+                                floorGroup.style.filter = 'brightness(0.35)';
                             }
                         } else {
-                            // Higher floor: hidden
                             floorGroup.style.display = 'none';
                             floorGroup.style.filter = 'none';
                         }
@@ -823,20 +1518,18 @@
         function updatePointsVisibility() {
             if (!activeFloorId) return;
             const activeNum = parseInt(activeFloorId.replace('floor-', ''));
-            
+
             pointsData.forEach(pt => {
                 const g = document.querySelector(`g.map-point[data-id="${pt.id}"]`);
                 if (!g) return;
-                
-                // 1. LEGEND FILTER
+
                 if (pt.iconType && !activeFilters.has(pt.iconType)) {
-                    g.style.display = 'none'; 
-                    return; 
+                    g.style.display = 'none';
+                    return;
                 } else {
-                    g.style.display = ''; 
+                    g.style.display = '';
                 }
 
-                // 2. FLOOR CHECK
                 const ptNum = parseInt(pt.floor.replace('floor-', ''));
                 const oldArrow = g.querySelector('.floor-arrow');
                 if (oldArrow) oldArrow.remove();
@@ -849,162 +1542,218 @@
                     g.style.pointerEvents = 'none';
                 }
 
-                // Floor arrow: an off-floor marker still shows which way it sits
                 if (ptNum !== activeNum && showFloorArrows) {
                     const arrow = document.createElementNS('http://www.w3.org/2000/svg', 'text');
                     arrow.setAttribute('class', 'floor-arrow');
                     arrow.setAttribute('font-weight', 'bold');
-                    
+
                     if (ptNum > activeNum) {
-                        arrow.setAttribute('fill', '#6a945b'); // Tactical green
+                        arrow.setAttribute('fill', '#6a945b');
                         arrow.textContent = '▲';
                     } else {
-                        arrow.setAttribute('fill', '#9c3434'); // Tactical red
+                        arrow.setAttribute('fill', '#9c3434');
                         arrow.textContent = '▼';
                     }
                     g.appendChild(arrow);
                 }
             });
-            
+
             updatePointsScale();
         }
 
-        // 5. Dynamic Zoom Scale
+        // 5. Dynamic Zoom Scale  (floor arrows scaled down)
         function updatePointsScale() {
             if (!initialViewBoxWidth) return;
-            
+
             const zoomRatio = viewBox.w / initialViewBoxWidth;
+            // clamp the visual scale of icons
             const scale = Math.max(maxScale, Math.min(5.0, zoomRatio * minScale));
-            console.log(minScale);
-            
-            document.querySelectorAll('.map-point').forEach(g => {
+
+            const currentIconSize = ICON_SIZE * scale;
+            const currentRadius = POINT_RADIUS * scale;
+            const arrowSize = 3.2 * scale;
+            const arrowOffset = currentIconSize / 3.5;
+
+            // Single query – avoid querySelector inside the loop
+            const points = document.querySelectorAll('.map-point');
+            for (let i = 0; i < points.length; i++) {
+                const g = points[i];
                 const img = g.querySelector('image');
                 const circle = g.querySelector('circle:not(.point-glow)');
                 const glow = g.querySelector('.point-glow');
                 const arrow = g.querySelector('.floor-arrow');
 
-                const currentIconSize = ICON_SIZE * scale;
-                const currentRadius = POINT_RADIUS * scale;
-
                 if (glow) {
                     glow.setAttribute('r', img ? currentIconSize * 0.7 : currentRadius * 3);
                 }
-
                 if (img) {
                     img.setAttribute('width', currentIconSize);
                     img.setAttribute('height', currentIconSize);
                     img.setAttribute('x', -currentIconSize / 2);
                     img.setAttribute('y', -currentIconSize / 2);
                 }
-                
                 if (circle) {
                     circle.setAttribute('r', currentRadius);
                 }
-                
                 if (arrow) {
-                    arrow.setAttribute('font-size', 5 * scale);
-                    arrow.setAttribute('x', currentIconSize / 3);
-                    arrow.setAttribute('y', -currentIconSize / 3);
+                    arrow.setAttribute('font-size', arrowSize);
+                    arrow.setAttribute('x', arrowOffset);
+                    arrow.setAttribute('y', -arrowOffset);
                 }
-            });
+            }
         }
 
         // 6. Pan, Zoom & Map Clicks
         function setupPanAndZoom(svg) {
             const vbAttr = svg.getAttribute('viewBox');
             if (vbAttr) {
-                const parts = vbAttr.split(/\s+|,/).map(parseFloat).filter(n => !isNaN(n));
+                const parts = vbAttr.split(/[\s,]+/).map(parseFloat).filter(n => !isNaN(n));
                 if (parts.length === 4) viewBox = { x: parts[0], y: parts[1], w: parts[2], h: parts[3] };
             } else {
                 viewBox.w = svg.clientWidth || 1000;
                 viewBox.h = svg.clientHeight || 1000;
             }
-            
             initialViewBoxWidth = viewBox.w;
+            cacheMapSize(svg);
+            svg.setAttribute('viewBox', `${viewBox.x} ${viewBox.y} ${viewBox.w} ${viewBox.h}`);
+            updatePointsScale();
 
-            function updateViewBox() { 
-                svg.setAttribute('viewBox', `${viewBox.x} ${viewBox.y} ${viewBox.w} ${viewBox.h}`); 
-                updatePointsScale();
+            const ro = new ResizeObserver(() => cacheMapSize(svg));
+            ro.observe(svg);
+
+            function getSVGPoint(clientX, clientY) {
+                const pt = svg.createSVGPoint();
+                pt.x = clientX;
+                pt.y = clientY;
+                return pt.matrixTransform(svg.getScreenCTM().inverse());
             }
-            updateViewBox();
 
-            // ZOOM
+            function applyZoom(clientX, clientY, scaleFactor) {
+                const svgP = getSVGPoint(clientX, clientY);
+                viewBox.x = svgP.x - (svgP.x - viewBox.x) * scaleFactor;
+                viewBox.y = svgP.y - (svgP.y - viewBox.y) * scaleFactor;
+                viewBox.w *= scaleFactor;
+                viewBox.h *= scaleFactor;
+                scheduleViewBoxUpdate(svg, true);
+                closeViewer();
+            }
+
             svg.addEventListener('wheel', (e) => {
                 e.preventDefault();
-                const scale = e.deltaY > 0 ? 1.1 : 0.9;
-                const pt = svg.createSVGPoint();
-                pt.x = e.clientX; pt.y = e.clientY;
-                const svgP = pt.matrixTransform(svg.getScreenCTM().inverse());
-
-                viewBox.x = svgP.x - (svgP.x - viewBox.x) * scale;
-                viewBox.y = svgP.y - (svgP.y - viewBox.y) * scale;
-                viewBox.w *= scale;
-                viewBox.h *= scale;
-                updateViewBox();
-                closeViewer(); 
+                applyZoom(e.clientX, e.clientY, e.deltaY > 0 ? 1.1 : 0.9);
             }, { passive: false });
 
-            // PAN & DRAG
             let isPanning = false;
-            let startPan = { x: 0, y: 0 };
             let hasMoved = false;
+            let startPan = { x: 0, y: 0 };
+            let lastTouchDist = 0;
+            let activePointers = new Map();
 
-            svg.addEventListener('mousedown', (e) => {
-                if (e.button !== 0) return;
-                if (mode === 'MOVE' && e.target.closest('.map-point')) return; 
+            function onPointerDown(e) {
+                if (e.pointerType === 'mouse' && e.button !== 0) return;
 
-                isPanning = true;
-                hasMoved = false;
-                startPan = { x: e.clientX, y: e.clientY };
-            });
+                const pointEl = e.target.closest?.('.map-point');
 
-            svg.addEventListener('mousemove', (e) => {
-                if (draggedPoint && mode === 'MOVE') {
-                    const pt = svg.createSVGPoint();
-                    pt.x = e.clientX; pt.y = e.clientY;
-                    const svgP = pt.matrixTransform(svg.getScreenCTM().inverse());
-                    
+                if (pointEl && mode === 'MOVE' && isEditor) {
+                    const id = pointEl.getAttribute('data-id');
+                    const data = pointsData.find(p => p.id === id);
+                    if (!data) return;
+                    e.stopPropagation();
+                    draggedPoint = { group: pointEl, data };
+                    pointEl.setPointerCapture?.(e.pointerId);
+                    return;
+                }
+
+                if (pointEl && mode === 'VIEW') return;
+
+                activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+                svg.setPointerCapture?.(e.pointerId);
+
+                if (activePointers.size === 1) {
+                    isPanning = true;
+                    hasMoved = false;
+                    startPan = { x: e.clientX, y: e.clientY };
+                    mapWrapper.classList.add('is-panning');
+                } else if (activePointers.size === 2) {
+                    isPanning = false;
+                    const pts = Array.from(activePointers.values());
+                    lastTouchDist = Math.hypot(pts[1].x - pts[0].x, pts[1].y - pts[0].y);
+                }
+            }
+
+            function onPointerMove(e) {
+                if (draggedPoint && mode === 'MOVE' && isEditor) {
+                    const svgP = getSVGPoint(e.clientX, e.clientY);
                     draggedPoint.group.setAttribute('transform', `translate(${svgP.x}, ${svgP.y})`);
                     draggedPoint.data.x = svgP.x;
                     draggedPoint.data.y = svgP.y;
-                    return; 
+                    return;
                 }
 
-                if (!isPanning) return;
+                if (!activePointers.has(e.pointerId)) return;
+                activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+                if (activePointers.size === 2) {
+                    e.preventDefault();
+                    const pts = Array.from(activePointers.values());
+                    const dist = Math.hypot(pts[1].x - pts[0].x, pts[1].y - pts[0].y);
+                    if (lastTouchDist > 0) {
+                        applyZoom(
+                            (pts[0].x + pts[1].x) / 2,
+                            (pts[0].y + pts[1].y) / 2,
+                            lastTouchDist / dist
+                        );
+                    }
+                    lastTouchDist = dist;
+                    return;
+                }
+
+                if (!isPanning || activePointers.size !== 1) return;
+
                 const dx = e.clientX - startPan.x;
                 const dy = e.clientY - startPan.y;
                 if (Math.abs(dx) > 3 || Math.abs(dy) > 3) hasMoved = true;
 
                 if (hasMoved) {
-                    const scaleX = viewBox.w / svg.clientWidth;
-                    const scaleY = viewBox.h / svg.clientHeight;
+                    const scaleX = viewBox.w / _cachedWidth;
+                    const scaleY = viewBox.h / _cachedHeight;
                     viewBox.x -= dx * scaleX;
                     viewBox.y -= dy * scaleY;
-                    updateViewBox();
                     startPan = { x: e.clientX, y: e.clientY };
+                    scheduleViewBoxUpdate(svg, false);
                     closeViewer();
                 }
-            });
+            }
 
-            svg.addEventListener('mouseup', () => { isPanning = false; draggedPoint = null; });
-            svg.addEventListener('mouseleave', () => { isPanning = false; draggedPoint = null; });
+            function onPointerUp(e) {
+                if (draggedPoint) draggedPoint = null;
+                activePointers.delete(e.pointerId);
+                if (activePointers.size < 2) lastTouchDist = 0;
+                if (activePointers.size === 0) {
+                    isPanning = false;
+                    mapWrapper.classList.remove('is-panning');
+                } else if (activePointers.size === 1) {
+                    const remaining = activePointers.values().next().value;
+                    isPanning = true;
+                    hasMoved = false;
+                    startPan = { x: remaining.x, y: remaining.y };
+                }
+            }
 
-            // MAP CLICK (Add)
+            svg.addEventListener('pointerdown', onPointerDown);
+            svg.addEventListener('pointermove', onPointerMove, { passive: false });
+            svg.addEventListener('pointerup', onPointerUp);
+            svg.addEventListener('pointercancel', onPointerUp);
+
             svg.addEventListener('click', (e) => {
-                if (hasMoved || mode !== 'ADD' || !activeFloorId || e.target.closest('.map-point')) return;
-
-                const pt = svg.createSVGPoint();
-                pt.x = e.clientX;
-                pt.y = e.clientY;
-                const svgP = pt.matrixTransform(svg.getScreenCTM().inverse());
-
+                if (hasMoved || mode !== 'ADD' || !isEditor || !activeFloorId || e.target.closest('.map-point')) return;
+                const svgP = getSVGPoint(e.clientX, e.clientY);
                 pendingPointCoords = { floor: activeFloorId, x: svgP.x, y: svgP.y };
-                document.getElementById('point-image-input').value = ""; 
-                document.getElementById('point-details-input').value = ""; 
+                document.getElementById('point-image-input').value = '';
+                document.getElementById('point-details-input').value = '';
                 createModal.classList.add('active');
             });
         }
-
         // 7. Point Creation & Rendering
         function cancelCreate() {
             createModal.classList.remove('active');
@@ -1020,8 +1769,7 @@
                 const file = fileInput.files[0];
                 base64Image = await convertToBase64(file);
             }
-            
-            // Failsafe: if somehow bound to floor-0, force floor-1
+
             let targetFloor = pendingPointCoords.floor;
             if (targetFloor === 'floor-0') {
                 targetFloor = 'floor-1';
@@ -1039,9 +1787,9 @@
 
             pointsData.push(newPointData);
             renderPointToDOM(newPointData);
-            updatePointsVisibility(); 
+            updatePointsVisibility();
             updateLegendCounts();
-            cancelCreate(); 
+            cancelCreate();
         }
 
         function renderPointToDOM(pointData) {
@@ -1053,9 +1801,9 @@
             g.setAttribute('class', 'map-point');
             g.setAttribute('data-id', pointData.id);
             g.setAttribute('transform', `translate(${pointData.x}, ${pointData.y})`);
-            
+
             const title = document.createElementNS('http://www.w3.org/2000/svg', 'title');
-            title.textContent = pointData.iconType || "Point";
+            title.textContent = pointData.iconType || 'Point';
             g.appendChild(title);
 
             const glow = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
@@ -1081,16 +1829,9 @@
                 g.appendChild(circle);
             }
 
-            g.addEventListener('mousedown', (e) => {
-                if (mode === 'MOVE') {
-                    e.stopPropagation(); 
-                    draggedPoint = { group: g, data: pointData };
-                }
-            });
-
             g.addEventListener('click', (e) => {
                 if (mode === 'VIEW') {
-                    e.stopPropagation(); 
+                    e.stopPropagation();
                     showViewer(pointData, e.clientX, e.clientY);
                 }
             });
@@ -1101,10 +1842,8 @@
         // 8. View & Delete Logic
         function showViewer(pointData, screenX, screenY) {
             currentViewedPointId = pointData.id;
-            
-            viewer.style.left = (screenX + 15) + 'px';
-            viewer.style.top = (screenY - 20) + 'px';
-            viewerHeader.textContent = pointData.iconType || "document Details";
+
+            viewerHeader.textContent = pointData.iconType || 'document Details';
 
             if (pointData.details) {
                 viewerDescription.textContent = pointData.details;
@@ -1118,8 +1857,20 @@
             } else {
                 viewerContent.innerHTML = `<div class="no-image-box">No visual reference</div>`;
             }
-            
+
             viewer.classList.add('active');
+
+            if (window.innerWidth >= 768) {
+                viewer.style.left = (screenX + 15) + 'px';
+                viewer.style.top = (screenY - 20) + 'px';
+                viewer.style.right = '';
+                viewer.style.bottom = '';
+            } else {
+                viewer.style.left = '';
+                viewer.style.right = '';
+                viewer.style.top = '';
+                viewer.style.bottom = '';
+            }
         }
 
         function closeViewer() {
@@ -1130,23 +1881,52 @@
         function openLightbox(imgSrc) {
             lightboxImg.src = imgSrc;
             lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
         }
+
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+            lightboxImg.removeAttribute('src');
+            document.body.style.overflow = '';
+        }
+
+        lightboxClose.addEventListener('click', (e) => {
+            e.stopPropagation();
+            closeLightbox();
+        });
+
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox || e.target === lightboxImg) {
+                closeLightbox();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                if (lightbox.classList.contains('active')) {
+                    closeLightbox();
+                    return;
+                }
+                closeViewer();
+                if (createModal.classList.contains('active')) cancelCreate();
+                closeSheet();
+            }
+        });
 
         // 9. Data Handlers
         function convertToBase64(file, maxWidth = 1920) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
-            
+
                 reader.onload = (event) => {
                     const img = new Image();
                     img.src = event.target.result;
-                    
+
                     img.onload = () => {
                         const canvas = document.createElement('canvas');
                         let width = img.width;
                         let height = img.height;
 
-                        // Scale down if the image is wider than maxWidth
                         if (width > maxWidth) {
                             height = Math.round((height * maxWidth) / width);
                             width = maxWidth;
@@ -1154,31 +1934,30 @@
 
                         canvas.width = width;
                         canvas.height = height;
-                        
+
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, width, height);
 
-                        // Re-encode as JPEG with 70% quality
                         const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
                         resolve(compressedBase64);
                     };
-                    
+
                     img.onerror = error => reject(error);
                 };
-                        
+
                 reader.onerror = error => reject(error);
                 reader.readAsDataURL(file);
             });
         }
 
         function exportData() {
-            if (pointsData.length === 0) return alert("No document to export!");
+            if (pointsData.length === 0) return alert('No document to export!');
             const dataStr = JSON.stringify({ map: currentMap, points: pointsData }, null, 2);
             const blob = new Blob([dataStr], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `${currentMap}-points.json`; 
+            a.download = `${currentMap}-points.json`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -1195,7 +1974,8 @@
                     const parsed = JSON.parse(e.target.result);
                     if (parsed.map && parsed.map !== currentMap) {
                         if (!confirm(`Warning: document data is tagged for '${parsed.map}', but current Map is '${currentMap}'. Load anyway?`)) {
-                            event.target.value = ""; return;
+                            event.target.value = '';
+                            return;
                         }
                     }
 
@@ -1205,9 +1985,9 @@
                     updatePointsVisibility();
                     updateLegendCounts();
                 } catch (err) {
-                    alert("Data corruption detected. File invalid.");
+                    alert('Data corruption detected. File invalid.');
                 }
-                event.target.value = ""; 
+                event.target.value = '';
             };
             reader.readAsText(file);
         }
@@ -1237,7 +2017,6 @@
                 applyDarkGlow();
             });
 
-            // Reflect the markup's initial state
             ignoreFloors = ignoreFloorsInput.checked;
             showFloorArrows = floorArrowsInput.checked;
             darkGlow = darkGlowInput.checked;
@@ -1251,11 +2030,169 @@
                 closeViewer();
                 lightbox.classList.remove('active');
                 if (createModal.classList.contains('active')) cancelCreate();
+                closeSheet();
             }
         });
+
+        const editModal = document.getElementById('edit-modal');
+        const editIconSelect = document.getElementById('edit-icon-select');
+        const editSelectItems = document.getElementById('edit-select-items');
+        const editSelectSelected = document.getElementById('edit-select-selected');
+        const editHiddenIconValue = document.getElementById('edit-selected-icon-value');
+        const lightboxEdit = document.getElementById('lightbox-edit');
+        let editingPointId = null;
+
+        function applyEditorUI() {
+            const addBtn = document.getElementById('mode-add');
+            const moveBtn = document.getElementById('mode-move');
+            const form = document.getElementById('editor-login-form');
+            const logoutRow = document.getElementById('editor-logout-row');
+            const status = document.getElementById('editor-status');
+
+            if (isEditor) {
+                addBtn.disabled = false;
+                moveBtn.disabled = false;
+                form.style.display = 'none';
+                logoutRow.style.display = 'flex';
+                status.textContent = 'Редактор: включён';
+                status.classList.add('on');
+                lightboxEdit.classList.add('visible');
+            } else {
+                addBtn.disabled = true;
+                moveBtn.disabled = true;
+                form.style.display = 'block';
+                logoutRow.style.display = 'none';
+                status.textContent = 'Редактор: выключен';
+                status.classList.remove('on');
+                lightboxEdit.classList.remove('visible');
+                if (mode === 'ADD' || mode === 'MOVE') setMode('VIEW');
+            }
+        }
+
+        function editorLogin() {
+            const input = document.getElementById('editor-password');
+            if (input.value === EDITOR_PASSWORD) {
+                isEditor = true;
+                sessionStorage.setItem('kordmap_editor', '1');
+                input.value = '';
+                applyEditorUI();
+            } else {
+                alert('Неверный пароль');
+                input.value = '';
+                input.focus();
+            }
+        }
+
+        function editorLogout() {
+            isEditor = false;
+            sessionStorage.removeItem('kordmap_editor');
+            applyEditorUI();
+            closeViewer();
+            closeLightbox();
+            cancelEdit();
+        }
+
+        document.getElementById('editor-password').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') editorLogin();
+        });
+
+        if (sessionStorage.getItem('kordmap_editor') === '1') {
+            isEditor = true;
+        }
+        applyEditorUI();
+
+        function buildEditIconDropdown(selected) {
+            editSelectItems.innerHTML = '';
+            if (!availableIcons || availableIcons.length === 0) {
+                editSelectSelected.innerHTML = 'No icons';
+                editHiddenIconValue.value = '';
+                return;
+            }
+            availableIcons.forEach(iconName => {
+                const div = document.createElement('div');
+                div.className = 'select-item';
+                div.innerHTML = `<img src="icons/${iconName}.png" alt="${iconName}" onerror="this.style.display='none'"> <span>${iconName}</span>`;
+                div.onclick = (e) => {
+                    e.stopPropagation();
+                    setEditDropdownSelection(iconName);
+                    editSelectItems.classList.remove('active');
+                };
+                editSelectItems.appendChild(div);
+            });
+            setEditDropdownSelection(selected || availableIcons[0]);
+        }
+
+        function setEditDropdownSelection(iconName) {
+            editHiddenIconValue.value = iconName;
+            editSelectSelected.innerHTML = `<img src="icons/${iconName}.png" alt="${iconName}" onerror="this.style.display='none'"> <span>${iconName}</span>`;
+        }
+
+        editIconSelect.addEventListener('click', (e) => {
+            editSelectItems.classList.toggle('active');
+            e.stopPropagation();
+        });
+
+        function openEditForCurrentPoint() {
+            if (!isEditor || !currentViewedPointId) return;
+            const pt = pointsData.find(p => p.id === currentViewedPointId);
+            if (!pt) return;
+
+            editingPointId = pt.id;
+            buildEditIconDropdown(pt.iconType);
+            document.getElementById('edit-point-details-input').value = pt.details || '';
+            document.getElementById('edit-point-image-input').value = '';
+            closeLightbox();
+            editModal.classList.add('active');
+        }
+
+        function cancelEdit() {
+            editModal.classList.remove('active');
+            editingPointId = null;
+        }
+
+        async function saveEditedPoint() {
+            if (!editingPointId) return;
+            const pt = pointsData.find(p => p.id === editingPointId);
+            if (!pt) return;
+
+            const fileInput = document.getElementById('edit-point-image-input');
+            const detailsInput = document.getElementById('edit-point-details-input');
+
+            pt.iconType = editHiddenIconValue.value;
+            pt.details = detailsInput.value.trim();
+
+            if (fileInput.files.length > 0) {
+                pt.image = await convertToBase64(fileInput.files[0]);
+            }
+
+            const el = document.querySelector(`g.map-point[data-id="${pt.id}"]`);
+            if (el) el.remove();
+            renderPointToDOM(pt);
+            updatePointsVisibility();
+            updateLegendCounts();
+
+            cancelEdit();
+            showViewer(pt, window.innerWidth / 2, window.innerHeight / 3);
+        }
+
+        lightboxEdit.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openEditForCurrentPoint();
+        });
+
+        function setMode(newMode) {
+            if ((newMode === 'ADD' || newMode === 'MOVE') && !isEditor) return;
+            mode = newMode;
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.mode === newMode);
+            });
+            mapWrapper.className = `map-container mode-${newMode.toLowerCase()}`;
+            if (darkGlow) mapWrapper.classList.add('dark-glow');
+            closeViewer();
+        }
+
     </script>
 
-    <!-- Vercel Web Analytics -->
     <script type="module">
         import { inject } from 'https://cdn.jsdelivr.net/npm/@vercel/analytics@2.0.1/+esm';
         inject();
