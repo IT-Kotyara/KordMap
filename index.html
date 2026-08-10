@@ -1,18 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Карта документов Kord Breach</title>
     <style>
-
         @font-face {
             font-family: Bender;
             src: url(Bender.woff);
             font-weight: normal;
         }
-
         @font-face {
             font-family: Bender;
             src: url(Bender-Bold.woff);
@@ -20,8 +18,10 @@
         }
 
         * {
-            font-family: Bender;
+            font-family: Bender, system-ui, sans-serif;
+            box-sizing: border-box;
         }
+<<<<<<< Updated upstream
 
         /* Tactical Color Palette */
         :root {
@@ -37,25 +37,44 @@
             --accent: #d18d32;       /* Tactical orange/gold */
             --accent-hover: #e59f3d; 
             --accent-dim: rgba(209, 141, 50, 0.15);
+=======
+>>>>>>> Stashed changes
 
-            /* Action Buttons */
-            --btn-success: #3c5438;  
+        :root {
+            --bg-base: #09090a;
+            --bg-panel: #121315;
+            --bg-card: #191b1d;
+            --bg-hover: #232528;
+            --border: #282a2e;
+            --text-main: #c4c5c7;
+            --text-muted: #72757a;
+            --accent: #d18d32;
+            --accent-hover: #e59f3d;
+            --accent-dim: rgba(209, 141, 50, 0.15);
+            --btn-success: #3c5438;
             --btn-success-hover: #4a6645;
             --btn-danger: #6b2b2b;
             --btn-danger-hover: #823535;
+            --header-height: 56px;
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
+            --safe-top: env(safe-area-inset-top, 0px);
         }
 
-        /* Base Styles */
-        body, html { margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; height: 100vh; background: var(--bg-base); color: var(--text-main); overflow: hidden; }
-        .container { display: none; height: 100%; }
-        .brand-block {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-            margin-top: 15px;
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background: var(--bg-base);
+            color: var(--text-main);
+            overflow: hidden;
+            -webkit-tap-highlight-color: transparent;
         }
+<<<<<<< Updated upstream
         /* Map Selector Screen */
+=======
+
+        /* ========== MAP SELECTOR ========== */
+>>>>>>> Stashed changes
         #map-selector {
             position: fixed;
             inset: 0;
@@ -64,121 +83,81 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            background-attachment: fixed;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
             z-index: 200;
             overflow-y: auto;
-            padding: 40px 20px;
+            padding: 24px 16px calc(80px + var(--safe-bottom));
+            -webkit-overflow-scrolling: touch;
         }
-
         #map-selector::before {
             content: '';
             position: absolute;
             inset: 0;
-            background: rgba(9, 9, 10, 0.72);
+            background: rgba(9, 9, 10, 0.75);
             z-index: 0;
             pointer-events: none;
         }
+<<<<<<< Updated upstream
 
         #map-selector > * {
             position: relative;
             z-index: 1;
         }
+=======
+        #map-selector > * { position: relative; z-index: 1; }
+>>>>>>> Stashed changes
 
         #map-selector h1 {
             color: var(--accent);
             font-weight: bold;
-            font-size: 3rem;
+            font-size: clamp(1.6rem, 6vw, 2.8rem);
             letter-spacing: 2px;
             text-transform: uppercase;
-            margin-bottom: 10px;
-            flex-shrink: 0;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 1);
-        }
-
-        #map-selector h2 {
-            color: white;
-            font-weight: bold;
-            font-size: 4rem;
-            letter-spacing: 2px;
-            margin: 0;
-            margin-top: -40px;
-            flex-shrink: 0;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-        }
-
-        #map-selector h2 img {
-            width: 64px;
-            height: 64px;
-        }
-
-        .social-links {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 22px;
-        }
-
-        .social-links a {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            transition: 0.25s;
-            text-decoration: none;
-        }
-
-        .social-links a:hover {
-            transform: translateY(-2px);
-        }
-
-        .social-links img {
-            width: 50px;
-            height: 50px;
-            object-fit: contain;
+            margin: 12px 0 8px;
+            text-align: center;
+            text-shadow: 1px 1px 3px #000;
         }
 
         .map-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin-top: 20px;
-            max-width: 1400px;
+            grid-template-columns: 1fr;
+            gap: 12px;
             width: 100%;
-            padding-bottom: 40px;
+            max-width: 1100px;
+            margin-top: 12px;
         }
+        @media (min-width: 480px) {
+            .map-grid { grid-template-columns: 1fr 1fr; }
+        }
+        @media (min-width: 900px) {
+            .map-grid { grid-template-columns: repeat(3, 1fr); gap: 18px; }
+        }
+
         .map-card {
             background: var(--bg-card);
             background-size: cover;
             background-position: center;
-            background-repeat: no-repeat;
-            padding: 60px 60px;
-            border-radius: 2px;
-            font-size: 1.5rem;
+            padding: 28px 16px;
+            border-radius: 6px;
+            font-size: clamp(1.1rem, 4vw, 1.5rem);
             font-weight: bold;
             cursor: pointer;
-            transition: 0.5s;
-            border: 4px solid var(--border);
+            transition: 0.3s;
+            border: 3px solid var(--border);
             text-transform: uppercase;
             letter-spacing: 1px;
             color: #ececec;
             text-align: center;
-            position: relative;
-            overflow: hidden;
+            min-height: 90px;
             display: flex;
             align-items: center;
             justify-content: center;
-            text-shadow: 1.5px 1.5px 1px #000;
+            text-shadow: 1.5px 1.5px 2px #000;
         }
+<<<<<<< Updated upstream
 
         .map-card > * {
             position: relative;
@@ -187,14 +166,16 @@
 
         .map-card:hover {
             background-color: var(--bg-hover);
+=======
+        .map-card:hover, .map-card:active {
+>>>>>>> Stashed changes
             border-color: var(--accent);
             color: var(--accent);
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-            transition: 0.5s;
-            background-size: 110%;
+            transform: translateY(-2px);
+            background-size: 108%;
         }
 
+<<<<<<< Updated upstream
         /* Sidebar */
         .sidebar { width: 280px; background: var(--bg-panel); display: flex; flex-direction: column; z-index: 10; border-right: 1px solid var(--border); }
         .sidebar-header { padding: 20px; font-size: 1.1rem; font-weight: bold; text-align: center; color: var(--accent); text-transform: uppercase; letter-spacing: 2px; }
@@ -204,54 +185,240 @@
         .mode-btn { width: 100%; padding: 10px; background: var(--bg-card); color: var(--text-muted); border: 1px solid var(--border); border-radius: 2px; cursor: pointer; font-weight: bold; transition: 0.2s; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; }
         .mode-btn:hover { background: var(--bg-hover); color: var(--text-main); }
         .mode-btn.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+=======
+        .brand-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+            margin-top: 28px;
+            text-align: center;
+        }
+        .brand-block h2 {
+            color: white;
+            font-size: clamp(1.4rem, 5vw, 2.4rem);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 1px 1px 3px #000;
+        }
+        .brand-block h2 img { width: 40px; height: 40px; }
+
+        .social-links {
+            display: flex;
+            gap: 18px;
+        }
+        .social-links a {
+            display: flex;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            transition: 0.2s;
+        }
+        .social-links img { width: 48px; height: 48px; object-fit: contain; }
+
+        .donate-button {
+            position: fixed;
+            bottom: calc(20px + var(--safe-bottom));
+            right: 16px;
+            background: rgba(0,0,0,0.55);
+            color: #fff;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: bold;
+            text-decoration: none;
+            z-index: 201;
+            font-size: 0.95rem;
+            backdrop-filter: blur(4px);
+        }
+
+        /* ========== APP LAYOUT ========== */
+        .container {
+            display: none;
+            height: 100%;
+            width: 100%;
+            flex-direction: column;
+        }
+        .container.active { display: flex; }
+
+        /* Mobile top bar */
+        .mobile-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: calc(var(--header-height) + var(--safe-top));
+            padding: var(--safe-top) 12px 0;
+            background: var(--bg-panel);
+            border-bottom: 1px solid var(--border);
+            z-index: 40;
+            flex-shrink: 0;
+        }
+        .mobile-header button {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            min-height: 44px;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+        .mobile-header button:active { background: var(--bg-hover); }
+        .mobile-header .map-title {
+            font-weight: bold;
+            color: var(--accent);
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            max-width: 40vw;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Map area */
+        .map-container {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            background: var(--bg-base);
+            touch-action: none;
+            user-select: none;
+        }
+        .map-container svg {
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            cursor: grab;
+            user-select: none;
+            pointer-events: all;
+        }
+        .map-container svg:active { cursor: grabbing; }
+        .map-container.mode-add svg { cursor: crosshair; }
+        .map-container svg g[id^="floor-"] {
+            transition: filter 0.25s ease, opacity 0.25s ease;
+        }
+
+        /* Sidebar – mobile = bottom sheet */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: min(65vh, 520px);
+            max-height: calc(100% - var(--header-height) - 20px);
+            background: var(--bg-panel);
+            border-radius: 18px 18px 0 0;
+            border-top: 1px solid var(--border);
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            transform: translateY(110%);
+            transition: transform 0.32s cubic-bezier(0.32, 0.72, 0, 1);
+            padding-bottom: var(--safe-bottom);
+            box-shadow: 0 -8px 30px rgba(0,0,0,0.5);
+        }
+        .sidebar.open { transform: translateY(0); }
+
+        .sheet-handle {
+            width: 40px;
+            height: 5px;
+            background: var(--border);
+            border-radius: 3px;
+            margin: 10px auto 6px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-header {
+            padding: 4px 16px 12px;
+            font-size: 1.05rem;
+            font-weight: bold;
+            text-align: center;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            flex-shrink: 0;
+        }
+
+>>>>>>> Stashed changes
         .change-map-btn {
-            width: calc(100% - 30px);
-            margin: 0 15px 12px;
-            padding: 8px 12px;
+            display: none; /* hidden on mobile – use top bar instead */
+        }
+
+        .controls {
+            padding: 0 14px 12px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        .mode-row {
+            display: flex;
+            gap: 8px;
+        }
+        .mode-btn {
+            flex: 1;
+            padding: 12px 8px;
             background: var(--bg-card);
             color: var(--text-muted);
             border: 1px solid var(--border);
-            border-radius: 2px;
+            border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
+            min-height: 46px;
             transition: 0.2s;
         }
-        .change-map-btn:hover {
-            background: var(--bg-hover);
+        .mode-btn:hover, .mode-btn:active { background: var(--bg-hover); color: var(--text-main); }
+        .mode-btn.active {
+            background: var(--accent-dim);
             border-color: var(--accent);
             color: var(--accent);
         }
-        .action-group { display: flex; gap: 10px; margin-top: 10px; }
-        .action-btn { flex: 1; padding: 10px; border: 1px solid var(--border); border-radius: 2px; cursor: pointer; font-weight: bold; font-size: 0.8rem; text-transform: uppercase; transition: 0.2s; }
-        .action-btn { background: var(--bg-card); color: var(--text-main); }
-        .action-btn:hover { background: var(--bg-hover); }
-        .action-btn.export { background: var(--btn-success); color: #fff; border-color: var(--btn-success); }
-        .action-btn.export:hover { background: var(--btn-success-hover); }
-        
-        /* Legend / Filters */
-        .legend-container { border-bottom: 1px solid var(--border); display: flex; flex-direction: column; max-height: 35vh; }
-        .legend-header { padding: 8px 15px; font-size: 0.75rem; font-weight: bold; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; background: #000; border-bottom: 1px solid var(--border); }
-        .legend-menu { padding: 10px 15px; display: flex; flex-direction: column; gap: 10px; overflow-y: auto; }
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--text-main);
-            font-size: 0.85rem;
+
+        .action-group { display: flex; gap: 8px; }
+        .action-btn {
+            flex: 1;
+            padding: 11px 8px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
             cursor: pointer;
-            user-select: none;
+            font-weight: bold;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            background: var(--bg-card);
+            color: var(--text-main);
+            min-height: 44px;
         }
-        .legend-count {
-            margin-left: auto;
+        .action-btn.export {
+            background: var(--btn-success);
+            color: #fff;
+            border-color: var(--btn-success);
+        }
+
+        /* Legend & options */
+        .legend-container, .options-container {
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+        .legend-header {
+            padding: 8px 16px;
+            font-size: 0.72rem;
+            font-weight: bold;
             color: var(--text-muted);
-            font-size: 0.8rem;
-            font-weight: normal;
-            min-width: 20px;
-            text-align: right;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: #000;
         }
+<<<<<<< Updated upstream
         .legend-item img { width: 32px; height: 32px; object-fit: contain; }
         .legend-item input[type="checkbox"] { accent-color: var(--accent); cursor: pointer; margin: 0; width: 14px; height: 14px; background: var(--bg-card); border: 1px solid var(--border); }
 
@@ -277,31 +444,266 @@
         /* Map Points */
         .map-point { cursor: pointer; transition: filter 0.2s, opacity 0.2s; }
         .map-point:hover { filter: drop-shadow(0px 0px 5px var(--accent)); }
+=======
+        .legend-menu, .options-menu {
+            padding: 10px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            overflow-y: auto;
+            max-height: 28vh;
+        }
+        .legend-item, .option-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-main);
+            font-size: 0.9rem;
+            cursor: pointer;
+            user-select: none;
+            min-height: 40px;
+        }
+        .legend-item img { width: 28px; height: 28px; object-fit: contain; }
+        .legend-item input, .option-item input {
+            accent-color: var(--accent);
+            width: 18px;
+            height: 18px;
+            margin: 0;
+            flex-shrink: 0;
+        }
+        .legend-name { flex: 1; }
+
+        .menu-items {
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            flex: 1;
+            padding: 6px 0;
+            -webkit-overflow-scrolling: touch;
+        }
+        .floor-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            padding: 14px 18px;
+            text-align: left;
+            font-size: 0.95rem;
+            cursor: pointer;
+            border-left: 3px solid transparent;
+            font-weight: bold;
+            letter-spacing: 1px;
+            min-height: 48px;
+        }
+        .floor-btn:hover, .floor-btn:active { background: var(--bg-hover); color: var(--text-main); }
+        .floor-btn.active {
+            background: #000;
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+
+        .sidebar-footer {
+            padding: 12px 14px;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-align: center;
+            border-top: 1px solid var(--border);
+            background: var(--bg-base);
+            line-height: 1.45;
+            flex-shrink: 0;
+        }
+        .sidebar-footer a { color: var(--accent); text-decoration: none; font-weight: bold; }
+
+        /* Overlay when sheet is open */
+        .sheet-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.45);
+            z-index: 45;
+        }
+        .sheet-backdrop.visible { display: block; }
+
+        /* ========== DESKTOP (≥768px) ========== */
+        @media (min-width: 768px) {
+            .mobile-header { display: none; }
+
+            .container.active {
+                flex-direction: row;
+            }
+
+            .sidebar {
+                position: relative;
+                width: 280px;
+                height: 100%;
+                max-height: none;
+                transform: none !important;
+                border-radius: 0;
+                border-top: none;
+                border-right: 1px solid var(--border);
+                box-shadow: none;
+                padding-bottom: 0;
+            }
+            .sheet-handle { display: none; }
+            .sheet-backdrop { display: none !important; }
+
+            .change-map-btn {
+                display: block;
+                width: calc(100% - 30px);
+                margin: 0 15px 12px;
+                padding: 10px 12px;
+                background: var(--bg-card);
+                color: var(--text-muted);
+                border: 1px solid var(--border);
+                border-radius: 4px;
+                cursor: pointer;
+                font-weight: bold;
+                font-size: 0.78rem;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                min-height: 42px;
+            }
+            .change-map-btn:hover {
+                background: var(--bg-hover);
+                border-color: var(--accent);
+                color: var(--accent);
+            }
+
+            .legend-menu, .options-menu { max-height: 32vh; }
+        }
+
+        /* ========== MAP POINTS ========== */
+        .map-point { cursor: pointer; transition: filter 0.2s, opacity 0.2s; }
+        .map-point:hover { filter: drop-shadow(0px 0px 5px var(--accent)); }
+        .point-glow { display: none; pointer-events: none; }
+        .map-container.dark-glow .point-glow { display: block; }
+>>>>>>> Stashed changes
         .map-container.mode-move .map-point { cursor: move; }
 
-        /* Modals & Overlays */
-        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 100; justify-content: center; align-items: center; backdrop-filter: blur(2px); }
+        /* ========== MODALS & VIEWER ========== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(3px);
+            padding: 16px;
+        }
         .modal-overlay.active { display: flex; }
-        .modal-content { background: var(--bg-panel); padding: 25px; border-radius: 4px; border: 1px solid var(--border); min-width: 320px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
-        .modal-content h3 { margin-top: 0; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; font-size: 1.1rem; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
-        .modal-content input[type="file"] { margin: 15px 0; display: block; color: var(--text-muted); font-size: 0.85rem; }
-        .modal-content textarea { width: 100%; box-sizing: border-box; background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border); border-radius: 2px; padding: 10px; margin-bottom: 15px; resize: vertical; min-height: 80px; font-family: inherit; font-size: 0.85rem; }
-        .modal-content textarea:focus { outline: none; border-color: var(--accent); }
-        
-        /* Custom Icon Select Dropdown */
-        .custom-select { position: relative; background: var(--bg-card); border-radius: 2px; border: 1px solid var(--border); margin-bottom: 15px; user-select: none; }
-        .select-selected { display: flex; align-items: center; gap: 10px; padding: 10px; cursor: pointer; font-size: 0.9rem; }
-        .select-selected img, .select-item img { width: 24px; height: 24px; object-fit: contain; }
-        .select-items { position: absolute; background: var(--bg-panel); top: 100%; left: -1px; right: -1px; z-index: 99; border: 1px solid var(--border); border-top: none; max-height: 200px; overflow-y: auto; display: none; }
-        .select-items.active { display: block; }
-        .select-item { display: flex; align-items: center; gap: 10px; padding: 10px; cursor: pointer; transition: background 0.2s; font-size: 0.9rem; }
-        .select-item:hover { background: var(--bg-hover); color: var(--accent); }
 
-        .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
-        .modal-actions button { padding: 8px 16px; cursor: pointer; border-radius: 2px; border: 1px solid var(--border); font-weight: bold; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; }
+        .modal-content {
+            background: var(--bg-panel);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            width: 100%;
+            max-width: 380px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.7);
+        }
+        .modal-content h3 {
+            margin: 0 0 14px;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 1.05rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+        }
+        .modal-content label {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .modal-content textarea {
+            width: 100%;
+            background: var(--bg-card);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 14px;
+            resize: vertical;
+            min-height: 80px;
+            font-size: 0.95rem;
+        }
+        .modal-content textarea:focus { outline: none; border-color: var(--accent); }
+        .modal-content input[type="file"] {
+            margin-bottom: 14px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            width: 100%;
+        }
+
+        .custom-select {
+            position: relative;
+            background: var(--bg-card);
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            margin-bottom: 14px;
+            user-select: none;
+        }
+        .select-selected {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            min-height: 48px;
+        }
+        .select-selected img, .select-item img { width: 26px; height: 26px; object-fit: contain; }
+        .select-items {
+            position: absolute;
+            background: var(--bg-panel);
+            top: 100%;
+            left: -1px;
+            right: -1px;
+            z-index: 99;
+            border: 1px solid var(--border);
+            border-top: none;
+            max-height: 220px;
+            overflow-y: auto;
+            display: none;
+            border-radius: 0 0 6px 6px;
+        }
+        .select-items.active { display: block; }
+        .select-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            min-height: 48px;
+        }
+        .select-item:hover, .select-item:active { background: var(--bg-hover); color: var(--accent); }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 8px;
+        }
+        .modal-actions button {
+            padding: 12px 18px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            min-height: 46px;
+            cursor: pointer;
+        }
         .btn-cancel { background: var(--bg-card); color: var(--text-main); }
-        .btn-cancel:hover { background: var(--bg-hover); }
         .btn-save { background: var(--accent); color: #000; border-color: var(--accent); }
+<<<<<<< Updated upstream
         .btn-save:hover { background: var(--accent-hover); }
         
         /* Floating Point Viewer */
@@ -320,12 +722,112 @@
 
         /* Fullscreen Lightbox */
         #lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 150; justify-content: center; align-items: center; }
+=======
+
+        /* Point viewer */
+        #point-viewer {
+            display: none;
+            position: absolute;
+            background: var(--bg-panel);
+            border: 1px solid var(--border);
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.75);
+            z-index: 50;
+            width: min(240px, 85vw);
+            pointer-events: none;
+        }
+        #point-viewer.active { display: block; pointer-events: auto; }
+        #point-viewer img {
+            width: 100%;
+            cursor: zoom-in;
+            border-radius: 4px;
+            object-fit: cover;
+            border: 1px solid var(--border);
+        }
+        .viewer-header {
+            font-size: 0.8rem;
+            color: var(--accent);
+            margin-bottom: 8px;
+            font-weight: bold;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 6px;
+            text-transform: uppercase;
+        }
+        .viewer-description {
+            font-size: 0.88rem;
+            color: var(--text-main);
+            margin-bottom: 10px;
+            line-height: 1.4;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            display: none;
+        }
+        .no-image-box {
+            border: 1px dashed var(--border);
+            background: var(--bg-base);
+            padding: 18px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+        .close-viewer {
+            position: absolute;
+            top: -12px;
+            right: -12px;
+            background: var(--bg-card);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Lightbox */
+        #lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.95);
+            z-index: 202;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+        }
+>>>>>>> Stashed changes
         #lightbox.active { display: flex; cursor: zoom-out; }
-        #lightbox img { max-width: 90%; max-height: 90%; border-radius: 4px; box-shadow: 0 0 30px rgba(0,0,0,0.8); border: 1px solid var(--border); }
+        #lightbox img {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 6px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
+        }
+
+        /* Mobile viewer becomes bottom card */
+        @media (max-width: 767px) {
+            #point-viewer {
+                position: fixed;
+                left: 12px;
+                right: 12px;
+                bottom: calc(12px + var(--safe-bottom));
+                top: auto;
+                width: auto;
+                max-width: none;
+            }
+        }
     </style>
 </head>
 <body>
 
+    <!-- MAP SELECTOR -->
     <div id="map-selector">
         <h1>Выберите карту</h1>
         <div class="map-grid">
@@ -344,7 +846,6 @@
         </div>
         <div class="brand-block">
             <h2>Тарковское Метадвижение <img src="favicon.ico" alt=""></h2>
-            
             <div class="social-links">
                 <a href="https://vk.ru/metadvij" target="_blank" rel="noopener noreferrer" title="ВКонтакте">
                     <img src="vk.ico" alt="VK">
@@ -355,11 +856,28 @@
             </div>
         </div>
     </div>
+<<<<<<< Updated upstream
 
+=======
+    <a class="donate-button" href="https://www.donationalerts.com/r/v1shnevskyy" target="_blank" rel="noopener noreferrer">Поддержать нас 💸</a>
+
+    <!-- MAIN APP -->
+>>>>>>> Stashed changes
     <div class="container" id="app-container">
-        <nav class="sidebar">
+        <!-- Mobile top bar -->
+        <header class="mobile-header">
+            <button type="button" id="toggle-sheet-btn">☰ Меню</button>
+            <span class="map-title" id="mobile-map-title">Карта</span>
+            <button type="button" onclick="changeMap()">Карты</button>
+        </header>
+
+        <div class="sheet-backdrop" id="sheet-backdrop"></div>
+
+        <nav class="sidebar" id="sidebar">
+            <div class="sheet-handle"></div>
             <div class="sidebar-header" id="current-map-title">Карта</div>
             <button class="change-map-btn" onclick="changeMap()">Выбрать карту</button>
+<<<<<<< Updated upstream
             <div class="controls">
                 <button id="mode-view" class="mode-btn active" onclick="setMode('VIEW')">View Points</button>
                 <button id="mode-add" class="mode-btn" onclick="setMode('ADD')">Mark Points</button>
@@ -376,16 +894,51 @@
                 <div class="legend-header">Фильтр документов</div>
                 <div id="legend-menu" class="legend-menu"></div>
             </div>
+=======
+
+            <div class="controls">
+                <div class="mode-row">
+                    <button class="mode-btn active" data-mode="VIEW" onclick="setMode('VIEW')">Просмотр</button>
+                    <button class="mode-btn" data-mode="ADD" onclick="setMode('ADD')">Добавить</button>
+                    <button class="mode-btn" data-mode="MOVE" onclick="setMode('MOVE')">Двигать</button>
+                </div>
+                <div class="action-group">
+                    <button class="action-btn export" onclick="exportData()">Экспорт</button>
+                    <label class="action-btn" style="text-align:center;display:flex;align-items:center;justify-content:center;">
+                        Импорт
+                        <input type="file" accept=".json,application/json" style="display:none" onchange="loadData(event)">
+                    </label>
+                </div>
+            </div>
+
+            <div id="legend-container" class="legend-container" style="display:none;">
+                <div class="legend-header">Фильтр документов</div>
+                <div id="legend-menu" class="legend-menu"></div>
+            </div>
+
+            <div id="options-container" class="options-container">
+                <div class="legend-header">Отображение</div>
+                <div class="options-menu">
+                    <label class="option-item">
+                        <input type="checkbox" id="opt-floor-arrows" checked> Стрелки этажей
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" id="opt-ignore-floors"> Игнорировать этажи
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" id="opt-dark-glow"> Контраст иконок
+                    </label>
+                </div>
+            </div>
+>>>>>>> Stashed changes
 
             <div class="menu-items" id="floor-menu"></div>
             
             <div class="sidebar-footer">
-                Original project by <a href="https://github.com/KalleLeskinen/KordMap" target="_blank" rel="noopener noreferrer">Kalle Leskinen on Github</a><br>
-                <br>
+                Original project by <a href="https://github.com/KalleLeskinen/KordMap" target="_blank" rel="noopener noreferrer">Kalle Leskinen</a><br>
                 Document locations by <a href="https://t.me/metadvij" target="_blank" rel="noopener noreferrer">Metadvij community</a><br>
-                <br>
-                Map SVGs by <a href="https://github.com/the-hideout/tarkov-dev-svg-maps/" target="_blank" rel="noopener noreferrer">Shebuka</a> and <a href="https://reemr.se/" target="_blank" rel="noopener noreferrer">RE3MR</a><br>
-                Shared and modified under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0</a><br>
+                Map SVGs by <a href="https://github.com/the-hideout/tarkov-dev-svg-maps/" target="_blank" rel="noopener noreferrer">Shebuka</a> &amp; <a href="https://reemr.se/" target="_blank" rel="noopener noreferrer">RE3MR</a><br>
+                <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0</a>
             </div>
         </nav>
 
@@ -405,24 +958,23 @@
     <!-- Create Point Modal -->
     <div id="create-modal" class="modal-overlay">
         <div class="modal-content">
-            <h3>Mark New document</h3>
-            
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px;">document Type:</p>
+            <h3>Новый документ</h3>
+            <label>Тип документа:</label>
             <div class="custom-select" id="icon-select">
                 <div class="select-selected" id="select-selected">Загружаем иконки...</div>
                 <div class="select-items" id="select-items"></div>
             </div>
             <input type="hidden" id="selected-icon-value">
-            
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px;">Details (Optional):</p>
-            <textarea id="point-details-input" placeholder="Enter intel details..."></textarea>
 
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px;">Attach Image Reference:</p>
+            <label>Описание (необязательно):</label>
+            <textarea id="point-details-input" placeholder="Детали..."></textarea>
+
+            <label>Прикрепить изображение:</label>
             <input type="file" id="point-image-input" accept="image/*">
-            
+
             <div class="modal-actions">
-                <button class="btn-cancel" onclick="cancelCreate()">Cancel</button>
-                <button class="btn-save" onclick="saveNewPoint()">Save Marker</button>
+                <button class="btn-cancel" onclick="cancelCreate()">Отмена</button>
+                <button class="btn-save" onclick="saveNewPoint()">Сохранить</button>
             </div>
         </div>
     </div>
@@ -432,38 +984,47 @@
     </div>
 
     <script>
-        // Global Map State
+        // ========== STATE ==========
         let viewBox = { x: 0, y: 0, w: 1000, h: 1000 };
         let initialViewBoxWidth = 1000;
-
-        // App State
         let currentMap = '';
         let activeFloorId = null;
-        let mode = 'VIEW'; 
+        let mode = 'VIEW';
         let pointsData = [];
         let availableIcons = [];
         let activeFilters = new Set();
+<<<<<<< Updated upstream
 
 
 
         let pendingPointCoords = null; 
         let draggedPoint = null;       
         let currentViewedPointId = null; 
+=======
+        let ignoreFloors = false;
+        let showFloorArrows = true;
+        let darkGlow = false;
+        let pendingPointCoords = null;
+        let draggedPoint = null;
+        let currentViewedPointId = null;
+>>>>>>> Stashed changes
 
-        // Base Sizes
-        const POINT_RADIUS = 1.5; 
-        const ICON_SIZE = 9.6;    
-        // Map Scaling
+        const POINT_RADIUS = 1.5;
+        const ICON_SIZE = 9.6;
         let minScale = 0.2;
         let maxScale = 10.0;
 
-        // DOM Elements
+        // DOM
         const appContainer = document.getElementById('app-container');
         const mapSelector = document.getElementById('map-selector');
         const mapWrapper = document.getElementById('map-wrapper');
         const floorMenu = document.getElementById('floor-menu');
         const mapTitle = document.getElementById('current-map-title');
-        
+        const mobileMapTitle = document.getElementById('mobile-map-title');
+        const sidebar = document.getElementById('sidebar');
+        const sheetBackdrop = document.getElementById('sheet-backdrop');
+        const toggleSheetBtn = document.getElementById('toggle-sheet-btn');
+
         const viewer = document.getElementById('point-viewer');
         const viewerHeader = document.getElementById('viewer-header');
         const viewerDescription = document.getElementById('viewer-description');
@@ -471,32 +1032,46 @@
         const lightbox = document.getElementById('lightbox');
         const lightboxImg = document.getElementById('lightbox-img');
         const createModal = document.getElementById('create-modal');
-        
         const iconSelect = document.getElementById('icon-select');
         const selectItems = document.getElementById('select-items');
         const selectSelected = document.getElementById('select-selected');
         const hiddenIconValue = document.getElementById('selected-icon-value');
-        
         const legendContainer = document.getElementById('legend-container');
         const legendMenu = document.getElementById('legend-menu');
 
-        // Custom Dropdown Logic
+        // ========== SHEET (mobile) ==========
+        function openSheet() {
+            sidebar.classList.add('open');
+            sheetBackdrop.classList.add('visible');
+        }
+        function closeSheet() {
+            sidebar.classList.remove('open');
+            sheetBackdrop.classList.remove('visible');
+        }
+        toggleSheetBtn.addEventListener('click', () => {
+            sidebar.classList.contains('open') ? closeSheet() : openSheet();
+        });
+        sheetBackdrop.addEventListener('click', closeSheet);
+
+        // ========== DROPDOWN ==========
         iconSelect.addEventListener('click', (e) => {
             selectItems.classList.toggle('active');
             e.stopPropagation();
         });
-        
         document.addEventListener('click', (e) => {
             if (!e.target.closest('.custom-select')) selectItems.classList.remove('active');
         });
 
-        // 1. Initialization
+        // ========== INIT MAP ==========
         async function initMap(mapName) {
             currentMap = mapName;
-            pointsData = []; 
-            mapTitle.textContent = mapName.charAt(0).toUpperCase() + mapName.slice(1);
+            pointsData = [];
+            const title = mapName.charAt(0).toUpperCase() + mapName.slice(1);
+            mapTitle.textContent = title;
+            mobileMapTitle.textContent = title;
             mapSelector.style.display = 'none';
-            appContainer.style.display = 'flex';
+            appContainer.classList.add('active');
+            closeSheet();
 
             const svgPath = `maps/${mapName}/${mapName}.svg`;
             const jsonPath = `maps/${mapName}/mapdata.json`;
@@ -504,19 +1079,17 @@
 
             let availableFloors = [];
 
-            // Load Map SVG
             try {
                 const response = await fetch(svgPath);
                 if (!response.ok) throw new Error('SVG file not found');
                 mapWrapper.innerHTML = await response.text();
             } catch (error) {
-                mapWrapper.innerHTML = `<div style="padding:20px; text-align:center;"><h2 style="color:var(--btn-danger);">Signal Lost</h2><p>${error.message}</p></div>`;
+                mapWrapper.innerHTML = `<div style="padding:20px;text-align:center;"><h2 style="color:var(--btn-danger);">Signal Lost</h2><p>${error.message}</p></div>`;
                 return;
             }
-            
+
             const svgElement = mapWrapper.querySelector('svg');
 
-            // Load Map Configuration
             try {
                 const dataResponse = await fetch(jsonPath);
                 if (dataResponse.ok) {
@@ -526,19 +1099,17 @@
                     } else {
                         availableIcons = parsedData.icons || [];
                         availableFloors = parsedData.floors || [];
-                        maxScale = parsedData.mapScale[0] || 0.2;
-                        minScale = parsedData.mapScale[1] || 10.0;
+                        maxScale = parsedData.mapScale?.[0] || 0.2;
+                        minScale = parsedData.mapScale?.[1] || 10.0;
                     }
                 }
-            } catch(e) { }
+            } catch (e) {}
 
             buildIconDropdown();
             buildLegend();
-            
             setupMapInteractions(svgElement, availableFloors);
             setupPanAndZoom(svgElement);
 
-            // Load Points
             try {
                 const pointsResponse = await fetch(pointsPath);
                 if (pointsResponse.ok) {
@@ -549,7 +1120,13 @@
                         updatePointsVisibility();
                     }
                 }
+<<<<<<< Updated upstream
             } catch(e) { }
+=======
+            } catch (e) {}
+
+            setMode('VIEW');
+>>>>>>> Stashed changes
             updateLegendCounts();
         }
 
@@ -557,6 +1134,7 @@
             closeViewer();
             lightbox.classList.remove('active');
             if (createModal.classList.contains('active')) cancelCreate();
+            closeSheet();
 
             mapWrapper.innerHTML = '';
             pointsData = [];
@@ -569,8 +1147,7 @@
             legendContainer.style.display = 'none';
 
             setMode('VIEW');
-
-            appContainer.style.display = 'none';
+            appContainer.classList.remove('active');
             mapSelector.style.display = 'flex';
         }
 
@@ -581,12 +1158,10 @@
                 hiddenIconValue.value = '';
                 return;
             }
-
             availableIcons.forEach(iconName => {
                 const div = document.createElement('div');
                 div.className = 'select-item';
                 div.innerHTML = `<img src="icons/${iconName}.png" alt="${iconName}" onerror="this.style.display='none'"> <span>${iconName}</span>`;
-                
                 div.onclick = (e) => {
                     e.stopPropagation();
                     setDropdownSelection(iconName);
@@ -613,7 +1188,6 @@
 
             availableIcons.forEach(iconName => {
                 activeFilters.add(iconName);
-
                 const label = document.createElement('label');
                 label.className = 'legend-item';
                 label.dataset.icon = iconName;
@@ -634,11 +1208,9 @@
 
                 const span = document.createElement('span');
                 span.className = 'legend-name';
-                span.textContent = `${iconName} (0)`;   // сразу с нулём
+                span.textContent = `${iconName} (0)`;
 
-                label.appendChild(checkbox);
-                label.appendChild(img);
-                label.appendChild(span);
+                label.append(checkbox, img, span);
                 legendMenu.appendChild(label);
             });
         }
@@ -646,82 +1218,99 @@
         function updateLegendCounts() {
             const counts = {};
             availableIcons.forEach(icon => counts[icon] = 0);
-
             pointsData.forEach(pt => {
-                if (pt.iconType && counts.hasOwnProperty(pt.iconType)) {
-                    counts[pt.iconType]++;
-                }
+                if (pt.iconType && counts.hasOwnProperty(pt.iconType)) counts[pt.iconType]++;
             });
-
             document.querySelectorAll('.legend-item').forEach(item => {
                 const icon = item.dataset.icon;
                 const nameSpan = item.querySelector('.legend-name');
-                if (nameSpan && icon) {
-                    nameSpan.textContent = `${icon} (${counts[icon] || 0})`;
-                }
+                if (nameSpan && icon) nameSpan.textContent = `${icon} (${counts[icon] || 0})`;
             });
         }
 
-        // 2. Mode Switching
+        // ========== MODES ==========
         function setMode(newMode) {
             mode = newMode;
+<<<<<<< Updated upstream
             document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById(`mode-${newMode.toLowerCase()}`).classList.add('active');
+=======
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.mode === newMode);
+            });
+>>>>>>> Stashed changes
             mapWrapper.className = `map-container mode-${newMode.toLowerCase()}`;
+            if (darkGlow) mapWrapper.classList.add('dark-glow');
             closeViewer();
         }
 
+<<<<<<< Updated upstream
         // 3. Base Map Setup (Floor 0 Hidden, Floor 1 Default)
+=======
+        function ensurePointGlowGradient(svg) {
+            if (svg.querySelector('#point-glow-gradient')) return;
+            const NS = 'http://www.w3.org/2000/svg';
+            const defs = document.createElementNS(NS, 'defs');
+            const gradient = document.createElementNS(NS, 'radialGradient');
+            gradient.id = 'point-glow-gradient';
+            [['0%', '0.8'], ['50%', '0.6'], ['100%', '0']].forEach(([offset, opacity]) => {
+                const stop = document.createElementNS(NS, 'stop');
+                stop.setAttribute('offset', offset);
+                stop.setAttribute('stop-color', '#000');
+                stop.setAttribute('stop-opacity', opacity);
+                gradient.appendChild(stop);
+            });
+            defs.appendChild(gradient);
+            svg.insertBefore(defs, svg.firstChild);
+        }
+
+        // ========== FLOORS ==========
+>>>>>>> Stashed changes
         function setupMapInteractions(svg, floorsConfig) {
-            floorMenu.innerHTML = ''; 
-            
+            floorMenu.innerHTML = '';
             let pointsLayer = svg.querySelector('#points-layer');
             if (!pointsLayer) {
                 pointsLayer = document.createElementNS('http://www.w3.org/2000/svg', 'g');
                 pointsLayer.id = 'points-layer';
                 svg.appendChild(pointsLayer);
             }
+<<<<<<< Updated upstream
+=======
+            ensurePointGlowGradient(svg);
+>>>>>>> Stashed changes
 
             const buttonsToCreate = [];
-            
             if (floorsConfig && floorsConfig.length > 0) {
                 floorsConfig.forEach((floorVal) => {
                     const floorId = `floor-${floorVal}`;
-                    const floorGroup = svg.querySelector(`[id="${floorId}"]`);
-                    
-                    if (floorGroup) {
-                        if (floorId !== 'floor-0') {
-                            buttonsToCreate.push({ id: floorId, label: `Этаж ${floorVal}` });
-                        }
+                    if (svg.querySelector(`[id="${floorId}"]`) && floorId !== 'floor-0') {
+                        buttonsToCreate.push({ id: floorId, label: `Этаж ${floorVal}` });
                     }
                 });
             } else {
-                const allFloors = Array.from(svg.querySelectorAll(`g[id^="floor-"]`));
-                allFloors.forEach((floor) => {
-                    const floorId = floor.id;
-                    if (floorId !== 'floor-0') {
-                        buttonsToCreate.push({ id: floorId, label: floorId.replace('-', ' ').toUpperCase() });
+                Array.from(svg.querySelectorAll('g[id^="floor-"]')).forEach(floor => {
+                    if (floor.id !== 'floor-0') {
+                        buttonsToCreate.push({ id: floor.id, label: floor.id.replace('-', ' ').toUpperCase() });
                     }
                 });
             }
 
-            // Determine default floor (Prefer Floor-1, else first available)
             const hasFloor1 = buttonsToCreate.some(f => f.id === 'floor-1');
-            const defaultFloorId = hasFloor1 ? 'floor-1' : (buttonsToCreate.length > 0 ? buttonsToCreate[0].id : null);
+            const defaultFloorId = hasFloor1 ? 'floor-1' : (buttonsToCreate[0]?.id || null);
 
-            // Generate buttons
             buttonsToCreate.forEach(btnConfig => {
                 const btn = document.createElement('button');
                 btn.className = `floor-btn ${btnConfig.id === defaultFloorId ? 'active' : ''}`;
                 btn.textContent = btnConfig.label;
                 btn.dataset.target = btnConfig.id;
-                btn.onclick = () => switchFloor(btnConfig.id, buttonsToCreate.map(b => b.id));
+                btn.onclick = () => {
+                    switchFloor(btnConfig.id, buttonsToCreate.map(b => b.id));
+                    if (window.innerWidth < 768) closeSheet();
+                };
                 floorMenu.appendChild(btn);
             });
 
-            if (defaultFloorId) {
-                switchFloor(defaultFloorId, buttonsToCreate.map(b => b.id));
-            }
+            if (defaultFloorId) switchFloor(defaultFloorId, buttonsToCreate.map(b => b.id));
         }
 
         function switchFloor(targetId, allFloorIds) {
@@ -732,58 +1321,42 @@
 
             const activeNum = parseInt(targetId.replace('floor-', ''));
             const svg = document.querySelector('.map-container svg');
+            if (!svg) return;
 
-            if (svg) {
-                const allFloorGroups = Array.from(svg.querySelectorAll('g[id^="floor-"]'));
-                allFloorGroups.forEach(floorGroup => {
-                    const floorId = floorGroup.id;
-                    const floorNum = parseInt(floorId.replace('floor-', ''));
+            Array.from(svg.querySelectorAll('g[id^="floor-"]')).forEach(floorGroup => {
+                const floorNum = parseInt(floorGroup.id.replace('floor-', ''));
+                if (isNaN(floorNum)) return;
 
-                    if (!isNaN(floorNum)) {
-                        if (floorNum === activeNum) {
-                            // Active floor: fully visible, normal brightness
-                            floorGroup.style.display = '';
-                            floorGroup.style.filter = 'none';
-                        } else if (floorNum < activeNum) {
-                            // Lower floor: visible but darkened except 0
-                            if(floorNum === 0 && activeNum === 1) {
-                                floorGroup.style.display = '';
-                                floorGroup.style.filter = 'none';
-                            } else {
-                            floorGroup.style.display = '';
-                            floorGroup.style.filter = 'brightness(0.35)';
-                            }
-                        } else {
-                            // Higher floor: hidden
-                            floorGroup.style.display = 'none';
-                            floorGroup.style.filter = 'none';
-                        }
-                    }
-                });
-            }
-
+                if (floorNum === activeNum) {
+                    floorGroup.style.display = '';
+                    floorGroup.style.filter = 'none';
+                } else if (floorNum < activeNum) {
+                    floorGroup.style.display = '';
+                    floorGroup.style.filter = (floorNum === 0 && activeNum === 1) ? 'none' : 'brightness(0.35)';
+                } else {
+                    floorGroup.style.display = 'none';
+                    floorGroup.style.filter = 'none';
+                }
+            });
             closeViewer();
             updatePointsVisibility();
         }
 
-        // 4. Ghost Points & Legend Filters
+        // ========== POINTS VISIBILITY ==========
         function updatePointsVisibility() {
             if (!activeFloorId) return;
             const activeNum = parseInt(activeFloorId.replace('floor-', ''));
-            
+
             pointsData.forEach(pt => {
                 const g = document.querySelector(`g.map-point[data-id="${pt.id}"]`);
                 if (!g) return;
-                
-                // 1. LEGEND FILTER
-                if (pt.iconType && !activeFilters.has(pt.iconType)) {
-                    g.style.display = 'none'; 
-                    return; 
-                } else {
-                    g.style.display = ''; 
-                }
 
-                // 2. FLOOR CHECK
+                if (pt.iconType && !activeFilters.has(pt.iconType)) {
+                    g.style.display = 'none';
+                    return;
+                }
+                g.style.display = '';
+
                 const ptNum = parseInt(pt.floor.replace('floor-', ''));
                 const oldArrow = g.querySelector('.floor-arrow');
                 if (oldArrow) oldArrow.remove();
@@ -793,53 +1366,58 @@
                     g.style.pointerEvents = 'all'; 
                 } else {
                     g.style.opacity = '0.35';
+<<<<<<< Updated upstream
                     g.style.pointerEvents = 'none'; 
                     
+=======
+                    g.style.pointerEvents = 'none';
+                }
+
+                if (ptNum !== activeNum && showFloorArrows) {
+>>>>>>> Stashed changes
                     const arrow = document.createElementNS('http://www.w3.org/2000/svg', 'text');
                     arrow.setAttribute('class', 'floor-arrow');
                     arrow.setAttribute('font-weight', 'bold');
-                    
                     if (ptNum > activeNum) {
-                        arrow.setAttribute('fill', '#6a945b'); // Tactical green
+                        arrow.setAttribute('fill', '#6a945b');
                         arrow.textContent = '▲';
                     } else {
-                        arrow.setAttribute('fill', '#9c3434'); // Tactical red
+                        arrow.setAttribute('fill', '#9c3434');
                         arrow.textContent = '▼';
                     }
                     g.appendChild(arrow);
                 }
             });
-            
             updatePointsScale();
         }
 
-        // 5. Dynamic Zoom Scale
         function updatePointsScale() {
             if (!initialViewBoxWidth) return;
-            
             const zoomRatio = viewBox.w / initialViewBoxWidth;
             const scale = Math.max(maxScale, Math.min(5.0, zoomRatio * minScale));
-            console.log(minScale);
-            
+
             document.querySelectorAll('.map-point').forEach(g => {
                 const img = g.querySelector('image');
                 const circle = g.querySelector('circle');
                 const arrow = g.querySelector('.floor-arrow');
+<<<<<<< Updated upstream
                 
                 const currentIconSize = ICON_SIZE * scale;
                 const currentRadius = POINT_RADIUS * scale;
                 
+=======
+                const currentIconSize = ICON_SIZE * scale;
+                const currentRadius = POINT_RADIUS * scale;
+
+                if (glow) glow.setAttribute('r', img ? currentIconSize * 0.7 : currentRadius * 3);
+>>>>>>> Stashed changes
                 if (img) {
                     img.setAttribute('width', currentIconSize);
                     img.setAttribute('height', currentIconSize);
                     img.setAttribute('x', -currentIconSize / 2);
                     img.setAttribute('y', -currentIconSize / 2);
                 }
-                
-                if (circle) {
-                    circle.setAttribute('r', currentRadius);
-                }
-                
+                if (circle) circle.setAttribute('r', currentRadius);
                 if (arrow) {
                     arrow.setAttribute('font-size', 5 * scale);
                     arrow.setAttribute('x', currentIconSize / 3);
@@ -848,68 +1426,71 @@
             });
         }
 
-        // 6. Pan, Zoom & Map Clicks
+        // ========== PAN / ZOOM / TOUCH ==========
         function setupPanAndZoom(svg) {
             const vbAttr = svg.getAttribute('viewBox');
             if (vbAttr) {
-                const parts = vbAttr.split(/\s+|,/).map(parseFloat).filter(n => !isNaN(n));
+                const parts = vbAttr.split(/[\s,]+/).map(parseFloat).filter(n => !isNaN(n));
                 if (parts.length === 4) viewBox = { x: parts[0], y: parts[1], w: parts[2], h: parts[3] };
             } else {
                 viewBox.w = svg.clientWidth || 1000;
                 viewBox.h = svg.clientHeight || 1000;
             }
-            
             initialViewBoxWidth = viewBox.w;
 
-            function updateViewBox() { 
-                svg.setAttribute('viewBox', `${viewBox.x} ${viewBox.y} ${viewBox.w} ${viewBox.h}`); 
+            function updateViewBox() {
+                svg.setAttribute('viewBox', `${viewBox.x} ${viewBox.y} ${viewBox.w} ${viewBox.h}`);
                 updatePointsScale();
             }
             updateViewBox();
 
-            // ZOOM
+            // Wheel zoom
             svg.addEventListener('wheel', (e) => {
                 e.preventDefault();
-                const scale = e.deltaY > 0 ? 1.1 : 0.9;
+                const scaleFactor = e.deltaY > 0 ? 1.1 : 0.9;
                 const pt = svg.createSVGPoint();
                 pt.x = e.clientX; pt.y = e.clientY;
                 const svgP = pt.matrixTransform(svg.getScreenCTM().inverse());
-
-                viewBox.x = svgP.x - (svgP.x - viewBox.x) * scale;
-                viewBox.y = svgP.y - (svgP.y - viewBox.y) * scale;
-                viewBox.w *= scale;
-                viewBox.h *= scale;
+                viewBox.x = svgP.x - (svgP.x - viewBox.x) * scaleFactor;
+                viewBox.y = svgP.y - (svgP.y - viewBox.y) * scaleFactor;
+                viewBox.w *= scaleFactor;
+                viewBox.h *= scaleFactor;
                 updateViewBox();
-                closeViewer(); 
+                closeViewer();
             }, { passive: false });
 
-            // PAN & DRAG
+            // Pointer + touch pan / drag
             let isPanning = false;
             let startPan = { x: 0, y: 0 };
             let hasMoved = false;
+            let lastTouchDist = 0;
 
-            svg.addEventListener('mousedown', (e) => {
-                if (e.button !== 0) return;
-                if (mode === 'MOVE' && e.target.closest('.map-point')) return; 
+            function getSVGPoint(clientX, clientY) {
+                const pt = svg.createSVGPoint();
+                pt.x = clientX; pt.y = clientY;
+                return pt.matrixTransform(svg.getScreenCTM().inverse());
+            }
+
+            svg.addEventListener('pointerdown', (e) => {
+                if (e.button !== 0 && e.pointerType === 'mouse') return;
+                if (mode === 'MOVE' && e.target.closest('.map-point')) return;
 
                 isPanning = true;
                 hasMoved = false;
                 startPan = { x: e.clientX, y: e.clientY };
+                svg.setPointerCapture?.(e.pointerId);
             });
 
-            svg.addEventListener('mousemove', (e) => {
+            svg.addEventListener('pointermove', (e) => {
                 if (draggedPoint && mode === 'MOVE') {
-                    const pt = svg.createSVGPoint();
-                    pt.x = e.clientX; pt.y = e.clientY;
-                    const svgP = pt.matrixTransform(svg.getScreenCTM().inverse());
-                    
+                    const svgP = getSVGPoint(e.clientX, e.clientY);
                     draggedPoint.group.setAttribute('transform', `translate(${svgP.x}, ${svgP.y})`);
                     draggedPoint.data.x = svgP.x;
                     draggedPoint.data.y = svgP.y;
-                    return; 
+                    return;
                 }
-
                 if (!isPanning) return;
+
                 const dx = e.clientX - startPan.x;
                 const dy = e.clientY - startPan.y;
                 if (Math.abs(dx) > 3 || Math.abs(dy) > 3) hasMoved = true;
@@ -925,26 +1506,56 @@
                 }
             });
 
-            svg.addEventListener('mouseup', () => { isPanning = false; draggedPoint = null; });
-            svg.addEventListener('mouseleave', () => { isPanning = false; draggedPoint = null; });
+            svg.addEventListener('pointerup', () => {
+                isPanning = false;
+                draggedPoint = null;
+            });
+            svg.addEventListener('pointercancel', () => {
+                isPanning = false;
+                draggedPoint = null;
+            });
 
-            // MAP CLICK (Add)
+            // Pinch zoom
+            svg.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 2) {
+                    const t0 = e.touches[0], t1 = e.touches[1];
+                    lastTouchDist = Math.hypot(t1.clientX - t0.clientX, t1.clientY - t0.clientY);
+                }
+            }, { passive: true });
+
+            svg.addEventListener('touchmove', (e) => {
+                if (e.touches.length === 2) {
+                    e.preventDefault();
+                    const t0 = e.touches[0], t1 = e.touches[1];
+                    const dist = Math.hypot(t1.clientX - t0.clientX, t1.clientY - t0.clientY);
+                    if (lastTouchDist > 0) {
+                        const scaleFactor = lastTouchDist / dist;
+                        const cx = (t0.clientX + t1.clientX) / 2;
+                        const cy = (t0.clientY + t1.clientY) / 2;
+                        const svgP = getSVGPoint(cx, cy);
+                        viewBox.x = svgP.x - (svgP.x - viewBox.x) * scaleFactor;
+                        viewBox.y = svgP.y - (svgP.y - viewBox.y) * scaleFactor;
+                        viewBox.w *= scaleFactor;
+                        viewBox.h *= scaleFactor;
+                        updateViewBox();
+                    }
+                    lastTouchDist = dist;
+                    closeViewer();
+                }
+            }, { passive: false });
+
+            // Click to add
             svg.addEventListener('click', (e) => {
                 if (hasMoved || mode !== 'ADD' || !activeFloorId || e.target.closest('.map-point')) return;
-
-                const pt = svg.createSVGPoint();
-                pt.x = e.clientX;
-                pt.y = e.clientY;
-                const svgP = pt.matrixTransform(svg.getScreenCTM().inverse());
-
+                const svgP = getSVGPoint(e.clientX, e.clientY);
                 pendingPointCoords = { floor: activeFloorId, x: svgP.x, y: svgP.y };
-                document.getElementById('point-image-input').value = ""; 
-                document.getElementById('point-details-input').value = ""; 
+                document.getElementById('point-image-input').value = '';
+                document.getElementById('point-details-input').value = '';
                 createModal.classList.add('active');
             });
         }
 
-        // 7. Point Creation & Rendering
+        // ========== CREATE / RENDER ==========
         function cancelCreate() {
             createModal.classList.remove('active');
             pendingPointCoords = null;
@@ -954,17 +1565,12 @@
             const fileInput = document.getElementById('point-image-input');
             const detailsInput = document.getElementById('point-details-input');
             let base64Image = null;
-
             if (fileInput.files.length > 0) {
-                const file = fileInput.files[0];
-                base64Image = await convertToBase64(file);
+                base64Image = await convertToBase64(fileInput.files[0]);
             }
-            
-            // Failsafe: if somehow bound to floor-0, force floor-1
+
             let targetFloor = pendingPointCoords.floor;
-            if (targetFloor === 'floor-0') {
-                targetFloor = 'floor-1';
-            }
+            if (targetFloor === 'floor-0') targetFloor = 'floor-1';
 
             const newPointData = {
                 id: Date.now().toString(),
@@ -978,23 +1584,23 @@
 
             pointsData.push(newPointData);
             renderPointToDOM(newPointData);
-            updatePointsVisibility(); 
+            updatePointsVisibility();
             updateLegendCounts();
-            cancelCreate(); 
+            cancelCreate();
         }
 
         function renderPointToDOM(pointData) {
             const svg = document.querySelector('.map-container svg');
-            const pointsLayer = svg.querySelector('#points-layer');
+            const pointsLayer = svg?.querySelector('#points-layer');
             if (!pointsLayer) return;
 
             const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
             g.setAttribute('class', 'map-point');
             g.setAttribute('data-id', pointData.id);
             g.setAttribute('transform', `translate(${pointData.x}, ${pointData.y})`);
-            
+
             const title = document.createElementNS('http://www.w3.org/2000/svg', 'title');
-            title.textContent = pointData.iconType || "Point";
+            title.textContent = pointData.iconType || 'Point';
             g.appendChild(title);
 
             if (pointData.iconType) {
@@ -1014,16 +1620,16 @@
                 g.appendChild(circle);
             }
 
-            g.addEventListener('mousedown', (e) => {
+            g.addEventListener('pointerdown', (e) => {
                 if (mode === 'MOVE') {
-                    e.stopPropagation(); 
+                    e.stopPropagation();
                     draggedPoint = { group: g, data: pointData };
                 }
             });
 
             g.addEventListener('click', (e) => {
                 if (mode === 'VIEW') {
-                    e.stopPropagation(); 
+                    e.stopPropagation();
                     showViewer(pointData, e.clientX, e.clientY);
                 }
             });
@@ -1031,13 +1637,10 @@
             pointsLayer.appendChild(g);
         }
 
-        // 8. View & Delete Logic
+        // ========== VIEWER ==========
         function showViewer(pointData, screenX, screenY) {
             currentViewedPointId = pointData.id;
-            
-            viewer.style.left = (screenX + 15) + 'px';
-            viewer.style.top = (screenY - 20) + 'px';
-            viewerHeader.textContent = pointData.iconType || "document Details";
+            viewerHeader.textContent = pointData.iconType || 'Document';
 
             if (pointData.details) {
                 viewerDescription.textContent = pointData.details;
@@ -1051,7 +1654,12 @@
             } else {
                 viewerContent.innerHTML = `<div class="no-image-box">No visual reference</div>`;
             }
-            
+
+            // Desktop: position near click; mobile CSS handles bottom placement
+            if (window.innerWidth >= 768) {
+                viewer.style.left = (screenX + 15) + 'px';
+                viewer.style.top = (screenY - 20) + 'px';
+            }
             viewer.classList.add('active');
         }
         
@@ -1076,91 +1684,109 @@
             lightbox.classList.add('active');
         }
 
-        // 9. Data Handlers
+        // ========== DATA HELPERS ==========
         function convertToBase64(file, maxWidth = 1920) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
-            
                 reader.onload = (event) => {
                     const img = new Image();
                     img.src = event.target.result;
-                    
                     img.onload = () => {
                         const canvas = document.createElement('canvas');
-                        let width = img.width;
-                        let height = img.height;
-
-                        // Scale down if the image is wider than maxWidth
+                        let width = img.width, height = img.height;
                         if (width > maxWidth) {
                             height = Math.round((height * maxWidth) / width);
                             width = maxWidth;
                         }
-
                         canvas.width = width;
                         canvas.height = height;
-                        
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, width, height);
-
-                        // Re-encode as JPEG with 70% quality
-                        const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
-                        resolve(compressedBase64);
+                        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+                        resolve(canvas.toDataURL('image/jpeg', 0.7));
                     };
-                    
-                    img.onerror = error => reject(error);
+                    img.onerror = reject;
                 };
-                        
-                reader.onerror = error => reject(error);
+                reader.onerror = reject;
                 reader.readAsDataURL(file);
             });
         }
 
         function exportData() {
-            if (pointsData.length === 0) return alert("No document to export!");
+            if (pointsData.length === 0) return alert('Нет документов для экспорта!');
             const dataStr = JSON.stringify({ map: currentMap, points: pointsData }, null, 2);
             const blob = new Blob([dataStr], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `${currentMap}-points.json`; 
-            document.body.appendChild(a);
+            a.download = `${currentMap}-points.json`;
             a.click();
-            document.body.removeChild(a);
             URL.revokeObjectURL(url);
         }
 
         function loadData(event) {
             const file = event.target.files[0];
             if (!file) return;
-
             const reader = new FileReader();
             reader.onload = (e) => {
                 try {
                     const parsed = JSON.parse(e.target.result);
                     if (parsed.map && parsed.map !== currentMap) {
-                        if (!confirm(`Warning: document data is tagged for '${parsed.map}', but current Map is '${currentMap}'. Load anyway?`)) {
-                            event.target.value = ""; return;
+                        if (!confirm(`Данные для «${parsed.map}», сейчас открыта «${currentMap}». Загрузить всё равно?`)) {
+                            event.target.value = '';
+                            return;
                         }
                     }
-
                     document.querySelectorAll('.map-point').forEach(p => p.remove());
                     pointsData = parsed.points || [];
                     pointsData.forEach(pt => renderPointToDOM(pt));
                     updatePointsVisibility();
                     updateLegendCounts();
                 } catch (err) {
-                    alert("Data corruption detected. File invalid.");
+                    alert('Файл повреждён или неверный формат.');
                 }
-                event.target.value = ""; 
+                event.target.value = '';
             };
             reader.readAsText(file);
         }
 
+<<<<<<< Updated upstream
+=======
+        // ========== DISPLAY OPTIONS ==========
+        function applyDarkGlow() {
+            mapWrapper.classList.toggle('dark-glow', darkGlow);
+        }
+
+        function initDisplayOptions() {
+            const ignoreFloorsInput = document.getElementById('opt-ignore-floors');
+            const floorArrowsInput = document.getElementById('opt-floor-arrows');
+            const darkGlowInput = document.getElementById('opt-dark-glow');
+
+            ignoreFloorsInput.addEventListener('change', (e) => {
+                ignoreFloors = e.target.checked;
+                updatePointsVisibility();
+            });
+            floorArrowsInput.addEventListener('change', (e) => {
+                showFloorArrows = e.target.checked;
+                updatePointsVisibility();
+            });
+            darkGlowInput.addEventListener('change', (e) => {
+                darkGlow = e.target.checked;
+                applyDarkGlow();
+            });
+
+            ignoreFloors = ignoreFloorsInput.checked;
+            showFloorArrows = floorArrowsInput.checked;
+            darkGlow = darkGlowInput.checked;
+            applyDarkGlow();
+        }
+        initDisplayOptions();
+
+>>>>>>> Stashed changes
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 closeViewer();
                 lightbox.classList.remove('active');
                 if (createModal.classList.contains('active')) cancelCreate();
+                closeSheet();
             }
         });
     </script>
