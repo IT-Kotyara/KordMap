@@ -971,18 +971,18 @@
     <div id="map-selector">
         <h1>Выберите карту</h1>
         <div class="map-grid">
-            <div class="map-card" style="background-image: url('mapBG/таможня.webp');" onclick="initMap('таможня')">Таможня</div>
-            <div class="map-card" style="background-image: url('mapBG/завод.webp');" onclick="initMap('завод')">Завод</div>
-            <div class="map-card" style="background-image: url('mapBG/развязка.webp');" onclick="initMap('развязка')">Развязка</div>
-            <div class="map-card" style="background-image: url('mapBG/берег.webp');" onclick="initMap('берег')">Берег</div>
-            <div class="map-card" style="background-image: url('mapBG/лес.webp');" onclick="initMap('лес')">Лес</div>
-            <div class="map-card" style="background-image: url('mapBG/маяк.webp');" onclick="initMap('маяк')">Маяк</div>
-            <div class="map-card" style="background-image: url('mapBG/резерв.webp');" onclick="initMap('резерв')">Резерв</div>
-            <div class="map-card" style="background-image: url('mapBG/улицы.webp');" onclick="initMap('улицы')">Улицы Таркова</div>
-            <div class="map-card" style="background-image: url('mapBG/эпицентр.webp');" onclick="initMap('эпицентр')">Эпицентр</div>
-            <div class="map-card" style="background-image: url('mapBG/лаборатория.webp');" onclick="initMap('лаборатория')">Лаборатория</div>
-            <div class="map-card" style="background-image: url('mapBG/лабиринт.webp');" onclick="initMap('лабиринт')">Лабиринт</div>
-            <div class="map-card" style="background-image: url('mapBG/ледокол.webp');" onclick="initMap('ледокол')">Ледокол</div>
+            <div class="map-card" onclick="initMap('таможня')">Таможня</div>
+            <div class="map-card" onclick="initMap('завод')">Завод</div>
+            <div class="map-card" onclick="initMap('развязка')">Развязка</div>
+            <div class="map-card" onclick="initMap('берег')">Берег</div>
+            <div class="map-card" onclick="initMap('лес')">Лес</div>
+            <div class="map-card" onclick="initMap('маяк')">Маяк</div>
+            <div class="map-card" onclick="initMap('резерв')">Резерв</div>
+            <div class="map-card" onclick="initMap('улицы')">Улицы Таркова</div>
+            <div class="map-card" onclick="initMap('эпицентр')">Эпицентр</div>
+            <div class="map-card" onclick="initMap('лаборатория')">Лаборатория</div>
+            <div class="map-card" onclick="initMap('лабиринт')">Лабиринт</div>
+            <div class="map-card" onclick="initMap('ледокол')">Ледокол</div>
         </div>
         <div class="brand-block">
             <h2>Тарковское Метадвижение <img src="favicon.ico" alt=""></h2>
@@ -1225,7 +1225,7 @@
 
             const svgPath = `maps/${mapName}/${mapName}.svg`;
             const jsonPath = `maps/${mapName}/mapdata.json`;
-            const pointsPath = `maps/${mapName}/${mapName}-points.json`;
+            const pointsPath = `data/${mapName}-points.json`;
 
             let availableFloors = [];
 
@@ -2190,6 +2190,29 @@
             if (darkGlow) mapWrapper.classList.add('dark-glow');
             closeViewer();
         }
+
+        document.querySelectorAll('.map-card').forEach(card => {
+            const onclickAttr = card.getAttribute('onclick') || '';
+            const match = onclickAttr.match(/initMap\(\s*['"]([^'"]+)['"]\s*\)/);
+            if (!match) {
+                card.classList.add('missing-bg');
+                return;
+            }
+
+            const name = match[1];
+            const url = `maps/${name}/${name}.webp`;
+            const img = new Image();
+
+            img.onload = () => {
+                card.style.backgroundImage = `url('${url}')`;
+                card.classList.add('has-bg');
+            };
+            img.onerror = () => {
+                card.style.backgroundImage = 'none';
+                card.classList.add('missing-bg');
+            };
+            img.src = url;
+        });
 
     </script>
 
