@@ -22,7 +22,7 @@
         * {
             font-family: Bender;
         }
-
+        
         /* Tactical Color Palette */
         :root {
             --bg-base: #09090a;      /* Deepest background */
@@ -55,6 +55,7 @@
             gap: 12px;
             margin-top: 15px;
         }
+
         /* Map Selector Screen */
         #map-selector {
             position: fixed;
@@ -85,7 +86,6 @@
 
         #map-selector > * {
             position: relative;
-            z-index: 1;
         }
 
         #map-selector h1 {
@@ -180,11 +180,6 @@
             text-shadow: 1.5px 1.5px 1px #000;
         }
 
-        .map-card > * {
-            position: relative;
-            z-index: 1;
-        }
-
         .map-card:hover {
             background-color: var(--bg-hover);
             border-color: var(--accent);
@@ -193,6 +188,18 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.5);
             transition: 0.5s;
             background-size: 110%;
+        }
+
+        .donate-button {
+            display: flex;
+            position: fixed;
+            scale: 2.5;
+            bottom: 35px;
+            right: 35px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+            text-decoration: none;
+            z-index: 201;
         }
 
         /* Sidebar */
@@ -293,8 +300,8 @@
         .map-point:hover { filter: drop-shadow(0px 0px 5px var(--accent)); }
 
         /* Dark glow behind icons, for readability on light map areas.
-           A gradient-filled circle rather than a drop-shadow filter: filters are
-           re-rasterized per icon on every pan/zoom frame, which crawls on busy maps. */
+        A gradient-filled circle rather than a drop-shadow filter: filters are
+        re-rasterized per icon on every pan/zoom frame, which crawls on busy maps. */
         .point-glow { display: none; pointer-events: none; }
         .map-container.dark-glow .point-glow { display: block; }
 
@@ -336,7 +343,7 @@
         .close-viewer:hover { background: var(--bg-hover); color: var(--accent); }
 
         /* Fullscreen Lightbox */
-        #lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 150; justify-content: center; align-items: center; }
+        #lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 202; justify-content: center; align-items: center; }
         #lightbox.active { display: flex; cursor: zoom-out; }
         #lightbox img { max-width: 90%; max-height: 90%; border-radius: 4px; box-shadow: 0 0 30px rgba(0,0,0,0.8); border: 1px solid var(--border); }
     </style>
@@ -372,7 +379,7 @@
             </div>
         </div>
     </div>
-
+    <a class="donate-button" href="https://www.donationalerts.com/r/v1shnevskyy" target="_blank" rel="noopener noreferrer" title="Поддержать нас">💸</a>
     <div class="container" id="app-container">
         <nav class="sidebar">
             <div class="sidebar-header" id="current-map-title">Карта</div>
