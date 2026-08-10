@@ -52,6 +52,96 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+        .editor-login {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        .editor-login input {
+            width: 100%;
+            padding: 10px 12px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            color: var(--text-main);
+            font-size: 0.9rem;
+        }
+        .editor-login input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        .editor-login-actions {
+            display: flex;
+            gap: 8px;
+        }
+        .editor-login-actions button {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            font-weight: bold;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            min-height: 40px;
+            background: var(--bg-card);
+            color: var(--text-main);
+        }
+        .editor-login-actions button.primary {
+            background: var(--accent);
+            color: #000;
+            border-color: var(--accent);
+        }
+        .editor-login-actions button:hover {
+            background: var(--bg-hover);
+        }
+        .editor-login-actions button.primary:hover {
+            background: var(--accent-hover);
+        }
+        .editor-status {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-align: center;
+        }
+        .editor-status.on {
+            color: var(--accent);
+        }
+        .mode-btn:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+        #lightbox-edit {
+            position: absolute;
+            bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 20px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-main);
+            font-weight: bold;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            z-index: 203;
+            display: none;
+            min-height: 44px;
+        }
+        #lightbox-edit.visible {
+            display: block;
+        }
+        #lightbox-edit:hover,
+        #lightbox-edit:active {
+            background: var(--accent);
+            color: #000;
+            border-color: var(--accent);
+        }
+
         /* ========== MAP SELECTOR ========== */
         #map-selector {
             position: fixed;
@@ -892,12 +982,23 @@
             <div class="sheet-handle"></div>
             <div class="sidebar-header" id="current-map-title">Карта</div>
             <button class="change-map-btn" onclick="changeMap()">Выбрать карту</button>
-
+            <div class="editor-login" id="editor-login">
+            <div class="editor-status" id="editor-status">Редактор: выключен</div>
+            <div id="editor-login-form">
+                <input type="password" id="editor-password" placeholder="Пароль редактора" autocomplete="current-password">
+                <div class="editor-login-actions">
+                    <button type="button" class="primary" onclick="editorLogin()">Войти</button>
+                </div>
+            </div>
+            <div class="editor-login-actions" id="editor-logout-row" style="display:none;">
+                <button type="button" onclick="editorLogout()">Выйти</button>
+            </div>
+        </div>
             <div class="controls">
                 <div class="mode-row">
-                    <button class="mode-btn active" data-mode="VIEW" onclick="setMode('VIEW')">Просмотр</button>
-                    <button class="mode-btn" data-mode="ADD" onclick="setMode('ADD')">Добавить</button>
-                    <button class="mode-btn" data-mode="MOVE" onclick="setMode('MOVE')">Двигать</button>
+                    <button class="mode-btn active" data-mode="VIEW" id="mode-view" onclick="setMode('VIEW')">Просмотр</button>
+                    <button class="mode-btn" data-mode="ADD" id="mode-add" onclick="setMode('ADD')" disabled>Добавить</button>
+                    <button class="mode-btn" data-mode="MOVE" id="mode-move" onclick="setMode('MOVE')" disabled>Двигать</button>
                 </div>
                 <div class="action-group">
                     <button class="action-btn export" onclick="exportData()">Экспорт</button>
@@ -970,12 +1071,34 @@
             </div>
         </div>
     </div>
-
+    <div id="edit-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h3>Редактировать документ</h3>
+            <p>Тип документа:</p>
+            <div class="custom-select" id="edit-icon-select">
+                <div class="select-selected" id="edit-select-selected">…</div>
+                <div class="select-items" id="edit-select-items"></div>
+            </div>
+            <input type="hidden" id="edit-selected-icon-value">
+            <p>Описание:</p>
+            <textarea id="edit-point-details-input" placeholder="Детали..."></textarea>
+            <p>Новое изображение (необязательно):</p>
+            <input type="file" id="edit-point-image-input" accept="image/*">
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="cancelEdit()">Отмена</button>
+                <button class="btn-save" onclick="saveEditedPoint()">Сохранить</button>
+            </div>
+        </div>
+    </div>
     <div id="lightbox">
         <button type="button" id="lightbox-close" aria-label="Close">×</button>
         <img id="lightbox-img" src="" alt="Expanded View">
+        <button type="button" id="lightbox-edit">Редактировать</button>
     </div>
     <script>
+        const EDITOR_PASSWORD = 'mentodigenye';
+        let isEditor = false;
+        
         // Global Map State
         let viewBox = { x: 0, y: 0, w: 1000, h: 1000 };
         let initialViewBoxWidth = 1000;
@@ -1512,6 +1635,7 @@
             function onPointerDown(e) {
                 if (e.pointerType === 'mouse' && e.button !== 0) return;
                 if (mode === 'MOVE' && e.target.closest('.map-point')) return;
+                if (mode === 'VIEW' && e.target.closest('.map-point')) return;
 
                 activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
                 svg.setPointerCapture?.(e.pointerId);
@@ -1597,7 +1721,7 @@
             svg.addEventListener('pointerleave', onPointerUp);
 
             svg.addEventListener('click', (e) => {
-                if (hasMoved || mode !== 'ADD' || !activeFloorId || e.target.closest('.map-point')) return;
+                if (hasMoved || mode !== 'ADD' || !isEditor || !activeFloorId || e.target.closest('.map-point')) return;
                 const svgP = getSVGPoint(e.clientX, e.clientY);
                 pendingPointCoords = { floor: activeFloorId, x: svgP.x, y: svgP.y };
                 document.getElementById('point-image-input').value = '';
@@ -1884,6 +2008,164 @@
                 closeSheet();
             }
         });
+
+        const editModal = document.getElementById('edit-modal');
+        const editIconSelect = document.getElementById('edit-icon-select');
+        const editSelectItems = document.getElementById('edit-select-items');
+        const editSelectSelected = document.getElementById('edit-select-selected');
+        const editHiddenIconValue = document.getElementById('edit-selected-icon-value');
+        const lightboxEdit = document.getElementById('lightbox-edit');
+        let editingPointId = null;
+
+        function applyEditorUI() {
+            const addBtn = document.getElementById('mode-add');
+            const moveBtn = document.getElementById('mode-move');
+            const form = document.getElementById('editor-login-form');
+            const logoutRow = document.getElementById('editor-logout-row');
+            const status = document.getElementById('editor-status');
+
+            if (isEditor) {
+                addBtn.disabled = false;
+                moveBtn.disabled = false;
+                form.style.display = 'none';
+                logoutRow.style.display = 'flex';
+                status.textContent = 'Редактор: включён';
+                status.classList.add('on');
+                lightboxEdit.classList.add('visible');
+            } else {
+                addBtn.disabled = true;
+                moveBtn.disabled = true;
+                form.style.display = 'block';
+                logoutRow.style.display = 'none';
+                status.textContent = 'Редактор: выключен';
+                status.classList.remove('on');
+                lightboxEdit.classList.remove('visible');
+                if (mode === 'ADD' || mode === 'MOVE') setMode('VIEW');
+            }
+        }
+
+        function editorLogin() {
+            const input = document.getElementById('editor-password');
+            if (input.value === EDITOR_PASSWORD) {
+                isEditor = true;
+                sessionStorage.setItem('kordmap_editor', '1');
+                input.value = '';
+                applyEditorUI();
+            } else {
+                alert('Неверный пароль');
+                input.value = '';
+                input.focus();
+            }
+        }
+
+        function editorLogout() {
+            isEditor = false;
+            sessionStorage.removeItem('kordmap_editor');
+            applyEditorUI();
+            closeViewer();
+            closeLightbox();
+            cancelEdit();
+        }
+
+        document.getElementById('editor-password').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') editorLogin();
+        });
+
+        if (sessionStorage.getItem('kordmap_editor') === '1') {
+            isEditor = true;
+        }
+        applyEditorUI();
+
+        function buildEditIconDropdown(selected) {
+            editSelectItems.innerHTML = '';
+            if (!availableIcons || availableIcons.length === 0) {
+                editSelectSelected.innerHTML = 'No icons';
+                editHiddenIconValue.value = '';
+                return;
+            }
+            availableIcons.forEach(iconName => {
+                const div = document.createElement('div');
+                div.className = 'select-item';
+                div.innerHTML = `<img src="icons/${iconName}.png" alt="${iconName}" onerror="this.style.display='none'"> <span>${iconName}</span>`;
+                div.onclick = (e) => {
+                    e.stopPropagation();
+                    setEditDropdownSelection(iconName);
+                    editSelectItems.classList.remove('active');
+                };
+                editSelectItems.appendChild(div);
+            });
+            setEditDropdownSelection(selected || availableIcons[0]);
+        }
+
+        function setEditDropdownSelection(iconName) {
+            editHiddenIconValue.value = iconName;
+            editSelectSelected.innerHTML = `<img src="icons/${iconName}.png" alt="${iconName}" onerror="this.style.display='none'"> <span>${iconName}</span>`;
+        }
+
+        editIconSelect.addEventListener('click', (e) => {
+            editSelectItems.classList.toggle('active');
+            e.stopPropagation();
+        });
+
+        function openEditForCurrentPoint() {
+            if (!isEditor || !currentViewedPointId) return;
+            const pt = pointsData.find(p => p.id === currentViewedPointId);
+            if (!pt) return;
+
+            editingPointId = pt.id;
+            buildEditIconDropdown(pt.iconType);
+            document.getElementById('edit-point-details-input').value = pt.details || '';
+            document.getElementById('edit-point-image-input').value = '';
+            closeLightbox();
+            editModal.classList.add('active');
+        }
+
+        function cancelEdit() {
+            editModal.classList.remove('active');
+            editingPointId = null;
+        }
+
+        async function saveEditedPoint() {
+            if (!editingPointId) return;
+            const pt = pointsData.find(p => p.id === editingPointId);
+            if (!pt) return;
+
+            const fileInput = document.getElementById('edit-point-image-input');
+            const detailsInput = document.getElementById('edit-point-details-input');
+
+            pt.iconType = editHiddenIconValue.value;
+            pt.details = detailsInput.value.trim();
+
+            if (fileInput.files.length > 0) {
+                pt.image = await convertToBase64(fileInput.files[0]);
+            }
+
+            const el = document.querySelector(`g.map-point[data-id="${pt.id}"]`);
+            if (el) el.remove();
+            renderPointToDOM(pt);
+            updatePointsVisibility();
+            updateLegendCounts();
+
+            cancelEdit();
+            showViewer(pt, window.innerWidth / 2, window.innerHeight / 3);
+        }
+
+        lightboxEdit.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openEditForCurrentPoint();
+        });
+
+        function setMode(newMode) {
+            if ((newMode === 'ADD' || newMode === 'MOVE') && !isEditor) return;
+            mode = newMode;
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.mode === newMode);
+            });
+            mapWrapper.className = `map-container mode-${newMode.toLowerCase()}`;
+            if (darkGlow) mapWrapper.classList.add('dark-glow');
+            closeViewer();
+        }
+
     </script>
 
     <script type="module">
