@@ -14,6 +14,10 @@ if (!fs.existsSync(DATA_DIR)) {
   fs.mkdirSync(DATA_DIR, { recursive: true });
 }
 
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
+
 app.post('/api/login', (req, res) => {
     console.log('POST /api/login');
     const { password } = req.body || {};
@@ -62,6 +66,6 @@ app.get('/api/health', (_req, res) => {
 app.use(express.static(ROOT));
 
 app.listen(PORT, () => {
-  console.log(`http://localhost:${PORT}`);
+  console.log(`Listening on ${PORT}`);
   console.log(`data: ${DATA_DIR}`);
 });
