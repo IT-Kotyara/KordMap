@@ -15,7 +15,7 @@ if (!fs.existsSync(DATA_DIR)) {
 }
 
 app.get('/', (req, res) => {
-  res.send('Hello World!')
+  res.sendFile(ROOT + "index.html");
 })
 
 app.post('/api/login', (req, res) => {
@@ -63,7 +63,7 @@ app.get('/api/health', (_req, res) => {
   res.json({ ok: true, dataDir: DATA_DIR });
 });
 
-app.use(express.static("./"));
+app.use(express.static(ROOT));
 
 app.listen(PORT, () => {
   console.log(`Listening on ${PORT}`);
