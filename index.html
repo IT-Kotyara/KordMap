@@ -2335,7 +2335,7 @@
                 return;
             }
 
-            const name = match[1];
+            const name = match[1].toLocaleLowerCase();
             const url = `maps/${name}/${name}.webp`;
             const img = new Image();
 
