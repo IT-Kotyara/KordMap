@@ -1336,7 +1336,7 @@
         async function initMap(mapName) {
             currentMap = mapName;
             pointsData = [];
-            const title = mapName.charAt(0) + mapName.slice(1);
+            const title = mapName.charAt(0).toLowerCase() + mapName.slice(1);
             mapTitle.textContent = title;
             mobileMapTitle.textContent = title;
             mapSelector.style.display = 'none';
