@@ -1018,18 +1018,18 @@
     <div id="map-selector">
         <h1>Выберите карту</h1>
         <div class="map-grid">
-            <div class="map-card" onclick="initMap('таможня')">Таможня</div>
-            <div class="map-card" onclick="initMap('завод')">Завод</div>
-            <div class="map-card" onclick="initMap('развязка')">Развязка</div>
-            <div class="map-card" onclick="initMap('берег')">Берег</div>
-            <div class="map-card" onclick="initMap('лес')">Лес</div>
-            <div class="map-card" onclick="initMap('маяк')">Маяк</div>
-            <div class="map-card" onclick="initMap('резерв')">Резерв</div>
-            <div class="map-card" onclick="initMap('улицы')">Улицы Таркова</div>
-            <div class="map-card" onclick="initMap('эпицентр')">Эпицентр</div>
-            <div class="map-card" onclick="initMap('лаборатория')">Лаборатория</div>
-            <div class="map-card" onclick="initMap('лабиринт')">Лабиринт</div>
-            <div class="map-card" onclick="initMap('ледокол')">Ледокол</div>
+            <div class="map-card" onclick="initMap('Таможня')">Таможня</div>
+            <div class="map-card" onclick="initMap('Завод')">Завод</div>
+            <div class="map-card" onclick="initMap('Развязка')">Развязка</div>
+            <div class="map-card" onclick="initMap('Берег')">Берег</div>
+            <div class="map-card" onclick="initMap('Лес')">Лес</div>
+            <div class="map-card" onclick="initMap('Маяк')">Маяк</div>
+            <div class="map-card" onclick="initMap('Резерв')">Резерв</div>
+            <div class="map-card" onclick="initMap('Улицы')">Улицы Таркова</div>
+            <div class="map-card" onclick="initMap('Эпицентр')">Эпицентр</div>
+            <div class="map-card" onclick="initMap('Лаборатория')">Лаборатория</div>
+            <div class="map-card" onclick="initMap('Лабиринт')">Лабиринт</div>
+            <div class="map-card" onclick="initMap('Ледокол')">Ледокол</div>
         </div>
         <div class="brand-block">
             <h2>Тарковское Метадвижение <img src="favicon.ico" alt=""></h2>
@@ -1336,7 +1336,7 @@
         async function initMap(mapName) {
             currentMap = mapName;
             pointsData = [];
-            const title = mapName.charAt(0).toUpperCase() + mapName.slice(1);
+            const title = mapName.charAt(0).toLowerCase() + mapName.slice(1);
             mapTitle.textContent = title;
             mobileMapTitle.textContent = title;
             mapSelector.style.display = 'none';
