@@ -5,7 +5,7 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 const ROOT = __dirname;
-const DATA_DIR = '/data';
+const DATA_DIR = path.join(ROOT, 'data');
 const EDITOR_PASSWORD = process.env.EDITOR_PASSWORD;
 
 app.use(express.json({ limit: '20mb' }));
