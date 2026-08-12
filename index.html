@@ -30,8 +30,8 @@
             --border: #282a2e;
             --text-main: #c4c5c7;
             --text-muted: #72757a;
-            --accent: #d18d32;
-            --accent-hover: #e59f3d;
+            --accent: #5fd5c0;
+            --accent-hover: #5fd58c;
             --accent-dim: rgba(209, 141, 50, 0.15);
             --btn-success: #3c5438;
             --btn-success-hover: #4a6645;
@@ -230,10 +230,11 @@
 
         .map-card-icons {
             display: flex;
+            padding-top: 15px;
             flex-wrap: wrap;
             justify-content: center;
             align-items: center;
-            gap: 10px;
+            gap: 20px;
         }
 
         .map-card-icons img {
@@ -241,8 +242,8 @@
             height: 28px;
             scale: 2;
             object-fit: contain;
-            filter: drop-shadow(3px 3px 2px #000);
         }
+
         .map-card:hover {
             background-color: var(--bg-hover);
             border-color: var(--accent);
