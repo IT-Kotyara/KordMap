@@ -233,14 +233,15 @@
             flex-wrap: wrap;
             justify-content: center;
             align-items: center;
-            gap: 6px;
+            gap: 10px;
         }
 
         .map-card-icons img {
             width: 28px;
             height: 28px;
+            scale: 2;
             object-fit: contain;
-            filter: drop-shadow(0 1px 2px #000);
+            filter: drop-shadow(3px 3px 2px #000);
         }
         .map-card:hover {
             background-color: var(--bg-hover);
@@ -436,20 +437,33 @@
             left: 0;
             right: 0;
             bottom: 0;
-            height: min(65vh, 520px);
-            max-height: calc(100% - var(--header-height) - 20px);
+            top: auto;
+            height: calc(100dvh - var(--header-height) - var(--safe-top) - 8px);
+            max-height: calc(100dvh - var(--header-height) - var(--safe-top) - 8px);
             background: var(--bg-panel);
             border-radius: 18px 18px 0 0;
             border-top: 1px solid var(--border);
-            z-index: 50;
+            z-index: 201;
             display: flex;
             flex-direction: column;
             transform: translateY(110%);
             transition: transform 0.32s cubic-bezier(0.32, 0.72, 0, 1);
             padding-bottom: var(--safe-bottom);
-            box-shadow: 0 -8px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
         }
-        .sidebar.open { transform: translateY(0); }
+
+        .sidebar.open {
+            transform: translateY(0);
+        }
+
+        .sidebar-scroll {
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+        }
 
         .sheet-handle {
             width: 40px;
@@ -458,6 +472,13 @@
             border-radius: 3px;
             margin: 10px auto 6px;
             flex-shrink: 0;
+        }
+
+        .legend-menu,
+        .options-menu,
+        .menu-items {
+            max-height: none;
+            overflow: visible;
         }
 
         .sidebar-header {
@@ -639,6 +660,7 @@
             z-index: 45;
         }
         .sheet-backdrop.visible { display: block; }
+        .change-map-btn { display: none;}
 
         /* ========== DESKTOP (≥768px) – original sidebar + selector styles ========== */
         @media (min-width: 768px) {
@@ -650,6 +672,8 @@
 
             .sidebar {
                 position: relative;
+                top: auto;
+                bottom: auto;
                 width: 280px;
                 height: 100%;
                 max-height: none;
@@ -659,7 +683,11 @@
                 border-right: 1px solid var(--border);
                 box-shadow: none;
                 padding-bottom: 0;
-                z-index: 10;
+                overflow: hidden;
+            }
+
+            .sidebar-scroll {
+                overflow-y: auto;
             }
             .sheet-handle { display: none; }
             .sheet-backdrop { display: none !important; }
@@ -1029,60 +1057,62 @@
             <div class="sheet-handle"></div>
             <div class="sidebar-header" id="current-map-title">Карта</div>
             <button class="change-map-btn" onclick="changeMap()">Выбрать карту</button>
-            <div class="editor-login" id="editor-login">
-            <div class="editor-status" id="editor-status">Редактор: выключен</div>
-            <div id="editor-login-form">
-                <input type="password" id="editor-password" placeholder="Пароль редактора" autocomplete="current-password">
-                <div class="editor-login-actions">
-                    <button type="button" class="primary" onclick="editorLogin()">Войти</button>
+            <div class="sidebar-scroll">
+                <div class="editor-login" id="editor-login">
+                <div class="editor-status" id="editor-status">Редактор: выключен</div>
+                <div id="editor-login-form">
+                    <input type="password" id="editor-password" placeholder="Пароль редактора" autocomplete="current-password">
+                    <div class="editor-login-actions">
+                        <button type="button" class="primary" onclick="editorLogin()">Войти</button>
+                    </div>
+                </div>
+                <div class="editor-login-actions" id="editor-logout-row" style="display:none;">
+                    <button type="button" onclick="editorLogout()">Выйти</button>
                 </div>
             </div>
-            <div class="editor-login-actions" id="editor-logout-row" style="display:none;">
-                <button type="button" onclick="editorLogout()">Выйти</button>
-            </div>
-        </div>
-        <div class="controls" id="editor-controls">
-            <div class="mode-row">
-                <button class="mode-btn active" data-mode="VIEW" id="mode-view" onclick="setMode('VIEW')">Просмотр</button>
-                <button class="mode-btn" data-mode="ADD" id="mode-add" onclick="setMode('ADD')">Добавить</button>
-                <button class="mode-btn" data-mode="MOVE" id="mode-move" onclick="setMode('MOVE')">Двигать</button>
-            </div>
-            <div class="action-group">
-                <button class="action-btn export" onclick="exportData()">Экспорт</button>
-                <label class="action-btn" style="text-align:center;display:flex;align-items:center;justify-content:center;cursor:pointer;">
-                    Импорт
-                    <input type="file" accept=".json,application/json" style="display:none" onchange="loadData(event)">
-                </label>
-            </div>
-        </div>
-
-            <div id="legend-container" class="legend-container" style="display:none;">
-                <div class="legend-header">Фильтр документов</div>
-                <div id="legend-menu" class="legend-menu"></div>
-            </div>
-
-            <div id="options-container" class="options-container">
-                <div class="legend-header">Отображение</div>
-                <div class="options-menu">
-                    <label class="option-item">
-                        <input type="checkbox" id="opt-floor-arrows" checked> Стрелки этажей
-                    </label>
-                    <label class="option-item">
-                        <input type="checkbox" id="opt-ignore-floors"> Игнорировать этажи
-                    </label>
-                    <label class="option-item">
-                        <input type="checkbox" id="opt-dark-glow"> Контраст иконок
+            <div class="controls" id="editor-controls">
+                <div class="mode-row">
+                    <button class="mode-btn active" data-mode="VIEW" id="mode-view" onclick="setMode('VIEW')">Просмотр</button>
+                    <button class="mode-btn" data-mode="ADD" id="mode-add" onclick="setMode('ADD')">Добавить</button>
+                    <button class="mode-btn" data-mode="MOVE" id="mode-move" onclick="setMode('MOVE')">Двигать</button>
+                </div>
+                <div class="action-group">
+                    <button class="action-btn export" onclick="exportData()">Экспорт</button>
+                    <label class="action-btn" style="text-align:center;display:flex;align-items:center;justify-content:center;cursor:pointer;">
+                        Импорт
+                        <input type="file" accept=".json,application/json" style="display:none" onchange="loadData(event)">
                     </label>
                 </div>
             </div>
 
-            <div class="menu-items" id="floor-menu"></div>
+                <div id="legend-container" class="legend-container" style="display:none;">
+                    <div class="legend-header">Фильтр документов</div>
+                    <div id="legend-menu" class="legend-menu"></div>
+                </div>
 
-            <div class="sidebar-footer">
-                Original project by <a href="https://github.com/KalleLeskinen/KordMap" target="_blank" rel="noopener noreferrer">Kalle Leskinen on Github</a><br><br>
-                Document locations by <a href="https://t.me/metadvij" target="_blank" rel="noopener noreferrer">Metadvij community</a><br><br>
-                Map SVGs by <a href="https://github.com/the-hideout/tarkov-dev-svg-maps/" target="_blank" rel="noopener noreferrer">Shebuka</a> and <a href="https://reemr.se/" target="_blank" rel="noopener noreferrer">RE3MR</a><br>
-                Shared and modified under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0</a>
+                <div id="options-container" class="options-container">
+                    <div class="legend-header">Отображение</div>
+                    <div class="options-menu">
+                        <label class="option-item">
+                            <input type="checkbox" id="opt-floor-arrows" checked> Стрелки этажей
+                        </label>
+                        <label class="option-item">
+                            <input type="checkbox" id="opt-ignore-floors"> Игнорировать этажи
+                        </label>
+                        <label class="option-item">
+                            <input type="checkbox" id="opt-dark-glow"> Контраст иконок
+                        </label>
+                    </div>
+                </div>
+
+                <div class="menu-items" id="floor-menu"></div>
+
+                <div class="sidebar-footer">
+                    Original project by <a href="https://github.com/KalleLeskinen/KordMap" target="_blank" rel="noopener noreferrer">Kalle Leskinen on Github</a><br><br>
+                    Document locations by <a href="https://t.me/metadvij" target="_blank" rel="noopener noreferrer">Metadvij community</a><br><br>
+                    Map SVGs by <a href="https://github.com/the-hideout/tarkov-dev-svg-maps/" target="_blank" rel="noopener noreferrer">Shebuka</a> and <a href="https://reemr.se/" target="_blank" rel="noopener noreferrer">RE3MR</a><br>
+                    Shared and modified under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0</a>
+                </div>
             </div>
         </nav>
 
@@ -1267,7 +1297,7 @@
                 const icons = new Set();
 
                 try {
-                    const res = await fetch(`maps/${mapName}/${mapName}-points.json`);
+                    const res = await fetch(`/data/${mapName}-points.json`);
                     if (res.ok) {
                         const data = await res.json();
                         const points = Array.isArray(data.points) ? data.points : [];
