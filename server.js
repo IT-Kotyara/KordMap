@@ -63,7 +63,7 @@ app.get('/api/health', (_req, res) => {
   res.json({ ok: true, dataDir: DATA_DIR });
 });
 
-app.use(express.static(ROOT));
+app.use(express.static("./"));
 
 app.listen(PORT, () => {
   console.log(`Listening on ${PORT}`);
