@@ -1343,8 +1343,8 @@
             appContainer.classList.add('active');
             closeSheet();
 
-            const svgPath = `maps/${mapName}/${mapName}.svg`;
-            const jsonPath = `maps/${mapName}/mapdata.json`;
+            const svgPath = `map/${mapName}/${mapName}.svg`;
+            const jsonPath = `map/${mapName}/mapdata.json`;
             const pointsPath = `/data/${mapName}-points.json`;
 
             let availableFloors = [];
@@ -2336,7 +2336,7 @@
             }
 
             const name = match[1].toLocaleLowerCase();
-            const url = `maps/${name}/${name}.webp`;
+            const url = `map/${name}/${name}.webp`;
             const img = new Image();
 
             img.onload = () => {
