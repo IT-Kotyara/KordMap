@@ -15,7 +15,7 @@ if (!fs.existsSync(DATA_DIR)) {
 }
 
 app.get('/', (req, res) => {
-  res.sendFile("public/index.html");
+  res.sendFile(path.join(__dirname, 'index.html'));
 })
 
 app.post('/api/login', (req, res) => {
