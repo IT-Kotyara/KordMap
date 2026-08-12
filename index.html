@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Карта документов Kord Breach</title>
     <style>
@@ -109,11 +109,6 @@
         .editor-status.on {
             color: var(--accent);
         }
-        .mode-btn:disabled {
-            opacity: 0.35;
-            cursor: not-allowed;
-            pointer-events: none;
-        }
         #lightbox-edit {
             position: absolute;
             bottom: calc(16px + env(safe-area-inset-bottom, 0px));
@@ -147,11 +142,11 @@
             position: fixed;
             inset: 0;
             background: var(--bg-panel);
-            background-image: url('/kord_mtdv.webp');
+            background-image: url('kord_mtdv.webp');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            background-attachment: fixed;
+            background-attachment: scroll;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -163,7 +158,7 @@
         }
         #map-selector::before {
             content: '';
-            position: absolute;
+            position: fixed;
             inset: 0;
             background: rgba(9, 9, 10, 0.72);
             z-index: 0;
@@ -203,6 +198,9 @@
         }
 
         .map-card {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
             background: var(--bg-card);
             background-size: cover;
             background-position: center;
@@ -220,11 +218,29 @@
             text-align: center;
             position: relative;
             overflow: hidden;
-            display: flex;
             align-items: center;
             justify-content: center;
             text-shadow: 1.5px 1.5px 1px #000;
             min-height: 90px;
+        }
+        .map-card-name {
+            display: block;
+            line-height: 1.2;
+        }
+
+        .map-card-icons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .map-card-icons img {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
+            filter: drop-shadow(0 1px 2px #000);
         }
         .map-card:hover {
             background-color: var(--bg-hover);
@@ -308,16 +324,23 @@
         }
 
         .donate-button {
+            margin: 0 15px 12px;
+            padding: 8px 12px;
+            background: var(--bg-card);
+            color: var(--text-muted);
+            border-radius: 2px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.2s;
             display: flex;
             position: fixed;
-            scale: 1.5;
             bottom: 35px;
-            right: 55px;
-            border-radius: 5px;
-            background: rgb(0, 0, 0);
-            color: #fff;
+            right: 35px;
+            border: 1px solid var(--border);
             text-shadow: 0 2px 15px #000;
             font-weight: bold;
+            font-size: 1.1rem;
             text-decoration: none;
             z-index: 199;
         }
@@ -327,7 +350,6 @@
                 bottom: calc(20px + var(--safe-bottom));
                 right: 16px;
                 padding: 10px 16px;
-                background: rgb(0, 0, 0);
                 border-radius: 8px;
                 font-size: 0.95rem;
             }
@@ -449,12 +471,7 @@
             flex-shrink: 0;
         }
 
-        .change-map-btn {
-            display: none;
-        }
-
         .controls {
-            padding: 12px 15px;
             border-bottom: 1px solid var(--border);
             display: flex;
             flex-direction: column;
@@ -464,6 +481,7 @@
             width: 100%;
             box-sizing: border-box;
         }
+
         .mode-row {
             display: flex;
             gap: 6px;
@@ -1023,20 +1041,20 @@
                 <button type="button" onclick="editorLogout()">Выйти</button>
             </div>
         </div>
-            <div class="controls">
-                <div class="mode-row">
-                    <button class="mode-btn active" data-mode="VIEW" id="mode-view" onclick="setMode('VIEW')">Просмотр</button>
-                    <button class="mode-btn" data-mode="ADD" id="mode-add" onclick="setMode('ADD')" disabled>Добавить</button>
-                    <button class="mode-btn" data-mode="MOVE" id="mode-move" onclick="setMode('MOVE')" disabled>Двигать</button>
-                </div>
-                <div class="action-group">
-                    <button class="action-btn export" onclick="exportData()">Экспорт</button>
-                    <label class="action-btn" style="text-align:center;display:flex;align-items:center;justify-content:center;cursor:pointer;">
-                        Импорт
-                        <input type="file" accept=".json,application/json" style="display:none" onchange="loadData(event)">
-                    </label>
-                </div>
+        <div class="controls" id="editor-controls">
+            <div class="mode-row">
+                <button class="mode-btn active" data-mode="VIEW" id="mode-view" onclick="setMode('VIEW')">Просмотр</button>
+                <button class="mode-btn" data-mode="ADD" id="mode-add" onclick="setMode('ADD')">Добавить</button>
+                <button class="mode-btn" data-mode="MOVE" id="mode-move" onclick="setMode('MOVE')">Двигать</button>
             </div>
+            <div class="action-group">
+                <button class="action-btn export" onclick="exportData()">Экспорт</button>
+                <label class="action-btn" style="text-align:center;display:flex;align-items:center;justify-content:center;cursor:pointer;">
+                    Импорт
+                    <input type="file" accept=".json,application/json" style="display:none" onchange="loadData(event)">
+                </label>
+            </div>
+        </div>
 
             <div id="legend-container" class="legend-container" style="display:none;">
                 <div class="legend-header">Фильтр документов</div>
@@ -1211,6 +1229,78 @@
             if (!e.target.closest('.custom-select')) selectItems.classList.remove('active');
         });
 
+        async function persistPoints() {
+            if (!isEditor || !currentMap) return false;
+            try {
+                const res = await fetch('/api/save-points', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json; charset=utf-8' },
+                    body: JSON.stringify({
+                        map: currentMap,
+                        points: pointsData
+                    })
+                });
+                if (!res.ok) {
+                    alert('Не удалось сохранить точки');
+                    return false;
+                }
+                return true;
+            } catch (e) {
+                console.error(e);
+                alert('Ошибка сети при сохранении');
+                return false;
+            }
+        }
+
+        async function loadMapCardMeta() {
+            const cards = document.querySelectorAll('.map-card');
+
+            await Promise.all(Array.from(cards).map(async (card) => {
+                const onclickAttr = card.getAttribute('onclick') || '';
+                const match = onclickAttr.match(/initMap\(\s*['"]([^'"]+)['"]\s*\)/);
+                if (!match) return;
+
+                const mapName = match[1];
+                const baseLabel = card.textContent.trim().replace(/\s*\(\d+\)\s*$/, '');
+
+                let count = 0;
+                const icons = new Set();
+
+                try {
+                    const res = await fetch(`maps/${mapName}/${mapName}-points.json`);
+                    if (res.ok) {
+                        const data = await res.json();
+                        const points = Array.isArray(data.points) ? data.points : [];
+                        count = points.length;
+                        points.forEach(p => {
+                            if (p.iconType) icons.add(p.iconType);
+                        });
+                    }
+                } catch {}
+
+                card.innerHTML = '';
+
+                const nameEl = document.createElement('div');
+                nameEl.className = 'map-card-name';
+                nameEl.textContent = `${baseLabel} (${count})`;
+                card.appendChild(nameEl);
+
+                const iconsEl = document.createElement('div');
+                iconsEl.className = 'map-card-icons';
+                Array.from(icons).sort().forEach(type => {
+                    const img = document.createElement('img');
+                    img.src = `icons/${type} noicon.webp`;
+                    img.alt = type;
+                    img.title = type;
+                    img.onerror = () => img.remove();
+                    iconsEl.appendChild(img);
+                });
+                card.appendChild(iconsEl);
+            }));
+        }
+
+        loadMapCardMeta();
+
         // 1. Initialization
         async function initMap(mapName) {
             currentMap = mapName;
@@ -1224,7 +1314,7 @@
 
             const svgPath = `maps/${mapName}/${mapName}.svg`;
             const jsonPath = `maps/${mapName}/mapdata.json`;
-            const pointsPath = `/data/${mapName}-points.json`;
+            const pointsPath = `data/${mapName}-points.json`;
 
             let availableFloors = [];
 
@@ -1325,7 +1415,7 @@
             availableIcons.forEach(iconName => {
                 const div = document.createElement('div');
                 div.className = 'select-item';
-                div.innerHTML = `<img src="icons/${iconName}.png" alt="${iconName}" onerror="this.style.display='none'"> <span>${iconName}</span>`;
+                div.innerHTML = `<img src="icons/${iconName}.webp" alt="${iconName}" onerror="this.style.display='none'"> <span>${iconName}</span>`;
                 div.onclick = (e) => {
                     e.stopPropagation();
                     setDropdownSelection(iconName);
@@ -1338,7 +1428,7 @@
 
         function setDropdownSelection(iconName) {
             hiddenIconValue.value = iconName;
-            selectSelected.innerHTML = `<img src="icons/${iconName}.png" alt="${iconName}" onerror="this.style.display='none'"> <span>${iconName}</span>`;
+            selectSelected.innerHTML = `<img src="icons/${iconName}.webp" alt="${iconName}" onerror="this.style.display='none'"> <span>${iconName}</span>`;
         }
 
         function buildLegend() {
@@ -1367,7 +1457,7 @@
                 };
 
                 const img = document.createElement('img');
-                img.src = `icons/${iconName}.png`;
+                img.src = `icons/${iconName}.webp`;
                 img.alt = iconName;
                 img.onerror = () => img.style.display = 'none';
 
@@ -1725,6 +1815,7 @@
             }
 
             function onPointerUp(e) {
+                const didMovePoint = !!draggedPoint;
                 if (draggedPoint) draggedPoint = null;
                 activePointers.delete(e.pointerId);
                 if (activePointers.size < 2) lastTouchDist = 0;
@@ -1737,6 +1828,7 @@
                     hasMoved = false;
                     startPan = { x: remaining.x, y: remaining.y };
                 }
+                if (didMovePoint && isEditor) persistPoints();
             }
 
             svg.addEventListener('pointerdown', onPointerDown);
@@ -1789,6 +1881,7 @@
             updatePointsVisibility();
             updateLegendCounts();
             cancelCreate();
+            await persistPoints();
         }
 
         function renderPointToDOM(pointData) {
@@ -1813,7 +1906,7 @@
 
             if (pointData.iconType) {
                 const img = document.createElementNS('http://www.w3.org/2000/svg', 'image');
-                img.setAttribute('href', `icons/${pointData.iconType}.png`);
+                img.setAttribute('href', `icons/${pointData.iconType}.webp`);
                 img.setAttribute('x', `-${ICON_SIZE / 2}`);
                 img.setAttribute('y', `-${ICON_SIZE / 2}`);
                 img.setAttribute('width', ICON_SIZE);
@@ -2042,43 +2135,56 @@
         let editingPointId = null;
 
         function applyEditorUI() {
-            const addBtn = document.getElementById('mode-add');
-            const moveBtn = document.getElementById('mode-move');
             const form = document.getElementById('editor-login-form');
             const logoutRow = document.getElementById('editor-logout-row');
             const status = document.getElementById('editor-status');
+            const controls = document.getElementById('editor-controls');
+            const lightboxEdit = document.getElementById('lightbox-edit');
 
             if (isEditor) {
-                addBtn.disabled = false;
-                moveBtn.disabled = false;
                 form.style.display = 'none';
                 logoutRow.style.display = 'flex';
                 status.textContent = 'Редактор: включён';
                 status.classList.add('on');
-                lightboxEdit.classList.add('visible');
+                controls.hidden = false;
+                lightboxEdit?.classList.add('visible');
             } else {
-                addBtn.disabled = true;
-                moveBtn.disabled = true;
                 form.style.display = 'block';
                 logoutRow.style.display = 'none';
                 status.textContent = 'Редактор: выключен';
                 status.classList.remove('on');
-                lightboxEdit.classList.remove('visible');
+                controls.hidden = "until-found";
+                lightboxEdit?.classList.remove('visible');
                 if (mode === 'ADD' || mode === 'MOVE') setMode('VIEW');
             }
         }
 
-        function editorLogin() {
+        async function editorLogin() {
             const input = document.getElementById('editor-password');
-            if (input.value === EDITOR_PASSWORD) {
-                isEditor = true;
-                sessionStorage.setItem('kordmap_editor', '1');
-                input.value = '';
-                applyEditorUI();
-            } else {
-                alert('Неверный пароль');
-                input.value = '';
-                input.focus();
+            try {
+                const res = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json; charset=utf-8' },
+                    body: JSON.stringify({
+                        password: input.value
+                    })
+                });
+                if (!res.ok) {
+                    alert('Неверный пароль');
+                    input.value = '';
+                    input.focus();
+                    return false;
+                } else {
+                    isEditor = true;
+                    sessionStorage.setItem('kordmap_editor', '1');
+                    input.value = '';
+                    applyEditorUI();
+                }
+                return true;
+            } catch (e) {
+                console.error(e);
+                alert('Ошибка сети при логине');
+                return false;
             }
         }
 
@@ -2110,7 +2216,7 @@
             availableIcons.forEach(iconName => {
                 const div = document.createElement('div');
                 div.className = 'select-item';
-                div.innerHTML = `<img src="icons/${iconName}.png" alt="${iconName}" onerror="this.style.display='none'"> <span>${iconName}</span>`;
+                div.innerHTML = `<img src="icons/${iconName}.webp" alt="${iconName}" onerror="this.style.display='none'"> <span>${iconName}</span>`;
                 div.onclick = (e) => {
                     e.stopPropagation();
                     setEditDropdownSelection(iconName);
@@ -2123,7 +2229,7 @@
 
         function setEditDropdownSelection(iconName) {
             editHiddenIconValue.value = iconName;
-            editSelectSelected.innerHTML = `<img src="icons/${iconName}.png" alt="${iconName}" onerror="this.style.display='none'"> <span>${iconName}</span>`;
+            editSelectSelected.innerHTML = `<img src="icons/${iconName}.webp" alt="${iconName}" onerror="this.style.display='none'"> <span>${iconName}</span>`;
         }
 
         editIconSelect.addEventListener('click', (e) => {
@@ -2169,7 +2275,7 @@
             renderPointToDOM(pt);
             updatePointsVisibility();
             updateLegendCounts();
-
+            await persistPoints();
             cancelEdit();
             showViewer(pt, window.innerWidth / 2, window.innerHeight / 3);
         }
