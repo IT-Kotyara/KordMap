@@ -1289,7 +1289,7 @@
                 iconsEl.className = 'map-card-icons';
                 Array.from(icons).sort().forEach(type => {
                     const img = document.createElement('img');
-                    img.src = `icons/${type}.png`;
+                    img.src = `icons/${type} noicon.webp`;
                     img.alt = type;
                     img.title = type;
                     img.onerror = () => img.remove();
