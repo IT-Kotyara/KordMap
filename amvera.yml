@@ -1,9 +1,12 @@
 meta:
-  environment: static_web
+  environment: node
   toolchain:
-    name: html
-    version: latest
+    name: npm
+    version: 24
 build:
   artifacts:
-    "*": /
-run: {}
+    '*': /
+run:
+  scriptName: server.js
+  persistenceMount: /data
+  containerPort: 3000
